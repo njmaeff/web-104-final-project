@@ -21,5 +21,5 @@ Cloud Firestore uses collections and security rules to enforce permissions. Ever
 
 ## Links
 - [Project Tracker and User Stories](https://njmaeff.youtrack.cloud/agiles/121-2/current)
-- [UI Mockup](https://www.figma.com/file/dTfdcFFkn5JPQyF5I9B9Zq/app?node-id=0%3A1)
+- [UI Mockup](https://www.figma.com/file/xJJB3LKEeHc1WZ6aS73mVf/ASSIGNMENT--Application-Planning%2CPrototyping-%26-Mockup?node-id=0%3A1)
 - [Flow Chart and Mind Map](https://whimsical.com/web104-final-project-NvwcmCe7f2ehRX1tiD452o)
