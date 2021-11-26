@@ -81,8 +81,8 @@ const loadAuthUI = ({ signInSuccessUrl, firstTimeSignInUrl } = {}) => {
 
 const init = () => {
   loadAuthUI({
-    signInSuccessUrl: "/app.html",
-    firstTimeSignInUrl: "/getting-started.html",
+    signInSuccessUrl: "app.html",
+    firstTimeSignInUrl: "getting-started.html",
   });
 };
 window.addEventListener("load", () => {

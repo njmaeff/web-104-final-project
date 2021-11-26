@@ -3,9 +3,9 @@ import "https://unpkg.com/react-dom@17/umd/react-dom.production.min.js";
 import "https://www.gstatic.com/firebasejs/9.4.0/firebase-app-compat.js";
 import "https://www.gstatic.com/firebasejs/9.4.0/firebase-auth-compat.js";
 import "https://www.gstatic.com/firebasejs/9.4.0/firebase-firestore-compat.js";
-import DatePicker from "/js/date-picker.js";
-import * as popper from "/js/react-popper.js";
-import * as formik from "/js/formik.js";
+import DatePicker from "./date-picker.js";
+import * as popper from "./react-popper.js";
+import * as formik from "./formik.js";
 
 const React = window.React;
 const {
@@ -1478,7 +1478,7 @@ const ProfilePage = () => {
         className: "primary",
         onClick: () => {
           auth.signOut().then(() => {
-            window.location.href = "/index.html";
+            window.location.href = "index.html";
           });
         },
       },
@@ -1487,7 +1487,7 @@ const ProfilePage = () => {
 
     React.createElement(
       "a",
-      { href: "/getting-started.html", className: "primary" },
+      { href: "getting-started.html", className: "primary" },
       "About"
     )
   );
