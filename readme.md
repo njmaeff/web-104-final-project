@@ -8,13 +8,17 @@ The mobile app will use the [react](https://reactjs.org/) framework for the user
 
 The user interface will use a minimal color scheme highlighting essential components.
 
-Cloud Firestore uses collections and security rules to enforce permissions. Every document is related to an employer, so we will make sub-collections under the employer. 
+Cloud Firestore uses collections and security rules to enforce permissions. Every document is related to an employer and role, so we will make sub-collections under these categories.
 
 ```text
+<!-- roles -->
 /user/{UserID}/employers/{employerDocs}/roles/
-/user/{UserID}/employers/{employerDocs}/ratings/
-/user/{UserID}/employers/{employerDocs}/targets/
-/user/{UserID}/employers/{employerDocs}/reviews/
+
+<!-- ratings beneath an employer and role -->
+/user/{UserID}/employers/{employerID}/roles/{roleID}/rate/
+
+<!-- reviews underneath an employer and role -->
+/user/{UserID}/employers/{employerDocs}/roles/{roleID}/reviews/
 ```
 
 
