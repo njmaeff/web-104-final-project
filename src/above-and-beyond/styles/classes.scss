@@ -1,6 +1,6 @@
 @use "styles/variables";
 @use "styles/mixins";
-@use "styles/mq" as *;
+@use "query" as *;
 
 /* footer styles */
 div.footer-control {

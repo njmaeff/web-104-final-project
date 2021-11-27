@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { LoginPage } from ".//login";
 import "../styles/styles.scss";
 import "../styles/firebaseui.scss";
-import { useAuthUI } from "../hooks/useFirebaseUI";
+import { useAuthUI } from "./SignIn";
 import { GetStartedPage } from ".//getStarted";
 
 export const LoginPageView = () => {

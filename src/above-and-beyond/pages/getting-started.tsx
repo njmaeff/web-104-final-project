@@ -1,19 +1,20 @@
 import React from "react";
 import About from "../components/mdx/about.mdx";
+import Link from "next/link";
 
 export default () => {
     return (
         <div className={"page page-first-login"}>
             <header>
                 <div>
-                    <a href={"app.html"} className={"primary"}>
-                        Continue
-                    </a>
+                    <Link href={"/app"}>
+                        <a className={"primary"}>Continue</a>
+                    </Link>
                 </div>
             </header>
             <main>
                 <section className={"info-about"}>
-                    <About />
+                    <About/>
                 </section>
             </main>
             <footer></footer>

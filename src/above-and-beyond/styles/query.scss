@@ -1,0 +1,22 @@
+@use "variables";
+@use "mq" as * with (
+    $breakpoints: (
+        tablet: variables.$tablet_size,
+        desktop: variables.$desktop_size
+    ),
+    $media-type: screen
+);
+
+@forward "mq";
+
+@mixin using_tablet {
+    @include mq($from: tablet) {
+        @content
+    }
+}
+
+@mixin using_desktop {
+    @include mq($from: desktop) {
+        @content
+    }
+}

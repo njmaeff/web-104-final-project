@@ -1,7 +1,7 @@
 import admin from "firebase-admin";
 
 export const connectFirebaseAdmin = ({
-    projectId = process.env.FIREBASE_PROJECT_ID,
+    projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
 } = {}): admin.auth.Auth => {
     if (!admin.apps.length) {
         admin.initializeApp({

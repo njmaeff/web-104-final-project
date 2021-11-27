@@ -1,6 +1,10 @@
+const withMDX = require("@next/mdx")({
+    extension: /\.mdx$/,
+});
+
 const {PHASE_DEVELOPMENT_SERVER} = require("next/constants");
 
-module.exports = (phase, {defaultConfig}) => ({
+module.exports = (phase, {defaultConfig}) => withMDX({
     ...defaultConfig,
     ...(phase === PHASE_DEVELOPMENT_SERVER ? {
         // allow cors for storybook
@@ -34,11 +38,6 @@ module.exports = (phase, {defaultConfig}) => ({
             test: /\.(woff|woff2|eot|ttf|otf)$/i,
             use: ['file-loader']
         },)
-
-        // if (!isServer) {
-        //     config.resolve.fallback.events = require.resolve("events");
-        //     config.resolve.fallback.fs = false;
-        // }
 
         return config
     },

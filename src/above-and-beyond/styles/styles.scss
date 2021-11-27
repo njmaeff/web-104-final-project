@@ -1,11 +1,10 @@
 @use "sass:math";
-@use "~@njmaeff/styles/scss/reset";
-@use "styles/variables";
-@use "styles/defaults";
-@use "styles/font";
-@use "styles/mixins";
-@use "styles/classes";
-@use "styles/mq" as *;
+@use "variables";
+@use "defaults";
+@use "font";
+@use "mixins";
+@use "classes";
+@use "query" as *;
 
 div.page {
     display: flex;
