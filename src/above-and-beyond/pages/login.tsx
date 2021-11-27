@@ -1,7 +1,7 @@
 import React, {useEffect} from "react"
 import type {NextPage} from "next";
 import {useRouter} from "next/router";
-import {useAuthUI} from "../lib/hooks/useFirebaseUI";
+import {useAuthUI} from "../hooks/useFirebaseUI";
 
 export const LoginPage: NextPage = () => {
     const router = useRouter();

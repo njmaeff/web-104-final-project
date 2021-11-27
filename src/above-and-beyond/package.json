@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "scripts": {
     "storybook": "start-storybook -p 6006 -s public-msw",
-    "seed": "node -r ts-node/register/transpile-only lib/seed/seed.ts",
-    "seed-clean": "node -r ts-node/register/transpile-only lib/seed/clean.ts",
+    "seed": "node -r ts-node/register/transpile-only seed/seed.ts",
+    "seed-clean": "node -r ts-node/register/transpile-only seed/clean.ts",
     "dev": "NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
     "start": "next start",

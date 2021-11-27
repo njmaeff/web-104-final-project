@@ -1,5 +1,5 @@
 import React from "react";
-import About from "../lib/js/components/mdx/about.mdx";
+import About from "../components/mdx/about.mdx";
 
 export default () => {
     return (
