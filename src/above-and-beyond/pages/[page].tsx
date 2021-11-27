@@ -16,6 +16,7 @@ export const LoginPage: NextPage = () => {
 
     }, [isLoggedIn]);
 
+
     return <Main/>
 }
 
