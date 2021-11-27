@@ -1,0 +1,15 @@
+{
+  "extends": "./src/node-tsconfig.json",
+  "references": [
+    {
+      "path": "src/webpack-static-site"
+    },
+    {
+      "path": "src/jsx-to-js"
+    },
+    {
+      "path": "src/storybook-react"
+    }
+  ],
+  "include": []
+}

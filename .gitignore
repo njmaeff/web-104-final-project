@@ -162,3 +162,17 @@ fabric.properties
 
 **/.tmp
 junit.xml
+
+build
+.idea
+.yarn/build-state.yml
+.yarn/install-state.gz
+dist
+src/**/*.js.map
+src/**/*.d.ts
+src/**/*.d.ts.map
+src/**/*.js
+!src/**/js/**/*.js
+!src/**/*.config.js
+root
+.rollup.cache

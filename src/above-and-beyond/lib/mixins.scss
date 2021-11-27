@@ -1,0 +1,48 @@
+@use "lib/variables";
+
+@mixin scrollbar() {
+    /* width */
+    ::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: variables.$color-light;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: variables.$color-primary;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: variables.$color-secondary;
+    }
+}
+
+@mixin borderShadow($color) {
+    border: 2px solid $color !important;
+    box-shadow: 0 0 3px $color !important;
+}
+
+@mixin overFlowEllipsis() {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+@mixin controlStyles() {
+    background-color: variables.$color-primary;
+    color: variables.$color-light;
+    font-size: 1.25rem;
+    padding: 0.5rem 2rem;
+    opacity: 0.8;
+    border-radius: 4px;
+    border: none;
+
+    &:hover, &:active {
+        background-color: darken(variables.$color-primary, 15%);
+    }
+}

@@ -1,29 +1,56 @@
-# Web 104 Final Project - Above and Beyond
+## Resources
 
-Above and Beyond is a mobile app designed to help employees track progress, set financial targets, and track achievements. The employee may use this information during performance reviews to help negotiate and achieve their goals.
+- music https://freemusicarchive.org/
+
+## Agile
+
+- [Agile Connection](https://www.agileconnection.com/article/identifying-and-improving-bad-user-stories)
 
 ## Design
 
-The mobile app will use the [react](https://reactjs.org/) framework for the user interface and Cloud Firestore for data storage. The app will be secured using Firebase Auth and the [firebaseui](https://firebase.google.com/docs/auth/web/firebaseui) library.
+- [Style Tiles](http://styletil.es/)
+- Donald Norman
+- Dieter Rams (Less is more)
+    - Ten principles of good design.
 
-The user interface will use a minimal color scheme highlighting essential components.
+- [overflow](https://overflow.io/examples/)
 
-Cloud Firestore uses collections and security rules to enforce permissions. Every document is related to an employer and role, so we will make sub-collections under these categories.
+## Programming
 
-```text
-<!-- roles -->
-/user/{UserID}/employers/{employerDocs}/roles/
+- [Programming Idioms](https://programming-idioms.org/)
 
-<!-- ratings beneath an employer and role -->
-/user/{UserID}/employers/{employerID}/roles/{roleID}/rate/
+## Insurance
 
-<!-- reviews underneath an employer and role -->
-/user/{UserID}/employers/{employerDocs}/roles/{roleID}/reviews/
-```
+- Co-operators
+
+## Software
+
+- Freshbooks
+
+## Collaboration
+
+- Kootenay web workers
+
+## Professionalism
+
+- Understand benchmarking and what are good metrics
+    - < 1 sec load
+    - < 2mb data
+    - < 50 requests
 
 
+## Wordpress
 
-## Links
-- [Project Tracker and User Stories](https://njmaeff.youtrack.cloud/agiles/121-2/current)
-- [UI Mockup](https://www.figma.com/file/xJJB3LKEeHc1WZ6aS73mVf/ASSIGNMENT--Application-Planning%2CPrototyping-%26-Mockup?node-id=0%3A1)
-- [Flow Chart and Mind Map](https://whimsical.com/web104-final-project-NvwcmCe7f2ehRX1tiD452o)
+### Hosting
+- [Plesk](https://github.com/plesk)
+
+### Themes
+- Flatsome theme (UX builder)
+
+### Migration Hacks
+- lime export
+- miso ftp
+
+## Blogs
+
+- [Medium alternative](https://scribe.rip/)
