@@ -135,6 +135,11 @@ export const FieldRowWrapper: React.FC<{ label: string, error?: boolean, readonl
                     background-color: transparent;
                 }
 
+                .react-datepicker-popper {
+                    position: relative;
+                    z-index: 1000;
+                }
+
                 .react-datepicker-wrapper {
                     input {
                         margin-left: 0;
@@ -316,6 +321,7 @@ export const FieldTable: React.FC<{
             padding-bottom: 1rem;
             border-bottom: thin solid ${theme.colors.grayLight};
             margin-bottom: 1rem;
+
             h3 {
                 margin: 1rem 0 0.5rem;
                 ${SectionSize}
