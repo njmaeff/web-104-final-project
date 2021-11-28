@@ -1,11 +1,11 @@
 import React, {useState} from "react";
 import {DropDown, DropDownElement} from "./control";
-import {Link} from "./link";
 import {usePageCtx} from "../hooks/usePageCtx";
 import {Loader} from "./loader";
 import styled from "@emotion/styled";
 import {ScrollBar} from "../styles/mixins";
 import {Employer} from "../orm/validate";
+import Link from "next/link";
 
 export const Page = styled.div`
     display: flex;
@@ -162,7 +162,9 @@ export const MenuTemplate: React.FC<{
                                 ))}
                         </DropDown>
                     </div>
-                    <Link href={"/profile"} className={"icon-settings"}/>
+                    <Link href={"/profile"}>
+                        <a className={'icon-settings'}/>
+                    </Link>
                 </nav>
             </header>
             {isSaving || isLoading ? (
@@ -203,28 +205,21 @@ export const MenuTemplate: React.FC<{
                     </div>
                     <div className={"footer-control"}>
                         <Link
-                            href={"/"}
-                            className={"icon-home"}
-                            disabled={disableNavigation}
-                        />
+                            href={"/main"}
+                        ><a className={'icon-home'}/></Link>
                         <Link
                             href={"/edit"}
-                            params={editAllParams}
-                            className={"icon-edit"}
-                            disabled={disableNavigation}
-                        />
+                        >
+                            <a className={'icon-edit'}/>
+                        </Link>
                     </div>
                     <div className={"footer-control"}>
                         <Link
                             href={"/review"}
-                            className={"icon-review"}
-                            disabled={disableNavigation}
-                        />
+                        ><a className={'icon-review'}/></Link>
                         <Link
-                            href={"/rate/success"}
-                            className={"icon-rate"}
-                            disabled={disableNavigation}
-                        />
+                            href={"/rate-success"}
+                        ><a className={'icon-rate'}/></Link>
                     </div>
                 </nav>
             </footer>

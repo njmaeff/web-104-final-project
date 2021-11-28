@@ -1,6 +1,7 @@
 import "react";
 import * as formik from "formik";
 import {isDateLike} from "../orm/docs";
+import {useEffect} from "react";
 
 export enum PageStatus {
     EDIT,
@@ -23,6 +24,11 @@ export const useFormWithStatus = <T = any>({
         },
         ...config,
     });
+
+    useEffect(() => {
+        form.validateForm();
+    }, [])
+
     const isReadonly = form.status === PageStatus.VIEW;
     const isNew = form.status === PageStatus.NEW;
     const isEdit = form.status === PageStatus.EDIT || isNew;

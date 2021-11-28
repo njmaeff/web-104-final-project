@@ -5,16 +5,22 @@ import {
     FieldTable,
     TextInput,
 } from "./input";
-import { MenuTemplate } from "./page";
-import { PageProps } from "./types";
-import { PageStatus, useFormWithStatus } from "../hooks/useFormWithStatus";
-import { EmployerCollection} from "../orm/docs";
-import { Link } from "./link";
-import { usePageCtx } from "../hooks/usePageCtx";
-import {RateIssue, RateSuccess} from "../orm/validate";
+import {MenuTemplate} from "./page";
+import {PageProps} from "./types";
+import {PageStatus, useFormWithStatus} from "../hooks/useFormWithStatus";
+import {EmployerCollection} from "../orm/docs";
+import {usePageCtx} from "../hooks/usePageCtx";
+import {
+    RateIssue,
+    rateIssueSchema,
+    RateSuccess,
+    rateSuccessSchema
+} from "../orm/validate";
+import {Highlight} from "../styles/mixins";
+import Link from "next/link";
 
 export const RateSuccessPage: React.FC = () => {
-    const { currentEmployerID, currentEmployer, allEmployers } = usePageCtx();
+    const {currentEmployerID, currentEmployer, allEmployers} = usePageCtx();
     const [formik, {
         fieldProps,
         mainProps
@@ -26,6 +32,7 @@ export const RateSuccessPage: React.FC = () => {
             result: "",
         },
         initialStatus: PageStatus.EDIT,
+        validationSchema: rateSuccessSchema,
         onSubmit: async (values) => {
             await EmployerCollection.fromID(currentEmployerID)
                 .roles.withID(currentEmployerID)
@@ -60,7 +67,7 @@ export const RateSuccessPage: React.FC = () => {
     );
 };
 export const RateIssuePage: React.FC<PageProps> = () => {
-    const { currentEmployerID, currentEmployer, allEmployers } = usePageCtx();
+    const {currentEmployerID, currentEmployer, allEmployers} = usePageCtx();
 
     const [formik, {
         fieldProps,
@@ -74,6 +81,7 @@ export const RateIssuePage: React.FC<PageProps> = () => {
             correction: "",
         },
         initialStatus: PageStatus.EDIT,
+        validationSchema: rateIssueSchema,
         onSubmit: async (values) => {
             await EmployerCollection.fromID(currentEmployerID)
                 .roles.withID(currentEmployerID)
@@ -136,17 +144,13 @@ export const RateYourselfTemplate: React.FC<{
                 {children}
                 <nav>
                     <Link
-                        href={"/rate/success"}
-                        className={`icon-award ${
-                            success ? "icon-highlight__primary" : ""
-                        }`}
-                    />
+                        href={"/rate-success"}
+                    ><a css={theme => success && Highlight(theme.colors.primary)}
+                        className={'icon-award'}/></Link>
                     <Link
-                        href={"/rate/issue"}
-                        className={`icon-issue ${
-                            issue ? "icon-highlight__primary" : ""
-                        }`}
-                    />
+                        href={"/rate-issue"}
+                    ><a css={theme => issue && Highlight(theme.colors.primary)}
+                        className={'icon-issue'}/></Link>
                 </nav>
             </div>
         </MenuTemplate>

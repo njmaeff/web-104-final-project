@@ -5,18 +5,19 @@ import {
     FieldTable,
     TextInput,
 } from "./input";
-import { MenuTemplate } from "./page";
-import { PageStatus, useFormWithStatus } from "../hooks/useFormWithStatus";
-import { EmployerCollection} from "../orm/docs";
-import { usePageCtx } from "../hooks/usePageCtx";
-import {Review} from "../orm/validate";
+import {MenuTemplate} from "./page";
+import {PageStatus, useFormWithStatus} from "../hooks/useFormWithStatus";
+import {EmployerCollection} from "../orm/docs";
+import {usePageCtx} from "../hooks/usePageCtx";
+import {Review, reviewSchema} from "../orm/validate";
 
 export const ReviewPage: React.FC = () => {
-    const { currentEmployer, allEmployers, currentRoleID, currentEmployerID } =
+    const {currentEmployer, allEmployers, currentRoleID, currentEmployerID} =
         usePageCtx();
-    const [formik, { mainProps, fieldProps }] = useFormWithStatus<
-        Partial<Review>
-    >({
+    const [formik, {
+        mainProps,
+        fieldProps
+    }] = useFormWithStatus<Partial<Review>>({
         initialValues: {
             date: new Date(),
             adjustedSalary: "",
@@ -24,6 +25,7 @@ export const ReviewPage: React.FC = () => {
             outcome: "",
         },
         initialStatus: PageStatus.EDIT,
+        validationSchema: reviewSchema,
         onSubmit: async (values) => {
             await EmployerCollection.fromID(currentEmployerID)
                 .roles.withID(currentRoleID)

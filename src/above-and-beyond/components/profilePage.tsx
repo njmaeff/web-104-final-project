@@ -7,7 +7,7 @@ import {auth} from "../firebase/connect-api";
 import {usePageCtx} from "../hooks/usePageCtx";
 import {router} from "next/client";
 import Link from "next/link";
-import {User} from "../orm/validate";
+import {User, userSchema} from "../orm/validate";
 
 export const ProfilePage: Page = () => {
     const {currentEmployer, user, allEmployers} = usePageCtx();
@@ -17,6 +17,7 @@ export const ProfilePage: Page = () => {
                 displayName: user.displayName,
                 email: user.email,
             },
+            validationSchema: userSchema,
             onSubmit: async (values) => {
                 const user = auth.currentUser;
 

@@ -45,15 +45,17 @@ export const Environment = ({children}) => {
 const routes = new Map([
     ["main", MainPage],
     ["profile", ProfilePage],
-    ["rate/success", RateSuccessPage],
-    ["rate/issue", RateIssuePage],
+    ["rate-success", RateSuccessPage],
+    ["rate-issue", RateIssuePage],
     ["edit", EditPage],
     ["review", ReviewPage],
 ])
 
 
 export const App = () => {
-    const Component = routes.get(router.query.page as string)
+    const {page} = router.query;
+
+    const Component = routes.get(page as string)
     return <Component/>
 };
 
