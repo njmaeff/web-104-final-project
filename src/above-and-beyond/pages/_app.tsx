@@ -4,6 +4,7 @@ import {CacheProvider} from '@emotion/react';
 import {createEmotionCache} from "../components/create-emotion-cache";
 import "firebaseui/dist/firebaseui.css"
 import "react-datepicker/dist/react-datepicker.min.css"
+import "antd/dist/antd.min.css"
 import "../styles/styles.scss"
 import {ThemeEnvironment} from "../styles/theme";
 

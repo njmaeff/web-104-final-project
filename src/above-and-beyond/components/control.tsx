@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import {Menu} from "antd";
+import Link from "next/link";
+import React, {useState} from "react";
 import * as popper from "react-popper";
-import { Link } from "./link";
 
 export const DropDownWindow: React.FC<{
     referenceElement;
@@ -8,13 +9,13 @@ export const DropDownWindow: React.FC<{
     setReferenceContainer;
     close;
 }> = ({
-    referenceElement,
-    referenceContainer,
-    setReferenceContainer,
-    close,
-    children,
-}) => {
-    const { styles, attributes } = popper.usePopper(
+          referenceElement,
+          referenceContainer,
+          setReferenceContainer,
+          close,
+          children,
+      }) => {
+    const {styles, attributes} = popper.usePopper(
         referenceElement,
         referenceContainer,
         {
@@ -42,7 +43,7 @@ export const DropDownWindow: React.FC<{
 export const DropDown: React.FC<{
     current: string;
     headingType?: "h3" | "p";
-}> = ({ current, children, headingType = "p" }) => {
+}> = ({current, children, headingType = "p"}) => {
     const [isToggled, toggle] = useState(false);
     const [referenceElement, setReferenceElement] = useState(null);
     const [popperContainer, setPopperContainer] =
@@ -65,7 +66,7 @@ export const DropDown: React.FC<{
                 }}
             >
                 {headingType === "h3" ? <h3>{current}</h3> : <p>{current}</p>}
-                <span className={"icon-angle-down"} />
+                <span className={"icon-angle-down"}/>
                 {isToggled ? (
                     <DropDownWindow
                         referenceElement={referenceElement}
@@ -83,17 +84,14 @@ export const DropDown: React.FC<{
 export const DropDownElement: React.FC<{
     href: string;
     onClick: () => any;
-    params?;
-}> = (props) => {
+}> = ({href, onClick, children}) => {
     return (
-        <div>
+        <Menu.Item>
             <Link
-                href={props.href}
-                onClick={props.onClick}
-                params={props.params}
+                href={href}
             >
-                {props.children}
+                <a>{children}</a>
             </Link>
-        </div>
+        </Menu.Item>
     );
 };

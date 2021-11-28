@@ -5,6 +5,7 @@ import {Button, Dropdown, Form, Input, Menu} from "antd";
 import {css} from "@emotion/react";
 import {Highlight, ScrollBar} from "../styles/mixins";
 import {ParagraphSize, SectionSize} from "../styles/size";
+import {DownOutlined} from "@ant-design/icons";
 
 interface FieldProps<Value = any> {
     label: string;
@@ -48,10 +49,50 @@ export const TextInput: React.FC<{
                    }) => {
     return (
         <div
+            css={
+                theme => css`
+                    height: ${height};
+                    position: relative;
+                    width: 100%;
+
+                    h2 {
+                        margin: 0.5rem;
+                        padding: 0 0.5rem;
+                        position: absolute;
+                        top: -1.4rem;
+                        left: 0;
+                        background-color: ${theme.colors.light};
+                    }
+
+                    textarea, p {
+                        font-family: inherit;
+                        font-size: 0.8rem;
+                        border: thin solid ${theme.colors.light};
+                        width: 100%;
+                        min-height: 9rem;
+                        max-height: 15rem;
+                        padding: 1.5rem 1rem 2rem;
+                        margin: 0;
+
+                        overflow-y: scroll;
+                        resize: none;
+                        outline: none;
+
+                        ${!readonly && css`
+                            &:active, &:focus {
+                                outline: none !important;
+                                ${Highlight(theme.colors.primary)}
+                            }
+                        `
+                        }
+
+                    }
+
+                `
+            }
             className={`input-text ${
                 !readonly ? "input-text__write-mode" : ""
             }`}
-            style={{width, height}}
         >
             <h2>{label}</h2>
             {readonly ? (
@@ -80,36 +121,26 @@ export const FieldRowWrapper: React.FC<{ label: string, error?: boolean, readonl
             hasFeedback={!readonly}
             validateStatus={error ? 'error' : 'success'}
             css={theme => css`
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                margin: 0.5rem 0;
-
-                .react-datepicker-wrapper {
-                    text-align: right;
-                }
 
                 label {
-                    margin: 0;
                     color: ${theme.colors.gray};
                 }
 
                 p {
-                    //max-width: 50%;
-                    min-width: 50%;
-                    word-wrap: anywhere;
-                    white-space: break-spaces;
+                    background-color: transparent;
+                }
+
+                .react-datepicker-wrapper {
+                    input {
+                        margin-left: 0;
+                    }
                 }
 
                 input, button.control-dropdown__toggle {
-                    p {
-                        max-width: 100%;
-                    }
 
                     ${ScrollBar(theme)}
-
                     border: 2px solid ${theme.colors.grayLight};
-                    text-align: right;
+                    background-color: ${theme.colors.light};
                     padding: 0.2rem 0.5rem;
                 }
 
@@ -232,8 +263,10 @@ export const FieldDropDownInput: React.FC<FieldProps> = ({
             {readonly ? (
                 <Dropdown overlay={
                     <Menu>{children}</Menu>
-                }>
-                    <Button>{value}</Button>
+                }
+
+                          trigger={['click']}>
+                    <Button>{value}<DownOutlined/></Button>
                 </Dropdown>
             ) : (
                 <Input
