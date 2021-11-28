@@ -2724,7 +2724,6 @@ __metadata:
     "@mdx-js/loader": ^1.6.22
     "@mdx-js/react": ^1.6.22
     "@next/mdx": ^12.0.4
-    "@popperjs/core": ^2.10.2
     "@types/faker": ^5.5.8
     "@types/lodash": ^4.14.177
     "@types/react": ^17.0.20
@@ -2746,7 +2745,6 @@ __metadata:
     react-datepicker: ^4.3.0
     react-dom: ^17.0.2
     react-firebaseui: ^6.0.0
-    react-popper: ^2.2.5
     sass: ^1.43.5
     ts-node: ^10.2.1
     type-fest: ^2.5.4
@@ -2788,7 +2786,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@popperjs/core@npm:^2.10.2, @popperjs/core@npm:^2.9.2":
+"@popperjs/core@npm:^2.9.2":
   version: 2.10.2
   resolution: "@popperjs/core@npm:2.10.2"
   checksum: 43c189e3eb6d032433512d94761b54fc7cae15957ca5528008813f887a67b5760b949f30a5141b476be2ba5a6c677c91def150f603d2d3e30b5e97a5ae51474e

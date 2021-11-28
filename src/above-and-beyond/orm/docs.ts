@@ -1,11 +1,9 @@
-import { auth, db } from "../firebase/connect-api";
+import {auth, db} from "../firebase/connect-api";
 import firebase from "firebase/compat/app";
-import { useState } from "react";
-import { PromiseValue } from "type-fest";
-import { FirestoreProvider } from "../firebase/firestore-provider-compat";
-import { useAsync } from "../hooks/useAsync";
-
-export const Timestamp = firebase.firestore.Timestamp;
+import {useState} from "react";
+import {FirestoreProvider} from "../firebase/firestore-provider-compat";
+import {useAsync} from "../hooks/useAsync";
+import {DateLike, Doc, Employer, Rate, Review, Role} from "./validate";
 
 /**
  * Helper function to compose paths to documents stored in collections.
@@ -18,7 +16,7 @@ export const makeAsyncCallbackHook = <
 >(
     fn: FN
 ) => {
-    const [state, update] = useState<PromiseValue<FN>>();
+    const [state, update] = useState<Awaited<FN>>();
 
     const hook = (...args: Parameters<FN>): ReturnType<FN> =>
         fn(...args).then((result) => {
@@ -66,57 +64,6 @@ export class Firestore<
     }
 }
 
-export type DateLike = firebase.firestore.Timestamp | Date;
-
-export interface Doc {
-    id?: string;
-}
-
-export type User = Pick<
-    firebase.auth.UserCredential["user"],
-    "displayName" | "email"
->;
-
-export interface Employer extends Doc {
-    name: string;
-    location?: string;
-}
-
-export interface Role extends Doc {
-    name: string;
-    startDate: DateLike;
-    salary: string;
-    salaryTarget: string;
-    responsibilities: string;
-    skillTarget: string;
-}
-
-export interface RateIssue extends Doc {
-    type: "issue";
-    date: DateLike;
-    situation: string;
-    value: string;
-    result: string;
-    correction: string;
-}
-
-export interface RateSuccess extends Doc {
-    type: "success";
-    date: DateLike;
-    situation: string;
-    value: string;
-    result: string;
-}
-
-export interface Review extends Doc {
-    date: DateLike;
-    manager: string;
-    outcome: string;
-    adjustedSalary: string;
-}
-
-export type Rate = RateIssue | RateSuccess;
-
 export interface DataMeta extends Doc {
     currentEmployerID: string;
     currentRoleID: string;
@@ -161,6 +108,7 @@ export class EmployerCollection {
     private employer = useEmployer();
 }
 
+export const Timestamp = firebase.firestore.Timestamp;
 export const ensureDate = (date: DateLike): Date => {
     if (date instanceof Timestamp) {
         return date.toDate();

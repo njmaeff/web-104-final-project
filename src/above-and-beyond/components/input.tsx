@@ -60,6 +60,7 @@ export const TextInput: React.FC<{
                         padding: 0 0.5rem;
                         position: absolute;
                         top: -1.4rem;
+                        z-index: 100;
                         left: 0;
                         background-color: ${theme.colors.light};
                     }
@@ -77,6 +78,10 @@ export const TextInput: React.FC<{
                         overflow-y: scroll;
                         resize: none;
                         outline: none;
+
+                        line-height: 1.3rem;
+                        background-color: ${theme.colors.light};
+                        color: ${theme.colors.dark};
 
                         ${!readonly && css`
                             &:active, &:focus {
@@ -261,21 +266,27 @@ export const FieldDropDownInput: React.FC<FieldProps> = ({
     return (
         <FieldRowWrapper label={label} error={error} readonly={readonly}>
             {readonly ? (
-                <Dropdown overlay={
+                <Dropdown css={theme => css`
+                    background-color: ${theme.colors.light};
+
+                `} overlay={
                     <Menu>{children}</Menu>
                 }
 
                           trigger={['click']}>
-                    <Button>{value}<DownOutlined/></Button>
+                    <Button css={theme =>
+                        css`
+                            border: 2px solid ${theme.colors.grayLight};
+                        `
+                    }>{value}<DownOutlined/></Button>
                 </Dropdown>
             ) : (
-                <Input
-                    className={error ? "border-highlight__primary" : ""}
-                    type="text"
+                <FormInput
                     name={name}
-
+                    error={error}
                     onChange={onChange}
                     value={value}
+
                 />
             )}
         </FieldRowWrapper>
@@ -304,7 +315,7 @@ export const FieldTable: React.FC<{
             width: 100%;
             padding-bottom: 1rem;
             border-bottom: thin solid ${theme.colors.grayLight};
-
+            margin-bottom: 1rem;
             h3 {
                 margin: 1rem 0 0.5rem;
                 ${SectionSize}

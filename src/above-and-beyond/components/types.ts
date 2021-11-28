@@ -1,6 +1,7 @@
 import React from "react";
-import { DataMeta, Employer } from "../orm/docs";
+import { DataMeta} from "../orm/docs";
 import firebase from "firebase/compat";
+import {Employer} from "../orm/validate";
 
 export interface PagePropsContext extends DataMeta {
     user: firebase.User;

@@ -7,8 +7,9 @@ import {
 } from "./input";
 import { MenuTemplate } from "./page";
 import { PageStatus, useFormWithStatus } from "../hooks/useFormWithStatus";
-import { EmployerCollection, Review } from "../orm/docs";
+import { EmployerCollection} from "../orm/docs";
 import { usePageCtx } from "../hooks/usePageCtx";
+import {Review} from "../orm/validate";
 
 export const ReviewPage: React.FC = () => {
     const { currentEmployer, allEmployers, currentRoleID, currentEmployerID } =

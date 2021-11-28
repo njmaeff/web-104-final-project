@@ -1,11 +1,11 @@
 import React, {useState} from "react";
 import {DropDown, DropDownElement} from "./control";
 import {Link} from "./link";
-import {Employer} from "../orm/docs";
 import {usePageCtx} from "../hooks/usePageCtx";
 import {Loader} from "./loader";
 import styled from "@emotion/styled";
 import {ScrollBar} from "../styles/mixins";
+import {Employer} from "../orm/validate";
 
 export const Page = styled.div`
     display: flex;
@@ -134,8 +134,7 @@ export const MenuTemplate: React.FC<{
                     <div className={"header-control"}>
                         <h2>{heading}</h2>
                         <DropDown
-                            current={currentEmployer?.name}
-                            headingType={"h3"}
+                            value={currentEmployer?.name}
                         >
                             <DropDownElement
                                 href={`/`}

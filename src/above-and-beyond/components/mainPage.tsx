@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, {useEffect} from "react";
 import {
     FieldDatePickerRow,
     FieldDropDownInput,
@@ -6,22 +6,19 @@ import {
     FieldTable,
     TextInput,
 } from "./input";
-import { MenuTemplate } from "./page";
-import { Page, PageProps } from "./types";
-import {
-    Employer,
-    EmployerCollection,
-    Role,
-    useEmployer,
-} from "../orm/docs";
+import {MenuTemplate} from "./page";
+import {Page, PageProps} from "./types";
+import {EmployerCollection, useEmployer,} from "../orm/docs";
 import {
     mergeForms,
     PageStatus,
     useFormWithStatus,
 } from "../hooks/useFormWithStatus";
-import { DropDownElement } from "./control";
-import { useAsync } from "../hooks/useAsync";
-import { usePageCtx } from "../hooks/usePageCtx";
+import {DropDownElement} from "./control";
+import {useAsync} from "../hooks/useAsync";
+import {usePageCtx} from "../hooks/usePageCtx";
+import {Employer, employerSchema, Role, roleSchema} from "../orm/validate";
+
 
 export const MainPage: Page<PageProps> = () => {
     const {
@@ -55,6 +52,8 @@ export const MainPage: Page<PageProps> = () => {
                 initialStatus: isNewEmployer
                     ? PageStatus.EDIT
                     : PageStatus.VIEW,
+
+                validationSchema: employerSchema,
                 onSubmit: async (values) => {
                     employerForm.setView();
 
@@ -69,6 +68,7 @@ export const MainPage: Page<PageProps> = () => {
                     : isNewRole
                         ? PageStatus.EDIT
                         : PageStatus.VIEW,
+                validationSchema: roleSchema,
                 onSubmit: async (values) => {
                     roleForm.setView();
                     const ref = await EmployerCollection.fromID(
@@ -89,22 +89,22 @@ export const MainPage: Page<PageProps> = () => {
         }
     }, [currentEmployerID]);
 
-    const [{ allRolesForEmployer }, { loaded }] = useAsync<{
+    const [{allRolesForEmployer}, {loaded}] = useAsync<{
         currentRole: Role;
         allRolesForEmployer: Role[];
     }>(
         async () => {
             if (!currentRoleID) {
-                roleFormik.resetForm({ values: { ...emptyRole.currentRole } });
+                roleFormik.resetForm({values: {...emptyRole.currentRole}});
                 if (!isNewEmployer) {
                     roleForm.setEdit();
                 }
-                return { ...emptyRole };
+                return {...emptyRole};
             } else {
                 const role = EmployerCollection.fromID(currentEmployerID).roles;
                 const allRolesForEmployer = await role.readFromCollection();
                 const currentRole = await role.read(currentRoleID);
-                await roleFormik.setValues(currentRole);
+                roleFormik.resetForm({values: currentRole})
 
                 return {
                     currentRole,
@@ -121,7 +121,7 @@ export const MainPage: Page<PageProps> = () => {
     return (
         <MenuTemplate
             currentEmployer={
-                isNewEmployer ? { name: "New Employer" } : currentEmployer
+                isNewEmployer ? {name: "New Employer"} : currentEmployer
             }
             heading={"Above and Beyond"}
             allEmployers={allEmployers}

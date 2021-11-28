@@ -3,11 +3,11 @@ import {FieldInputRow, FieldTable} from "./input";
 import {MenuTemplate} from "./page";
 import {Page} from "./types";
 import {PageStatus, useFormWithStatus} from "../hooks/useFormWithStatus";
-import {User} from "../orm/docs";
 import {auth} from "../firebase/connect-api";
 import {usePageCtx} from "../hooks/usePageCtx";
 import {router} from "next/client";
 import Link from "next/link";
+import {User} from "../orm/validate";
 
 export const ProfilePage: Page = () => {
     const {currentEmployer, user, allEmployers} = usePageCtx();

@@ -1,6 +1,6 @@
 import "react";
 import * as formik from "formik";
-import { isDateLike } from "../orm/docs";
+import {isDateLike} from "../orm/docs";
 
 export enum PageStatus {
     EDIT,
@@ -8,26 +8,12 @@ export enum PageStatus {
     NEW,
 }
 
-const validate = (values) => {
-    // default check for empty values
-    let errors = {};
-    for (const [key, value] of Object.entries(values)) {
-        if (!value) {
-            errors[key] = true;
-        }
-    }
-
-    return errors;
-};
-
 export const useFormWithStatus = <T = any>({
-    onSubmit,
-    ...config
-}: formik.FormikConfig<T>) => {
+                                               onSubmit,
+                                               ...config
+                                           }: formik.FormikConfig<T>) => {
     const form = formik.useFormik<T>({
         initialStatus: PageStatus.VIEW,
-        initialErrors: validate(config.initialValues),
-        validate,
         onSubmit: async (values, helpers) => {
             if (form.dirty) {
                 await onSubmit(values, helpers);
@@ -49,6 +35,7 @@ export const useFormWithStatus = <T = any>({
 
     for (const [key, value] of Object.entries(config.initialValues)) {
         const props = form.getFieldProps(key);
+        const meta = form.getFieldMeta(key);
         if (isDateLike(value)) {
             props.onChange = (date) => {
                 form.setFieldValue(key, date);
@@ -57,8 +44,7 @@ export const useFormWithStatus = <T = any>({
 
         fieldProps[key] = {
             ...props,
-            error: form.errors[key],
-            touched: form.touched[key],
+            ...meta,
             readonly: isReadonly,
         };
     }

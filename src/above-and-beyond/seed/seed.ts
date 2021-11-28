@@ -8,9 +8,10 @@ import {
     getFirestore,
 } from "firebase-admin/firestore";
 import faker from "faker";
-import { DataMeta, Employer, Role } from "../orm/docs";
+import { DataMeta} from "../orm/docs";
 import { testEmail, testPassword } from "./setup";
 import range from "lodash/range";
+import {Employer, Role} from "../orm/validate";
 
 faker.seed(19);
 

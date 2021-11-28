@@ -1,85 +1,25 @@
-import {Menu} from "antd";
+import {Button, Dropdown, Menu} from "antd";
 import Link from "next/link";
-import React, {useState} from "react";
-import * as popper from "react-popper";
+import React from "react";
+import {css} from "@emotion/react";
+import {DownOutlined} from "@ant-design/icons";
 
-export const DropDownWindow: React.FC<{
-    referenceElement;
-    referenceContainer;
-    setReferenceContainer;
-    close;
-}> = ({
-          referenceElement,
-          referenceContainer,
-          setReferenceContainer,
-          close,
-          children,
-      }) => {
-    const {styles, attributes} = popper.usePopper(
-        referenceElement,
-        referenceContainer,
-        {
-            placement: "bottom",
-            modifiers: [
-                {
-                    name: "hide",
-                },
-            ],
-        }
-    );
+export const DropDown: React.FC<{ value }> = ({children, value}) => {
 
-    return (
-        <div
-            className={"control-dropdown-container"}
-            ref={setReferenceContainer}
-            style={styles.popper}
-            {...attributes.popper}
-        >
-            {children}
-        </div>
-    );
-};
+    return <Dropdown css={theme => css`
+        background-color: ${theme.colors.light};
 
-export const DropDown: React.FC<{
-    current: string;
-    headingType?: "h3" | "p";
-}> = ({current, children, headingType = "p"}) => {
-    const [isToggled, toggle] = useState(false);
-    const [referenceElement, setReferenceElement] = useState(null);
-    const [popperContainer, setPopperContainer] =
-        useState<HTMLDivElement>(null);
+    `} overlay={
+        <Menu>{children}</Menu>
+    }
 
-    return (
-        <div
-            className={"control-dropdown"}
-            onBlur={(e) => {
-                if (!e.currentTarget.contains(e.relatedTarget as HTMLElement)) {
-                    toggle(false);
-                }
-            }}
-        >
-            <button
-                className={"control-dropdown__toggle"}
-                ref={setReferenceElement}
-                onClick={() => {
-                    toggle(!isToggled);
-                }}
-            >
-                {headingType === "h3" ? <h3>{current}</h3> : <p>{current}</p>}
-                <span className={"icon-angle-down"}/>
-                {isToggled ? (
-                    <DropDownWindow
-                        referenceElement={referenceElement}
-                        referenceContainer={popperContainer}
-                        setReferenceContainer={setPopperContainer}
-                        close={() => toggle(false)}
-                    >
-                        {children}
-                    </DropDownWindow>
-                ) : null}
-            </button>
-        </div>
-    );
+                     trigger={['click']}>
+        <Button css={theme =>
+            css`
+                border: 2px solid ${theme.colors.grayLight};
+            `
+        }>{value}<DownOutlined/></Button>
+    </Dropdown>
 };
 export const DropDownElement: React.FC<{
     href: string;

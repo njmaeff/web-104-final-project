@@ -8,9 +8,10 @@ import {
 import { MenuTemplate } from "./page";
 import { PageProps } from "./types";
 import { PageStatus, useFormWithStatus } from "../hooks/useFormWithStatus";
-import { EmployerCollection, RateIssue, RateSuccess } from "../orm/docs";
+import { EmployerCollection} from "../orm/docs";
 import { Link } from "./link";
 import { usePageCtx } from "../hooks/usePageCtx";
+import {RateIssue, RateSuccess} from "../orm/validate";
 
 export const RateSuccessPage: React.FC = () => {
     const { currentEmployerID, currentEmployer, allEmployers } = usePageCtx();
