@@ -137,10 +137,8 @@ export const MenuTemplate: React.FC<{
                             value={currentEmployer?.name}
                         >
                             <DropDownElement
-                                href={`/`}
-                                onClick={() => {
-                                    api.newEmployer();
-                                }}
+                                href={`/main?newEmployer=true`}
+                                key={'new'}
                             >
                                 Create New
                             </DropDownElement>
@@ -152,7 +150,6 @@ export const MenuTemplate: React.FC<{
                                 .map((employer) => (
                                     <DropDownElement
                                         key={employer.id}
-                                        href={`/api?employer=${employer.id}`}
                                         onClick={() =>
                                             api.updateEmployer(employer.id)
                                         }

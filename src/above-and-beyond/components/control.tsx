@@ -1,6 +1,6 @@
 import {Button, Dropdown, Menu} from "antd";
 import Link from "next/link";
-import React from "react";
+import React, {ReactEventHandler} from "react";
 import {css} from "@emotion/react";
 import {DownOutlined} from "@ant-design/icons";
 
@@ -22,16 +22,19 @@ export const DropDown: React.FC<{ value }> = ({children, value}) => {
     </Dropdown>
 };
 export const DropDownElement: React.FC<{
-    href: string;
-    onClick: () => any;
-}> = ({href, onClick, children}) => {
+    href?: string;
+    onClick?: ReactEventHandler<HTMLAnchorElement>
+}> = ({href, children, onClick}) => {
     return (
         <Menu.Item>
-            <Link
+            {href ? <Link
                 href={href}
             >
                 <a>{children}</a>
-            </Link>
+            </Link> : <a onClick={(e) => {
+                e.preventDefault()
+                onClick?.(e)
+            }}>{children}</a>}
         </Menu.Item>
     );
 };

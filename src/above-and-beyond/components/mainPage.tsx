@@ -146,7 +146,7 @@ export const MainPage: Page<PageProps> = () => {
                 >
                     {!isNewEmployer && (
                         <DropDownElement
-                            href={`/api?role=`}
+                            key={'new'}
                             onClick={() => {
                                 api.newRole();
                             }}
@@ -160,7 +160,6 @@ export const MainPage: Page<PageProps> = () => {
                         .map((role) => (
                             <DropDownElement
                                 key={role.id}
-                                href={`/api?role=${role.id}`}
                                 onClick={() => api.updateRole(role.id)}
                             >
                                 {role.name}
