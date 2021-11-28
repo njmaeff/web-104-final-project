@@ -22,7 +22,7 @@ export const TextInput = () => {
         <Text
             width={"70%"}
             height={"5rem"}
-            heading={"Text Input"}
+            label={"Text Input"}
             {...fieldProps.textInput}
         />
     );
@@ -37,7 +37,7 @@ export const FieldInputTable = () => {
     });
     return (
         <Field heading={"Details"}>
-            <FieldInputRow heading={"Field"} {...fieldProps.fieldInput} />
+            <FieldInputRow label={"Field"} {...fieldProps.fieldInput} />
         </Field>
     );
 };
@@ -53,7 +53,7 @@ export const FieldDatePicker = () => {
     return (
         <Field heading={"Details"}>
             <FieldDatePickerRow
-                heading={"Date"}
+                label={"Date"}
                 {...fieldProps.fieldInput}
                 readonly={false}
             />
@@ -72,7 +72,7 @@ export const FieldDateTimePicker = () => {
     return (
         <Field heading={"Details"}>
             <FieldDateTimePickerRow
-                heading={"Date"}
+                label={"Date"}
                 {...fieldProps.fieldInput}
                 readonly={false}
             />

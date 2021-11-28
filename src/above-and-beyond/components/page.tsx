@@ -1,9 +1,104 @@
-import React, { useState } from "react";
-import { DropDown, DropDownElement } from "./control";
-import { Link } from "./link";
-import { Employer } from "../orm/docs";
-import { usePageCtx } from "../hooks/usePageCtx";
-import { Loader } from "./loader";
+import React, {useState} from "react";
+import {DropDown, DropDownElement} from "./control";
+import {Link} from "./link";
+import {Employer} from "../orm/docs";
+import {usePageCtx} from "../hooks/usePageCtx";
+import {Loader} from "./loader";
+import styled from "@emotion/styled";
+import {ScrollBar} from "../styles/mixins";
+
+export const Page = styled.div`
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+
+    &::before {
+        /* to add opacity on background only https://stackoverflow.com/a/10423121/15809514 */
+        position: absolute;
+        background-image: url("/img/mobile-login-background.png");
+        background-position-y: 65%;
+        background-position-x: 50%;
+        background-repeat: no-repeat;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        opacity: .3;
+        content: "";
+        z-index: -1;
+    }
+
+    header {
+        padding: 1rem;
+        border-bottom: thin solid ${({theme}) => theme.colors.light};
+
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            a.icon-settings {
+                margin: 0 0.25rem;
+                font-size: 2.5rem;
+                background-color: ${({theme}) => theme.colors.light};
+                color: ${({theme}) => theme.colors.dark};
+                text-decoration: none;
+            }
+
+        }
+    }
+
+    main {
+        ${({theme}) => ScrollBar(theme)}
+
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        height: 100%;
+        padding: 1rem;
+
+        overflow-y: scroll;
+
+        .field-input, .field-display {
+            margin-bottom: 2rem;
+        }
+
+        .input-text {
+            margin: 1.5rem 0;
+        }
+
+
+    }
+
+    footer {
+        position: relative;
+        min-height: 5.5rem;
+        padding: 1rem 0.75rem 0.75rem;
+
+        nav {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            border-radius: 30px;
+            justify-content: space-between;
+            background-color: ${({theme}) => theme.colors.light};
+
+            max-width: 28rem;
+            margin: 0 auto;
+
+
+            box-shadow: 0 0.25rem 0.5rem 0 ${({theme}) => theme.colors.dark};
+            transition: 0.3s;
+            /* On mouse-over, add a deeper shadow */
+
+            &:hover {
+                box-shadow: 0 0.5rem 1rem 0 ${({theme}) => theme.colors.dark};
+            }
+
+        }
+    }
+`
 
 export const MenuTemplate: React.FC<{
     currentEmployer: Employer;
@@ -30,10 +125,10 @@ export const MenuTemplate: React.FC<{
           isLoading,
       }) => {
     const [isSaving, setSaveState] = useState(false);
-    const { api } = usePageCtx();
+    const {api} = usePageCtx();
 
     return (
-        <div className={`page`}>
+        <Page>
             <header>
                 <nav>
                     <div className={"header-control"}>
@@ -68,12 +163,12 @@ export const MenuTemplate: React.FC<{
                                 ))}
                         </DropDown>
                     </div>
-                    <Link href={"/profile"} className={"icon-settings"} />
+                    <Link href={"/profile"} className={"icon-settings"}/>
                 </nav>
             </header>
             {isSaving || isLoading ? (
                 <main>
-                    <Loader />
+                    <Loader/>
                 </main>
             ) : (
                 <main>{children}</main>
@@ -86,8 +181,8 @@ export const MenuTemplate: React.FC<{
                                 isEdit && isValid
                                     ? "border-highlight__success"
                                     : isEdit && !isValid
-                                    ? "border-highlight__primary"
-                                    : ""
+                                        ? "border-highlight__primary"
+                                        : ""
                             }`}
                             type={"button"}
                             onClick={() => {
@@ -134,6 +229,6 @@ export const MenuTemplate: React.FC<{
                     </div>
                 </nav>
             </footer>
-        </div>
+        </Page>
     );
 };

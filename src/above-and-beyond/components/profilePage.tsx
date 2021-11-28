@@ -1,15 +1,17 @@
 import React from "react";
-import { FieldInputRow, FieldTable } from "./input";
-import { MenuTemplate } from "./page";
-import { Page } from "./types";
-import { PageStatus, useFormWithStatus } from "../hooks/useFormWithStatus";
-import { User } from "../orm/docs";
-import { auth } from "../api/connect-api";
-import { usePageCtx } from "../hooks/usePageCtx";
+import {FieldInputRow, FieldTable} from "./input";
+import {MenuTemplate} from "./page";
+import {Page} from "./types";
+import {PageStatus, useFormWithStatus} from "../hooks/useFormWithStatus";
+import {User} from "../orm/docs";
+import {auth} from "../firebase/connect-api";
+import {usePageCtx} from "../hooks/usePageCtx";
+import {router} from "next/client";
+import Link from "next/link";
 
 export const ProfilePage: Page = () => {
-    const { currentEmployer, user, allEmployers } = usePageCtx();
-    const [form, { mainProps, ...userForm }] = useFormWithStatus<Partial<User>>(
+    const {currentEmployer, user, allEmployers} = usePageCtx();
+    const [form, {mainProps, ...userForm}] = useFormWithStatus<Partial<User>>(
         {
             initialValues: {
                 displayName: user.displayName,
@@ -27,7 +29,7 @@ export const ProfilePage: Page = () => {
                     await user.updateEmail(values.email);
                 }
 
-                form.resetForm({ values, status: PageStatus.VIEW });
+                form.resetForm({values, status: PageStatus.VIEW});
             },
         }
     );
@@ -41,11 +43,11 @@ export const ProfilePage: Page = () => {
         >
             <FieldTable>
                 <FieldInputRow
-                    heading={"Name"}
+                    label={"Name"}
                     {...userForm.fieldProps.displayName}
                 />
                 <FieldInputRow
-                    heading={"Email"}
+                    label={"Email"}
                     {...userForm.fieldProps.email}
                 />
             </FieldTable>
@@ -53,15 +55,17 @@ export const ProfilePage: Page = () => {
                 className={"primary"}
                 onClick={() => {
                     auth.signOut().then(() => {
-                        window.location.href = "index.html";
+                        router.push('/')
                     });
                 }}
             >
                 Logout
             </button>
-            <a href="getting-started.html" className={"primary"}>
-                About
-            </a>
+            <Link href={'/getting-started'}>
+                <a className={"primary"}>
+                    About
+                </a>
+            </Link>
         </MenuTemplate>
     );
 };

@@ -41,14 +41,14 @@ export const ReviewPage: React.FC = () => {
             {...mainProps}
         >
             <FieldTable>
-                <FieldDateTimePickerRow heading={"Date"} {...fieldProps.date} />
-                <FieldInputRow heading={"Manager"} {...fieldProps.manager} />
+                <FieldDateTimePickerRow label={"Date"} {...fieldProps.date} />
+                <FieldInputRow label={"Manager"} {...fieldProps.manager} />
                 <FieldInputRow
-                    heading={"Adjusted Salary"}
+                    label={"Adjusted Salary"}
                     {...fieldProps.adjustedSalary}
                 />
             </FieldTable>
-            <TextInput heading={"Outcome"} {...fieldProps.outcome} />
+            <TextInput label={"Outcome"} {...fieldProps.outcome} />
         </MenuTemplate>
     );
 };

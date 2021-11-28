@@ -1,8 +1,10 @@
 import {useEffect} from "react";
-import {auth} from "../api/connect-api";
+import {auth} from "../firebase/connect-api";
 import * as firebaseui from "firebaseui"
 import firebase from "firebase/compat/app";
 import {router} from "next/client";
+import styled from "@emotion/styled";
+import {darken} from "polished";
 
 
 export const useFirebaseUI = () => {
@@ -22,7 +24,7 @@ export const useFirebaseUI = () => {
                         ) {
                             router.push('/getting-started');
                         } else if (authResult.user) {
-                            router.push('/app')
+                            router.push('/main')
                         }
 
                         return false;
@@ -40,6 +42,41 @@ export const useFirebaseUI = () => {
     }, [])
 
 }
+
+export const FirebaseAuthContainer = styled.div`
+    margin-top: 3rem;
+    font-family: 'Rubik', sans-serif;
+
+    button {
+        background-color: ${({theme}) => theme.colors.primary} !important;
+        color: ${({theme}) => theme.colors.light} !important;
+        opacity: 85%;
+
+        span {
+            color: ${({theme}) => theme.colors.light} !important;
+        }
+
+        &:hover, &:active {
+            background-color: ${({theme}) => darken('15%', theme.colors.primary)
+            } !important;
+        }
+    }
+
+    div {
+        h1 {
+            font-size: 2rem;
+            color: ${({theme}) => theme.colors.dark};
+            margin-bottom: 1rem;
+        }
+
+        input {
+            border-bottom: thin solid ${({theme}) => theme.colors.dark};
+        }
+
+        background-color: transparent;
+    }
+
+`
 
 export function SignInScreen() {
     useFirebaseUI();

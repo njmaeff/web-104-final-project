@@ -131,17 +131,17 @@ export const MainPage: Page<PageProps> = () => {
         >
             <FieldTable>
                 <FieldInputRow
-                    heading={"Organization Name"}
+                    label={"Organization Name"}
                     {...employerForm.fieldProps.name}
                 />
                 <FieldInputRow
-                    heading={"Location"}
+                    label={"Location"}
                     {...employerForm.fieldProps.location}
                 />
             </FieldTable>
             <FieldTable>
                 <FieldDropDownInput
-                    heading={"Role"}
+                    label={"Role"}
                     {...roleForm.fieldProps.name}
                 >
                     {!isNewEmployer && (
@@ -169,15 +169,15 @@ export const MainPage: Page<PageProps> = () => {
                 </FieldDropDownInput>
 
                 <FieldDatePickerRow
-                    heading={"Start Date"}
+                    label={"Start Date"}
                     {...roleForm.fieldProps.startDate}
                 />
                 <FieldInputRow
-                    heading={"Current Salary"}
+                    label={"Current Salary"}
                     {...roleForm.fieldProps.salary}
                 />
                 <FieldInputRow
-                    heading={"Target Salary"}
+                    label={"Target Salary"}
                     {...roleForm.fieldProps.salaryTarget}
                 />
             </FieldTable>
@@ -185,13 +185,13 @@ export const MainPage: Page<PageProps> = () => {
             <TextInput
                 {...roleForm.fieldProps.skillTarget}
                 height={"auto"}
-                heading={"Skills"}
+                label={"Skills"}
             />
 
             <TextInput
                 {...roleForm.fieldProps.responsibilities}
                 height={"auto"}
-                heading={"Responsibilities"}
+                label={"Responsibilities"}
             />
         </MenuTemplate>
     );

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Loader } from "../components/loader";
 import { EmployerCollection, useEmployer, user } from "../orm/docs";
-import { auth } from "../api/connect-api";
+import { auth } from "../firebase/connect-api";
 import { PagePropsContext } from "../components/types";
 
 const PageCtx = React.createContext<Partial<PagePropsContext>>({});

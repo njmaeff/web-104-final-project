@@ -47,14 +47,14 @@ export const RateSuccessPage: React.FC = () => {
             heading={"Rate - Success"}
         >
             <FieldTable>
-                <FieldDateTimePickerRow heading={"Date"} {...fieldProps.date} />
+                <FieldDateTimePickerRow label={"Date"} {...fieldProps.date} />
                 <FieldInputRow
-                    heading={"Estimated Value"}
+                    label={"Estimated Value"}
                     {...fieldProps.value}
                 />
             </FieldTable>
-            <TextInput heading={"Situation"} {...fieldProps.situation} />
-            <TextInput heading={"Result"} {...fieldProps.result} />
+            <TextInput label={"Situation"} {...fieldProps.situation} />
+            <TextInput label={"Result"} {...fieldProps.result} />
         </RateYourselfTemplate>
     );
 };
@@ -96,15 +96,15 @@ export const RateIssuePage: React.FC<PageProps> = () => {
             heading={"Rate - Issue"}
         >
             <FieldTable>
-                <FieldDateTimePickerRow heading={"Date"} {...fieldProps.date} />
+                <FieldDateTimePickerRow label={"Date"} {...fieldProps.date} />
                 <FieldInputRow
-                    heading={"Estimated Value"}
+                    label={"Estimated Value"}
                     {...fieldProps.value}
                 />
             </FieldTable>
-            <TextInput heading={"Situation"} {...fieldProps.situation} />
-            <TextInput heading={"Result"} {...fieldProps.result} />
-            <TextInput heading={"Correction"} {...fieldProps.correction} />
+            <TextInput label={"Situation"} {...fieldProps.situation} />
+            <TextInput label={"Result"} {...fieldProps.result} />
+            <TextInput label={"Correction"} {...fieldProps.correction} />
         </RateYourselfTemplate>
     );
 };

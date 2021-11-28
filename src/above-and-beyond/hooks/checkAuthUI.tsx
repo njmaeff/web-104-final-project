@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {auth} from "../api/connect-api";
+import {auth} from "../firebase/connect-api";
 
 export const checkAuthUI = () => {
     const [isLoggedIn, setLogin] = useState(null);

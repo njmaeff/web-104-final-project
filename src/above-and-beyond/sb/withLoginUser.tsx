@@ -1,6 +1,6 @@
 import { usePromise } from "./usePromise";
 import React from "react";
-import { auth } from "../api/connect-api";
+import { auth } from "../firebase/connect-api";
 
 export const WithLoginUser = (Story) => {
     const loaded = usePromise(async () => {

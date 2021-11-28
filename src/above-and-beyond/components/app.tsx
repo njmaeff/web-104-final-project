@@ -1,12 +1,12 @@
 import React from "react";
-import {RouterProvider, useRouter} from "../hooks/useRouter";
 import {PageCtxProvider} from "../hooks/usePageCtx";
-import {RateIssuePage, RateSuccessPage} from "./ratePage";
-import {ReviewPage} from "./reviewPage";
+import {MDXProvider} from "@mdx-js/react";
 import {MainPage} from "./mainPage";
 import {ProfilePage} from "./profilePage";
+import {RateIssuePage, RateSuccessPage} from "./ratePage";
 import {EditPage} from "./editPage";
-import {MDXProvider} from "@mdx-js/react";
+import {ReviewPage} from "./reviewPage";
+import {router} from "next/client";
 
 const Anchor: React.FC<JSX.IntrinsicElements["a"]> = ({
                                                           children,
@@ -37,25 +37,24 @@ const components = {
 export const Environment = ({children}) => {
     return (
         <MDXProvider components={components}>
-            <RouterProvider
-                routes={[
-                    ["/", MainPage],
-                    ["/profile", ProfilePage],
-                    ["/rate/success", RateSuccessPage],
-                    ["/rate/issue", RateIssuePage],
-                    ["/edit", EditPage],
-                    ["/review", ReviewPage],
-                ]}
-            >
-                <PageCtxProvider>{children}</PageCtxProvider>
-            </RouterProvider>
+            <PageCtxProvider>{children}</PageCtxProvider>
         </MDXProvider>
     );
 };
 
+const routes = new Map([
+    ["main", MainPage],
+    ["profile", ProfilePage],
+    ["rate/success", RateSuccessPage],
+    ["rate/issue", RateIssuePage],
+    ["edit", EditPage],
+    ["review", ReviewPage],
+])
+
+
 export const App = () => {
-    const {Component} = useRouter();
-    return <Component/>;
+    const Component = routes.get(router.query.page as string)
+    return <Component/>
 };
 
 export const Main = () => (
@@ -63,3 +62,5 @@ export const Main = () => (
         <App/>
     </Environment>
 );
+
+export default Main

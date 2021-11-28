@@ -1,8 +1,8 @@
-import { auth, db } from "../api/connect-api";
+import { auth, db } from "../firebase/connect-api";
 import firebase from "firebase/compat/app";
 import { useState } from "react";
 import { PromiseValue } from "type-fest";
-import { FirestoreProvider } from "../api/firestore-provider-compat";
+import { FirestoreProvider } from "../firebase/firestore-provider-compat";
 import { useAsync } from "../hooks/useAsync";
 
 export const Timestamp = firebase.firestore.Timestamp;

@@ -3,8 +3,9 @@ import Head from 'next/head';
 import {CacheProvider} from '@emotion/react';
 import {createEmotionCache} from "../components/create-emotion-cache";
 import "firebaseui/dist/firebaseui.css"
-import "../styles/firebaseui.scss"
+import "react-datepicker/dist/react-datepicker.min.css"
 import "../styles/styles.scss"
+import {ThemeEnvironment} from "../styles/theme";
 
 const clientSideEmotionCache = createEmotionCache()
 
@@ -20,7 +21,7 @@ export default function App({
                       content="width=device-width, initial-scale=1, maximum-scale=1"/>
                 <link rel="shortcut icon" href="/img/favicon.ico"/>
             </Head>
-            <Component {...pageProps} />
+            <ThemeEnvironment><Component {...pageProps} /></ThemeEnvironment>
         </CacheProvider>
     );
 }

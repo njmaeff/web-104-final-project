@@ -1,7 +1,7 @@
 import {
     addUserByEmail,
     connectFirebaseAdmin,
-} from "../api/connect-admin";
+} from "../firebase/connect-admin";
 import {
     CollectionReference,
     DocumentReference,

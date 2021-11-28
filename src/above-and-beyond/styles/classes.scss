@@ -380,22 +380,4 @@ div.page-login, div.page-first-login {
         }
     }
 
-    div#firebaseui-auth-container {
-
-        div {
-            font-family: 'Rubik', sans-serif;
-
-            h1 {
-                font-size: 2rem;
-                color: variables.$color-dark;
-                margin-bottom: 1rem;
-            }
-
-            input {
-                border-bottom: thin solid variables.$color-dark;
-            }
-
-            background-color: transparent;
-        }
-    }
 }
