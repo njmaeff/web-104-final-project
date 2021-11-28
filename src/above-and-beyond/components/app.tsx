@@ -53,10 +53,9 @@ const routes = new Map([
 
 
 export const App = () => {
-    const {page} = router.query;
-
-    const Component = routes.get(page as string)
-    return <Component/>
+    const {page, ...params} = router.query;
+    const Component: React.FC<{ params?: any }> = routes.get(page as string)
+    return <Component params={params}/>;
 };
 
 export const Main = () => (

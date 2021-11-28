@@ -1,8 +1,21 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Loader } from "../components/loader";
-import { EmployerCollection, useEmployer, user } from "../orm/docs";
-import { auth } from "../firebase/connect-api";
-import { PagePropsContext } from "../components/types";
+import React, {useContext, useEffect, useState} from "react";
+import {Loader} from "../components/loader";
+import {DataMeta, EmployerCollection, useEmployer, user} from "../orm/docs";
+import {auth} from "../firebase/connect-api";
+import firebase from "firebase/compat";
+import {Employer} from "../orm/validate";
+
+export interface PagePropsContext extends DataMeta {
+    user: firebase.User;
+    api: {
+        updateEmployer(id: string);
+        updateRole(id: string);
+        newRole(): void;
+        newEmployer(): void;
+    };
+    allEmployers: Employer[];
+    currentEmployer: Employer;
+}
 
 const PageCtx = React.createContext<Partial<PagePropsContext>>({});
 
@@ -86,15 +99,15 @@ export const useMetaApi = () => {
         loading,
     ] as const;
 };
-export const PageCtxProvider = ({ children }) => {
+export const PageCtxProvider = ({children}) => {
     const [meta, api, loading] = useMetaApi();
 
     return !loading ? (
-        <PageCtx.Provider value={{ ...meta, api, user: auth.currentUser }}>
+        <PageCtx.Provider value={{...meta, api, user: auth.currentUser}}>
             {children}
         </PageCtx.Provider>
     ) : (
-        <Loader />
+        <Loader/>
     );
 };
 export const usePageCtx = () => {

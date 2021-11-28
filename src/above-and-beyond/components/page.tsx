@@ -150,6 +150,7 @@ export const MenuTemplate: React.FC<{
                                 .map((employer) => (
                                     <DropDownElement
                                         key={employer.id}
+                                        href={'/main'}
                                         onClick={() =>
                                             api.updateEmployer(employer.id)
                                         }

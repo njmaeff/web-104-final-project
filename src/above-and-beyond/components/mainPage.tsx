@@ -7,7 +7,7 @@ import {
     TextInput,
 } from "./input";
 import {MenuTemplate} from "./page";
-import {Page, PageProps} from "./types";
+import {Page} from "./types";
 import {EmployerCollection, useEmployer,} from "../orm/docs";
 import {
     mergeForms,
@@ -20,7 +20,9 @@ import {usePageCtx} from "../hooks/usePageCtx";
 import {Employer, employerSchema, Role, roleSchema} from "../orm/validate";
 
 
-export const MainPage: Page<PageProps> = () => {
+export const MainPage: Page<{ newEmployer?: boolean }> = ({
+                                                              params: {newEmployer}
+                                                          }) => {
     const {
         currentEmployerID,
         currentRoleID,
@@ -28,6 +30,7 @@ export const MainPage: Page<PageProps> = () => {
         currentEmployer,
         api,
     } = usePageCtx();
+
 
     const emptyRole = {
         allRolesForEmployer: [],
@@ -41,7 +44,7 @@ export const MainPage: Page<PageProps> = () => {
         },
     };
 
-    const isNewEmployer = !currentEmployerID;
+    const isNewEmployer = newEmployer;
     const isNewRole = !currentRoleID || isNewEmployer;
 
     const employer = useEmployer();
@@ -79,15 +82,6 @@ export const MainPage: Page<PageProps> = () => {
             })
         );
 
-    useEffect(() => {
-        if (isNewEmployer) {
-            employerFormik.setValues(currentEmployer);
-            employerForm.setEdit();
-            roleForm.setView();
-        } else {
-            employerForm.setView();
-        }
-    }, [currentEmployerID]);
 
     const [{allRolesForEmployer}, {loaded}] = useAsync<{
         currentRole: Role;
@@ -117,6 +111,20 @@ export const MainPage: Page<PageProps> = () => {
             init: emptyRole,
         }
     );
+
+    useEffect(() => {
+        if (newEmployer) {
+            employerFormik.setValues({
+                name: "",
+                location: ""
+            });
+            employerForm.setEdit();
+            roleForm.setView();
+        } else {
+            employerForm.setView();
+        }
+
+    }, [newEmployer])
 
     return (
         <MenuTemplate

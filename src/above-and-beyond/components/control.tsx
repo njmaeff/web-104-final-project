@@ -30,9 +30,10 @@ export const DropDownElement: React.FC<{
             {href ? <Link
                 href={href}
             >
-                <a>{children}</a>
+                <a onClick={(e) => {
+                    onClick?.(e)
+                }}>{children}</a>
             </Link> : <a onClick={(e) => {
-                e.preventDefault()
                 onClick?.(e)
             }}>{children}</a>}
         </Menu.Item>
