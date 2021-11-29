@@ -1,10 +1,10 @@
 import React, {useState} from "react";
 import {DropDown, DropDownElement} from "./control";
-import {usePageCtx} from "../hooks/usePageCtx";
+import {usePageCtx} from "./hooks/usePageCtx";
 import {Loader} from "./loader";
 import styled from "@emotion/styled";
-import {Highlight, ScrollBar, withTablet} from "../styles/mixins";
-import {Employer} from "../orm/validate";
+import {Highlight, ScrollBar, withTablet} from "./styles/mixins";
+import {Employer} from "./orm/validate";
 import Link from "next/link";
 import {Button} from "antd";
 import {css} from "@emotion/react";

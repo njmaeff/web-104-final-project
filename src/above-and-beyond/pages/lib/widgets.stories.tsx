@@ -2,8 +2,8 @@ import { Loader } from "./loader";
 import { Meta } from "@njmaeff/storybook-react/react";
 import React from "react";
 import { DropDown } from "./control";
-import { WithCenter } from "../sb/withCenter";
-import "../styles/styles.scss";
+import { WithCenter } from "./sb/withCenter";
+import "./styles/styles.scss";
 
 export const LoaderView = () => <Loader />;
 export const DropDownMenu = () => {

@@ -3,7 +3,7 @@ import { testEmail } from "./setup";
 import {
     connectFirebaseAdmin,
     removeUserByEmail
-} from "../firebase/connect-admin";
+} from "../pages/lib/firebase/connect-admin";
 
 export async function clearFirestoreData(
     subCollections?: FirebaseFirestore.CollectionReference<FirebaseFirestore.DocumentData>[]

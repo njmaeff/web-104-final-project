@@ -1,8 +1,8 @@
 import React, {useEffect} from "react"
 import type {NextPage} from "next";
 import {useRouter} from "next/router";
-import {Loader} from "../components/loader";
-import {checkAuthUI} from "../hooks/checkAuthUI";
+import {Loader} from "./lib/loader";
+import {checkAuthUI} from "./lib/hooks/checkAuthUI";
 
 
 export const HomePage: NextPage = () => {

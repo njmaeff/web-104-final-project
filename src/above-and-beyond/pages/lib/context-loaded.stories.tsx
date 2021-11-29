@@ -1,10 +1,10 @@
 import { Meta } from "@njmaeff/storybook-react/react";
 import React from "react";
-import "../styles/styles.scss";
-import { WithLoginUser } from "../sb/withLoginUser";
-import { WithContextLoaded } from "../sb/withContextLoaded";
+import "./styles/styles.scss";
+import { WithLoginUser } from "./sb/withLoginUser";
+import { WithContextLoaded } from "./sb/withContextLoaded";
 import { MenuTemplate } from "./page";
-import { usePageCtx } from "../hooks/usePageCtx";
+import { usePageCtx } from "./hooks/usePageCtx";
 import { RateIssuePage, RateSuccessPage } from "./ratePage";
 import { ReviewPage } from "./reviewPage";
 import { MainPage } from "./mainPage";

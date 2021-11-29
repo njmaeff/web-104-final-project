@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Page } from "../components/types";
+import { Page } from "../types";
 
 interface RouterContext<T = any> {
     navigate: (opts: { to: string }) => void;

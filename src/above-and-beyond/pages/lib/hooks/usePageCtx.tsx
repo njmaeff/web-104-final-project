@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from "react";
-import {Loader} from "../components/loader";
+import {Loader} from "../loader";
 import {DataMeta, EmployerCollection, useEmployer, user} from "../orm/docs";
 import {auth} from "../firebase/connect-api";
 import firebase from "firebase/compat";

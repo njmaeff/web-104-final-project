@@ -5,7 +5,7 @@ import {
     SectionSize,
     SubTitleSize,
     TitleSize
-} from "../styles/size";
+} from "./styles/size";
 
 export const Heading: React.FC = ({children}) => {
 

@@ -6,10 +6,10 @@ import {
     TextInput,
 } from "./input";
 import {MenuTemplate} from "./page";
-import {PageStatus, useFormWithStatus} from "../hooks/useFormWithStatus";
-import {EmployerCollection} from "../orm/docs";
-import {usePageCtx} from "../hooks/usePageCtx";
-import {Review, reviewSchema} from "../orm/validate";
+import {PageStatus, useFormWithStatus} from "./hooks/useFormWithStatus";
+import {EmployerCollection} from "./orm/docs";
+import {usePageCtx} from "./hooks/usePageCtx";
+import {Review, reviewSchema} from "./orm/validate";
 
 export const ReviewPage: React.FC = () => {
     const {currentEmployer, allEmployers, currentRoleID, currentEmployerID} =

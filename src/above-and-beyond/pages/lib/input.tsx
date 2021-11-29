@@ -1,10 +1,10 @@
 import React from "react";
-import {ensureDate} from "../orm/docs";
+import {ensureDate} from "./orm/docs";
 import DatePicker from "react-datepicker"
 import {Button, Dropdown, Form, Input, Menu} from "antd";
 import {css} from "@emotion/react";
-import {Highlight, ScrollBar} from "../styles/mixins";
-import {ParagraphSize, SectionSize} from "../styles/size";
+import {Highlight, ScrollBar} from "./styles/mixins";
+import {ParagraphSize, SectionSize} from "./styles/size";
 import {DownOutlined} from "@ant-design/icons";
 
 interface FieldProps<Value = any> {

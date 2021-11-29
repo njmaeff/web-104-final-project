@@ -7,16 +7,16 @@ import {
 } from "./input";
 import {MenuTemplate} from "./page";
 import {PageProps} from "./types";
-import {PageStatus, useFormWithStatus} from "../hooks/useFormWithStatus";
-import {EmployerCollection} from "../orm/docs";
-import {usePageCtx} from "../hooks/usePageCtx";
+import {PageStatus, useFormWithStatus} from "./hooks/useFormWithStatus";
+import {EmployerCollection} from "./orm/docs";
+import {usePageCtx} from "./hooks/usePageCtx";
 import {
     RateIssue,
     rateIssueSchema,
     RateSuccess,
     rateSuccessSchema
-} from "../orm/validate";
-import {Highlight} from "../styles/mixins";
+} from "./orm/validate";
+import {Highlight} from "./styles/mixins";
 import Link from "next/link";
 import styled from "@emotion/styled";
 

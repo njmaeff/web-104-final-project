@@ -1,6 +1,6 @@
 import React from "react"
 import type {NextPage} from "next";
-import Login from "../components/login";
+import Login from "./lib/login";
 
 export const LoginPage: NextPage = () => {
 

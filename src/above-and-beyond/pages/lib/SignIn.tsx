@@ -1,5 +1,5 @@
 import {useEffect} from "react";
-import {auth} from "../firebase/connect-api";
+import {auth} from "./firebase/connect-api";
 import * as firebaseui from "firebaseui"
 import firebase from "firebase/compat/app";
 import {router} from "next/client";

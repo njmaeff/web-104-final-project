@@ -8,16 +8,16 @@ import {
 } from "./input";
 import {MenuTemplate} from "./page";
 import {Page} from "./types";
-import {EmployerCollection, useEmployer,} from "../orm/docs";
+import {EmployerCollection, useEmployer,} from "./orm/docs";
 import {
     mergeForms,
     PageStatus,
     useFormWithStatus,
-} from "../hooks/useFormWithStatus";
+} from "./hooks/useFormWithStatus";
 import {DropDownElement} from "./control";
-import {useAsync} from "../hooks/useAsync";
-import {usePageCtx} from "../hooks/usePageCtx";
-import {Employer, employerSchema, Role, roleSchema} from "../orm/validate";
+import {useAsync} from "./hooks/useAsync";
+import {usePageCtx} from "./hooks/usePageCtx";
+import {Employer, employerSchema, Role, roleSchema} from "./orm/validate";
 import {router} from "next/client";
 
 

@@ -1,17 +1,17 @@
 import {
     addUserByEmail,
     connectFirebaseAdmin,
-} from "../firebase/connect-admin";
+} from "../pages/lib/firebase/connect-admin";
 import {
     CollectionReference,
     DocumentReference,
     getFirestore,
 } from "firebase-admin/firestore";
 import faker from "faker";
-import { DataMeta} from "../orm/docs";
+import { DataMeta} from "../pages/lib/orm/docs";
 import { testEmail, testPassword } from "./setup";
 import range from "lodash/range";
-import {Employer, Role} from "../orm/validate";
+import {Employer, Role} from "../pages/lib/orm/validate";
 
 faker.seed(19);
 

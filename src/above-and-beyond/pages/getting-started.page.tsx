@@ -1,5 +1,5 @@
 import React from "react";
-import About from "../components/mdx/about.mdx";
+import About from "./lib/mdx/about.mdx";
 import Link from "next/link";
 
 export default () => {

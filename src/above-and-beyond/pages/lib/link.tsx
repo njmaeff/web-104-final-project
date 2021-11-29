@@ -1,5 +1,5 @@
 import React from "react";
-import { useRouter } from "../hooks/useRouter";
+import { useRouter } from "./hooks/useRouter";
 
 export const Link: React.FC<
     JSX.IntrinsicElements["a"] & { params?; disabled?: boolean }

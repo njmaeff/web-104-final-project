@@ -1,8 +1,8 @@
 import { Meta } from "@njmaeff/storybook-react/react";
 import React, { useEffect } from "react";
 import { LoginPage } from ".//login";
-import "../styles/styles.scss";
-import "../styles/firebaseui.scss";
+import "./styles/styles.scss";
+import "./styles/firebaseui.scss";
 import { useAuthUI } from "./SignIn";
 import { GetStartedPage } from ".//getStarted";
 
