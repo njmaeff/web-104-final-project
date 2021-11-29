@@ -1,14 +1,7 @@
 import {css, Global,} from "@emotion/react";
-import {MediaFunction, ThemeFunction} from "./types";
-import {ScrollBar} from "./mixins";
+import {ThemeFunction} from "./types";
+import {ScrollBar, withTablet} from "./mixins";
 
-
-export const withTablet: MediaFunction = (theme, defs) => css`
-    @media (min-width: ${theme.media.tablet}) {
-        ${defs}
-    }
-
-`
 
 export const fonts = css`
     @font-face {

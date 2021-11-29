@@ -3,11 +3,19 @@ import {DropDown, DropDownElement} from "./control";
 import {usePageCtx} from "../hooks/usePageCtx";
 import {Loader} from "./loader";
 import styled from "@emotion/styled";
-import {Highlight, ScrollBar} from "../styles/mixins";
+import {Highlight, ScrollBar, withTablet} from "../styles/mixins";
 import {Employer} from "../orm/validate";
 import Link from "next/link";
 import {Button} from "antd";
 import {css} from "@emotion/react";
+import {
+    HomeOutlined,
+    LikeOutlined,
+    LineChartOutlined,
+    PlusCircleOutlined,
+    SettingOutlined,
+    StarOutlined
+} from "@ant-design/icons";
 
 export const FeatureButton: React.FC<{ edit?: boolean, valid?: boolean, loading?: boolean, onClick }> = ({
                                                                                                              loading,
@@ -28,11 +36,12 @@ export const FeatureButton: React.FC<{ edit?: boolean, valid?: boolean, loading?
             border: none;
             padding: 0.5rem;
             border-radius: 30px;
-            width: 4rem;
+            width: 3.5rem;
             height: 3.5rem;
 
             span {
                 padding: 0 !important;
+                margin-top: -0.5rem !important;
             }
 
             p {
@@ -45,7 +54,10 @@ export const FeatureButton: React.FC<{ edit?: boolean, valid?: boolean, loading?
         type="primary"
         loading={loading}
         onClick={onClick}
-        {...props}><p className={!loading ? 'icon-logo' : ''}/></Button>
+        {...props}>
+        {/*<p className={!loading ? 'icon-logo' : ''}/>*/}
+        <a><PlusCircleOutlined/></a>
+    </Button>
 };
 
 export const Page = styled.div`
@@ -114,14 +126,13 @@ export const Page = styled.div`
 
     footer {
         position: relative;
-        min-height: 5.5rem;
-        padding: 1rem 0.75rem 0.75rem;
+        min-height: 4.5rem;
+        padding-top: 1rem;
 
         nav {
             height: 100%;
             display: flex;
             align-items: center;
-            border-radius: 30px;
             justify-content: space-between;
             background-color: ${({theme}) => theme.colors.light};
 
@@ -138,6 +149,61 @@ export const Page = styled.div`
             }
 
         }
+    }
+`
+
+const FooterControlFeature = styled.div`
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+    padding: 0.2rem 0;
+
+    a {
+        font-size: 2rem;
+    }
+
+`
+
+const FooterControl = styled.div`
+    display: flex;
+    justify-content: space-between;
+    margin: 0 1.5rem;
+
+    a {
+        display: block;
+        font-size: 1.5rem;
+        padding: 0.5rem;
+        border-radius: 30px;
+    }
+
+    ${({theme}) => withTablet(theme, css`
+        :root {
+            font-size: 1rem;
+        }
+
+        a {
+            display: block;
+            font-size: 2rem;
+            padding: 0.5rem;
+
+            border-radius: 30px;
+        }
+    `)}
+
+`
+
+export const HeaderControl = styled.div`
+    display: flex;
+    flex-direction: column;
+    max-width: 60%;
+
+    h2 {
+        margin: 0 0 0.5rem;
+        font-size: 1rem;
+        opacity: 70%;
+        text-align: left;
+        font-weight: lighter;
     }
 `
 
@@ -172,7 +238,7 @@ export const MenuTemplate: React.FC<{
         <Page>
             <header>
                 <nav>
-                    <div className={"header-control"}>
+                    <HeaderControl>
                         <h2>{heading}</h2>
                         <DropDown
                             value={currentEmployer?.name}
@@ -200,9 +266,9 @@ export const MenuTemplate: React.FC<{
                                     </DropDownElement>
                                 ))}
                         </DropDown>
-                    </div>
+                    </HeaderControl>
                     <Link href={"/profile"}>
-                        <a className={'icon-settings'}/>
+                        <a><SettingOutlined/></a>
                     </Link>
                 </nav>
             </header>
@@ -215,7 +281,7 @@ export const MenuTemplate: React.FC<{
             )}
             <footer>
                 <nav>
-                    <div className={`footer-control-feature`}>
+                    <FooterControlFeature>
                         <FeatureButton
                             onClick={(e) => {
                                 e.preventDefault()
@@ -234,25 +300,25 @@ export const MenuTemplate: React.FC<{
                                 }
                             }}
                         />
-                    </div>
-                    <div className={"footer-control"}>
+                    </FooterControlFeature>
+                    <FooterControl>
                         <Link
                             href={"/main"}
-                        ><a className={'icon-home'}/></Link>
+                        ><a><HomeOutlined/></a></Link>
                         <Link
-                            href={"/edit"}
+                            href={"/analyze"}
                         >
-                            <a className={'icon-edit'}/>
+                            <a><LineChartOutlined/></a>
                         </Link>
-                    </div>
-                    <div className={"footer-control"}>
+                    </FooterControl>
+                    <FooterControl>
                         <Link
                             href={"/review"}
-                        ><a className={'icon-review'}/></Link>
+                        ><a><StarOutlined/></a></Link>
                         <Link
                             href={"/rate-success"}
-                        ><a className={'icon-rate'}/></Link>
-                    </div>
+                        ><a><LikeOutlined/></a></Link>
+                    </FooterControl>
                 </nav>
             </footer>
         </Page>

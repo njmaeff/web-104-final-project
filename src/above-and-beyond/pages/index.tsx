@@ -15,7 +15,7 @@ export const HomePage: NextPage = () => {
             if (isLoggedIn === false) {
                 await router.push('/login');
             } else if (isLoggedIn === true) {
-                await router.push('/main')
+                await router.push('/main/view')
             }
         };
         checkAuth();

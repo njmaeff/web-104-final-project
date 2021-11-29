@@ -15,6 +15,8 @@ export default function App({
                                 pageProps,
                                 emotionCache = clientSideEmotionCache
                             }) {
+    const Layout = Component.getLayout ?? (({children}) => <>{children}</>)
+
     return (
         <CacheProvider value={emotionCache}>
             <Head>
@@ -22,7 +24,11 @@ export default function App({
                       content="width=device-width, initial-scale=1, maximum-scale=1"/>
                 <link rel="shortcut icon" href="/img/favicon.ico"/>
             </Head>
-            <ThemeEnvironment><Component {...pageProps} /></ThemeEnvironment>
+            <ThemeEnvironment>
+                <Layout>
+                    <Component {...pageProps} />
+                </Layout>
+            </ThemeEnvironment>
         </CacheProvider>
     );
 }

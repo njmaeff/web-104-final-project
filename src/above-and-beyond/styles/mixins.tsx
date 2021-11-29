@@ -1,4 +1,4 @@
-import {ThemeFunction} from "./types";
+import {MediaFunction, ThemeFunction} from "./types";
 import {css} from "@emotion/react";
 
 export const ScrollBar: ThemeFunction = (theme) => css`
@@ -32,3 +32,9 @@ export const Highlight = (color) => css`
     box-shadow: 0 0 3px ${color} !important;
 `;
 
+export const withTablet: MediaFunction = (theme, defs) => css`
+    @media (min-width: ${theme.media.tablet}) {
+        ${defs}
+    }
+
+`
