@@ -16,7 +16,6 @@ const routes = new Map([
 
 const Main = () => {
     const {page, ...params} = router.query;
-    console.log(page, params)
     const Component: React.FC<{ params?: any }> = routes.get(page as string)
     return <Component params={params}/>;
 };

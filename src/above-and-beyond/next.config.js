@@ -6,6 +6,7 @@ const {PHASE_DEVELOPMENT_SERVER} = require("next/constants");
 
 module.exports = (phase, {defaultConfig}) => withMDX({
     ...defaultConfig,
+    pageExtensions: ['page.tsx', 'page.ts', 'page.jsx', 'page.js'],
     ...(phase === PHASE_DEVELOPMENT_SERVER ? {
         // allow cors for storybook
         async headers() {

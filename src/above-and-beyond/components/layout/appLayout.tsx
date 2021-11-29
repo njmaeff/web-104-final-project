@@ -3,6 +3,8 @@ import {MDXProvider} from "@mdx-js/react";
 import {PageCtxProvider} from "../../hooks/usePageCtx";
 import {useRouter} from "next/router";
 import {checkAuthUI} from "../../hooks/checkAuthUI";
+import {NextPageWithLayout} from "../types";
+import {WithoutSSR} from "../../util/next";
 
 export const Anchor: React.FC<JSX.IntrinsicElements["a"]> = ({
                                                                  children,
@@ -49,3 +51,16 @@ export const AppLayout: React.FC = ({children}) => {
         {children}
     </Environment>
 }
+export const WithAppLayout = (component, children?) => {
+
+    const Component: NextPageWithLayout = () => (
+        <WithoutSSR
+            component={component}>
+            {children}
+        </WithoutSSR>
+    )
+    Component.getLayout = AppLayout
+
+    return Component
+
+};
