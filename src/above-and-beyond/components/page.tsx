@@ -3,9 +3,50 @@ import {DropDown, DropDownElement} from "./control";
 import {usePageCtx} from "../hooks/usePageCtx";
 import {Loader} from "./loader";
 import styled from "@emotion/styled";
-import {ScrollBar} from "../styles/mixins";
+import {Highlight, ScrollBar} from "../styles/mixins";
 import {Employer} from "../orm/validate";
 import Link from "next/link";
+import {Button} from "antd";
+import {css} from "@emotion/react";
+
+export const FeatureButton: React.FC<{ edit?: boolean, valid?: boolean, loading?: boolean, onClick }> = ({
+                                                                                                             loading,
+                                                                                                             onClick,
+                                                                                                             edit,
+                                                                                                             valid,
+                                                                                                             ...props
+                                                                                                         }) => {
+
+
+    return <Button
+        // className={'icon-logo'}
+        css={theme => css`
+            ${edit && valid ? Highlight(theme.colors.success) : edit && !valid ? Highlight(theme.colors.primary) : ""}
+            display: block;
+            background-color: ${theme.colors.primary} !important;
+            color: ${theme.colors.light} !important;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 30px;
+            width: 4rem;
+            height: 3.5rem;
+
+            span {
+                padding: 0 !important;
+            }
+
+            p {
+                font-size: 2rem;
+                background-color: ${theme.colors.primary} !important;
+                color: ${theme.colors.light} !important;
+                margin: 0;
+            }
+        `}
+        type="primary"
+        loading={loading}
+        onClick={onClick}
+        {...props}><p className={!loading ? 'icon-logo' : ''}/></Button>
+};
 
 export const Page = styled.div`
     display: flex;
@@ -175,15 +216,7 @@ export const MenuTemplate: React.FC<{
             <footer>
                 <nav>
                     <div className={`footer-control-feature`}>
-                        <button
-                            className={`icon-logo   ${
-                                isEdit && isValid
-                                    ? "border-highlight__success"
-                                    : isEdit && !isValid
-                                        ? "border-highlight__primary"
-                                        : ""
-                            }`}
-                            type={"button"}
+                        <FeatureButton
                             onClick={(e) => {
                                 e.preventDefault()
                                 if (isEdit && isValid) {

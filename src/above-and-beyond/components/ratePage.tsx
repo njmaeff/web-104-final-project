@@ -18,6 +18,7 @@ import {
 } from "../orm/validate";
 import {Highlight} from "../styles/mixins";
 import Link from "next/link";
+import styled from "@emotion/styled";
 
 export const RateSuccessPage: React.FC = () => {
     const {currentEmployerID, currentEmployer, allEmployers} = usePageCtx();
@@ -117,6 +118,20 @@ export const RateIssuePage: React.FC<PageProps> = () => {
         </RateYourselfTemplate>
     );
 };
+
+export const RatePage = styled.div`
+    nav {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+
+        a {
+            font-size: 3rem;
+        }
+    }
+`
 export const RateYourselfTemplate: React.FC<{
     success?: boolean;
     issue?: boolean;
@@ -140,7 +155,7 @@ export const RateYourselfTemplate: React.FC<{
             allEmployers={allEmployers}
             {...menuProps}
         >
-            <div className={"page-rate-control"}>
+            <RatePage>
                 {children}
                 <nav>
                     <Link
@@ -152,7 +167,7 @@ export const RateYourselfTemplate: React.FC<{
                     ><a css={theme => issue && Highlight(theme.colors.primary)}
                         className={'icon-issue'}/></Link>
                 </nav>
-            </div>
+            </RatePage>
         </MenuTemplate>
     );
 };

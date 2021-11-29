@@ -170,6 +170,8 @@ export const FormInput: React.FC<{ name: string, onChange: any, value: any, erro
     return <Input
         css={theme => css`
             ${Highlight(error ? theme.colors.primary : 'inherit')}
+            background-color: ${theme.colors.light} !important;
+            color: ${theme.colors.dark};
         `}
         type="text"
         name={name}
