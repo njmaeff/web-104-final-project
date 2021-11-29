@@ -18,6 +18,7 @@ import {DropDownElement} from "./control";
 import {useAsync} from "../hooks/useAsync";
 import {usePageCtx} from "../hooks/usePageCtx";
 import {Employer, employerSchema, Role, roleSchema} from "../orm/validate";
+import {router} from "next/client";
 
 
 export const MainPage: Page<{ newEmployer?: boolean }> = ({
@@ -44,7 +45,7 @@ export const MainPage: Page<{ newEmployer?: boolean }> = ({
         },
     };
 
-    const isNewEmployer = newEmployer;
+    const isNewEmployer = !!newEmployer;
     const isNewRole = !currentRoleID || isNewEmployer;
 
     const employer = useEmployer();
@@ -57,9 +58,10 @@ export const MainPage: Page<{ newEmployer?: boolean }> = ({
                     : PageStatus.VIEW,
 
                 validationSchema: employerSchema,
-                onSubmit: async (values) => {
+                onSubmit: async (values, helpers) => {
                     employerForm.setView();
-
+                    helpers.setValues(values)
+                    await router.push('/main')
                     const ref = await employer.write(values);
                     await api.updateEmployer(ref.id);
                 },
@@ -72,15 +74,30 @@ export const MainPage: Page<{ newEmployer?: boolean }> = ({
                         ? PageStatus.EDIT
                         : PageStatus.VIEW,
                 validationSchema: roleSchema,
-                onSubmit: async (values) => {
+                onSubmit: async (values, helpers) => {
                     roleForm.setView();
+                    helpers.setValues(values)
                     const ref = await EmployerCollection.fromID(
                         currentEmployerID
                     ).roles.write(values);
+
                     await api.updateRole(ref.id);
                 },
             })
         );
+
+    useEffect(() => {
+        if (newEmployer) {
+            employerFormik.setValues({
+                name: "",
+                location: ""
+            });
+            employerForm.setEdit();
+            roleFormik.setValues(emptyRole.currentRole);
+            roleForm.setView();
+        }
+
+    }, [newEmployer])
 
 
     const [{allRolesForEmployer}, {loaded}] = useAsync<{
@@ -88,17 +105,11 @@ export const MainPage: Page<{ newEmployer?: boolean }> = ({
         allRolesForEmployer: Role[];
     }>(
         async () => {
-            if (!currentRoleID) {
-                roleFormik.resetForm({values: {...emptyRole.currentRole}});
-                if (!isNewEmployer) {
-                    roleForm.setEdit();
-                }
-                return {...emptyRole};
-            } else {
+            if (!isNewRole && currentRoleID) {
                 const role = EmployerCollection.fromID(currentEmployerID).roles;
                 const allRolesForEmployer = await role.readFromCollection();
                 const currentRole = await role.read(currentRoleID);
-                roleFormik.resetForm({values: currentRole})
+                await roleFormik.setValues(currentRole)
 
                 return {
                     currentRole,
@@ -111,20 +122,6 @@ export const MainPage: Page<{ newEmployer?: boolean }> = ({
             init: emptyRole,
         }
     );
-
-    useEffect(() => {
-        if (newEmployer) {
-            employerFormik.setValues({
-                name: "",
-                location: ""
-            });
-            employerForm.setEdit();
-            roleForm.setView();
-        } else {
-            employerForm.setView();
-        }
-
-    }, [newEmployer])
 
     return (
         <MenuTemplate

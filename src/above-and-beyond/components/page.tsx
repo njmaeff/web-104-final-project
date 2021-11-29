@@ -184,7 +184,8 @@ export const MenuTemplate: React.FC<{
                                         : ""
                             }`}
                             type={"button"}
-                            onClick={() => {
+                            onClick={(e) => {
+                                e.preventDefault()
                                 if (isEdit && isValid) {
                                     setSaveState(true);
                                     Promise.resolve(onClickSave?.())
