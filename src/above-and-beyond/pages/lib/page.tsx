@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, {SetStateAction, useContext, useState} from "react";
 import {EmployerDropDown} from "./control";
 import styled from "@emotion/styled";
 import {Highlight, ScrollBar, withTablet} from "./styles/mixins";
@@ -14,8 +14,7 @@ import {
     SettingOutlined,
     StarOutlined
 } from "@ant-design/icons";
-import {DataMeta, user} from "./orm/docs";
-import {useAsync, UseAsyncReturn} from "react-async-hook";
+import {auth} from "./firebase/connect-api";
 
 export const FeatureButton: React.FC<{ edit?: boolean, valid?: boolean, loading?: boolean, onClick }> = ({
                                                                                                              loading,
@@ -212,46 +211,70 @@ export const DEFAULT_META = {
     currentEmployerID: "",
     currentRoleID: ""
 };
-export const MetaContext = React.createContext<DataMeta>(DEFAULT_META)
 
-export const useMeta = () => {
-    return useContext(MetaContext)
-};
 
-export class User {
+export abstract class SyncContext<T extends {} = any, Status = undefined> {
+    abstract initialize(): { state: T, status?: Status }
 
-    async updateMeta(data: Partial<DataMeta>) {
-        await user.write(data)
-        this.data.merge({result: {...this.data.result, ...data},})
+    use() {
+        return useContext(this.context)
     }
-
 
     Provider: React.FC = ({children}) => {
-        this.data = useAsync(() => {
-            return user.read()
-        }, [])
-
-        return <this.Context.Provider value={{...this.data.result}}>
+        return <this.context.Provider value={{...this.state}}>
             {children}
-        </this.Context.Provider>
+        </this.context.Provider>
     }
 
-    private Context = React.createContext({});
+    setState(value: T) {
+        this._state[1](value)
+    }
 
-    data: UseAsyncReturn<DataMeta>
+    mergeState(value: Partial<T>) {
+        this._state[1]((prev) => ({...prev, ...value}))
+    }
+
+    setStatus(value: Status) {
+        this.status = value
+    }
+
+    isStatus(value: Status) {
+        return this.status === value
+    }
+
+    constructor() {
+        const {state, status} = this.initialize()
+        this._state = useState(state)
+        this.context = React.createContext<T>(state);
+        this.setStatus(status)
+    }
+
+    get state() {
+        return this._state[0]
+    }
+
+    protected readonly context: React.Context<T>
+    private status: Status
+    private readonly _state: [T, React.Dispatch<SetStateAction<T>>]
 }
 
-export const MetaDeps: React.FC = ({children}) => {
 
-    const data = useAsync(() => {
-        return user.read()
-    }, []);
+export enum PageStatus {
+    NewEmployer,
+    View
+}
 
-    return <MetaContext.Provider value={DEFAULT_META}>
-        {children}
-    </MetaContext.Provider>
+export class PageData extends SyncContext<{ currentEmployerID: string, currentEmployer?: Employer }, PageStatus> {
+    initialize() {
+        const state = JSON.parse(localStorage.getItem(auth.currentUser.uid))
+        return {
+            state,
+            status: state ? PageStatus.View : PageStatus.NewEmployer
+        }
+    }
+}
 
-};
+const page = new PageData()
 
 export const MenuTemplate: React.FC<{
     currentEmployer: Employer;
@@ -280,15 +303,20 @@ export const MenuTemplate: React.FC<{
                 <nav>
                     <HeaderControl>
                         <h2>{heading}</h2>
-                        <EmployerDropDown onChange={} onNew={} onLoad={}
-                                          onError={} employerID={}/>
+                        <EmployerDropDown
+                            onChange={(id) => page.setState({currentEmployerID: id})}
+                            onNew={() => page.setStatus(PageStatus.NewEmployer)}
+                            onLoad={(employer) => page.mergeState({currentEmployer: employer})}
+                            employerID={page.state.currentEmployerID}/>
                     </HeaderControl>
                     <Link href={"/profile"}>
                         <a><SettingOutlined/></a>
                     </Link>
                 </nav>
             </header>
-            <main>{children}</main>
+            <main>
+                <page.Provider>{children}</page.Provider>
+            </main>
             <footer>
                 <nav>
                     <FooterControlFeature>

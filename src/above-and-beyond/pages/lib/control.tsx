@@ -46,10 +46,10 @@ export const DropDownElement: React.FC<{
 
 
 export const EmployerDropDown: React.FC<{
-    onChange,
+    onChange: (id: string) => void,
     onNew,
-    onLoad,
-    onError,
+    onLoad: (employer: Employer) => void,
+    onError?: (e: Error) => void,
     employerID: string
 }> = ({onChange, onNew, onLoad, onError, employerID}) => {
 
@@ -86,13 +86,7 @@ export const EmployerDropDown: React.FC<{
             .map((employer) => (
                 <DropDownElement
                     key={employer.id}
-                    onClick={async () => {
-                        await user.write({
-                            currentEmployerID: employer.id,
-                            currentRoleID: ""
-                        })
-                        onChange?.(employer.id)
-                    }}
+                    onClick={() => onChange?.(employer.id)}
                 >
                     {employer.name}
                 </DropDownElement>
