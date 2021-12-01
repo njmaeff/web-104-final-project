@@ -6,7 +6,7 @@ import {
     TextInput,
 } from "./input";
 import {MenuTemplate} from "./page";
-import {PageProps} from "./types";
+import {QueryProps} from "./types";
 import {PageStatus, useFormWithStatus} from "./hooks/useFormWithStatus";
 import {EmployerCollection} from "./orm/docs";
 import {usePageCtx} from "./hooks/usePageCtx";
@@ -67,7 +67,7 @@ export const RateSuccessPage: React.FC = () => {
         </RateYourselfTemplate>
     );
 };
-export const RateIssuePage: React.FC<PageProps> = () => {
+export const RateIssuePage: React.FC<QueryProps> = () => {
     const {currentEmployerID, currentEmployer, allEmployers} = usePageCtx();
 
     const [formik, {

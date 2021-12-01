@@ -1,5 +1,4 @@
 import React, {useContext, useEffect, useState} from "react";
-import {Loader} from "../loader";
 import {DataMeta, EmployerCollection, useEmployer, user} from "../orm/docs";
 import {auth} from "../firebase/connect-api";
 import firebase from "firebase/compat";
@@ -21,7 +20,6 @@ const PageCtx = React.createContext<Partial<PagePropsContext>>({});
 
 export const useMetaApi = () => {
     const [data, updateData] = useState<Partial<PagePropsContext>>();
-    const [loading, setLoading] = useState(true);
     useEffect(() => {
         // initialize context data. Get the current employer id and role id
         const action = async () => {
@@ -36,7 +34,6 @@ export const useMetaApi = () => {
     }, []);
 
     const updateEmployer = async (id: string) => {
-        setLoading(true);
         const employerDoc = await useEmployer().read(id);
         const allRolesForCurrentEmployer = await EmployerCollection.fromID(
             id
@@ -57,11 +54,9 @@ export const useMetaApi = () => {
             currentRoleID,
         });
 
-        setLoading(false);
     };
 
     const newEmployer = () => {
-        setLoading(true);
         updateData({
             currentEmployerID: "",
             currentRoleID: "",
@@ -71,7 +66,6 @@ export const useMetaApi = () => {
                 location: "",
             },
         });
-        setLoading(false);
     };
 
     const updateRole = (id: string) => {
@@ -96,19 +90,14 @@ export const useMetaApi = () => {
             newEmployer,
             newRole,
         } as PagePropsContext["api"],
-        loading,
     ] as const;
 };
 export const PageCtxProvider = ({children}) => {
-    const [meta, api, loading] = useMetaApi();
+    const [meta, api] = useMetaApi();
 
-    return !loading ? (
-        <PageCtx.Provider value={{...meta, api, user: auth.currentUser}}>
-            {children}
-        </PageCtx.Provider>
-    ) : (
-        <Loader/>
-    );
+    return <PageCtx.Provider value={{...meta, api, user: auth.currentUser}}>
+        {children}
+    </PageCtx.Provider>
 };
 export const usePageCtx = () => {
     return useContext(PageCtx);

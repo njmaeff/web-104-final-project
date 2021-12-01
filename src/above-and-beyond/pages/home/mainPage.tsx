@@ -1,38 +1,41 @@
-import React, {useEffect} from "react";
+import {Page} from "../lib/types";
+import {usePageCtx} from "../lib/hooks/usePageCtx";
+import {EmployerCollection, useEmployer} from "../lib/orm/docs";
+import {
+    mergeForms,
+    PageStatus,
+    useFormWithStatus
+} from "../lib/hooks/useFormWithStatus";
+import {Employer, employerSchema, Role, roleSchema} from "../lib/orm/validate";
+import {router} from "next/client";
+import React, {Reducer, useEffect, useReducer} from "react";
+import {useAsync} from "../lib/hooks/useAsync";
+import {MenuTemplate} from "../lib/page";
 import {
     FieldDatePickerRow,
     FieldDropDownInput,
     FieldInputRow,
     FieldTable,
-    TextInput,
-} from "./input";
-import {MenuTemplate} from "./page";
-import {Page} from "./types";
-import {EmployerCollection, useEmployer,} from "./orm/docs";
-import {
-    mergeForms,
-    PageStatus,
-    useFormWithStatus,
-} from "./hooks/useFormWithStatus";
-import {DropDownElement} from "./control";
-import {useAsync} from "./hooks/useAsync";
-import {usePageCtx} from "./hooks/usePageCtx";
-import {Employer, employerSchema, Role, roleSchema} from "./orm/validate";
-import {router} from "next/client";
+    TextInput
+} from "../lib/input";
+import {DropDownElement} from "../lib/control";
+
+export type MainReducer = {
+    type: "init"
+} | {
+    type: "new-employer"
+} | {
+    type: "new-role"
+} | {
+    type: "view"
+} | {
+    type: "edit"
+}
 
 
-export const MainPage: Page<{ newEmployer?: boolean }> = ({
-                                                              params: {newEmployer}
-                                                          }) => {
-    const {
-        currentEmployerID,
-        currentRoleID,
-        allEmployers,
-        currentEmployer,
-        api,
-    } = usePageCtx();
+export const MainPage: Page = () => {
 
-
+    const {user} = usePageCtx();
     const emptyRole = {
         allRolesForEmployer: [],
         currentRole: {
@@ -45,34 +48,30 @@ export const MainPage: Page<{ newEmployer?: boolean }> = ({
         },
     };
 
-    const isNewEmployer = !!newEmployer;
-    const isNewRole = !currentRoleID || isNewEmployer;
 
     const employer = useEmployer();
     const [mainProps, [employerFormik, employerForm], [roleFormik, roleForm]] =
         mergeForms(
             useFormWithStatus<Partial<Employer>>({
-                initialValues: currentEmployer,
-                initialStatus: isNewEmployer
-                    ? PageStatus.EDIT
-                    : PageStatus.VIEW,
-
+                initialValues: {name: "", location: ""},
                 validationSchema: employerSchema,
                 onSubmit: async (values, helpers) => {
                     employerForm.setView();
                     helpers.setValues(values)
-                    await router.push('/main')
+                    await router.push('index')
                     const ref = await employer.write(values);
                     await api.updateEmployer(ref.id);
                 },
             }),
             useFormWithStatus<Partial<Role>>({
-                initialValues: emptyRole.currentRole,
-                initialStatus: isNewEmployer
-                    ? PageStatus.VIEW
-                    : isNewRole
-                        ? PageStatus.EDIT
-                        : PageStatus.VIEW,
+                initialValues: {
+                    name: "",
+                    startDate: new Date(),
+                    salary: "",
+                    skillTarget: "",
+                    salaryTarget: "",
+                    responsibilities: "",
+                },
                 validationSchema: roleSchema,
                 onSubmit: async (values, helpers) => {
                     roleForm.setView();
@@ -122,6 +121,21 @@ export const MainPage: Page<{ newEmployer?: boolean }> = ({
             init: emptyRole,
         }
     );
+
+    const [state, dispatch] = useReducer<Reducer<MainReducer, MainReducer>, MainReducer>((prevState, action) => {
+        return {...prevState, ...action}
+    }, {type: "init"}, arg => {
+        const data = JSON.parse(localStorage.getItem(user.uid))
+        if (data) {
+            return {
+                type: "view"
+            };
+
+        } else {
+            return arg
+        }
+    });
+
 
     return (
         <MenuTemplate

@@ -3,6 +3,10 @@ import Link from "next/link";
 import React, {ReactEventHandler} from "react";
 import {css} from "@emotion/react";
 import {DownOutlined} from "@ant-design/icons";
+import {Loader} from "./loader";
+import {Employer, Role} from "./orm/validate";
+import {useAsync} from "react-async-hook";
+import {EmployerCollection, useEmployer, user} from "./orm/docs";
 
 export const DropDown: React.FC<{ value }> = ({children, value}) => {
 
@@ -39,3 +43,121 @@ export const DropDownElement: React.FC<{
         </Menu.Item>
     );
 };
+
+
+export const EmployerDropDown: React.FC<{
+    onChange,
+    onNew,
+    onLoad,
+    onError,
+    employerID: string
+}> = ({onChange, onNew, onLoad, onError, employerID}) => {
+
+    const {
+        result: {currentEmployer, allEmployers},
+        loading,
+        error
+    } = useAsync<{ currentEmployer: Employer, allEmployers: Employer[] }>(async () => {
+        const currentEmployer = await useEmployer().read(employerID);
+        const allEmployers = await useEmployer().readFromCollection();
+        onLoad?.(currentEmployer)
+        return {
+            currentEmployer,
+            allEmployers
+        }
+    }, [employerID]);
+
+    error && onError?.(error)
+
+    return loading ? <Loader/> : <DropDown
+        value={currentEmployer.name}
+    >
+        <DropDownElement
+            key={'new'}
+            onClick={onNew}
+        >
+            Create New
+        </DropDownElement>
+        {allEmployers
+            .filter(
+                (employer) =>
+                    employer.id !== currentEmployer.id
+            )
+            .map((employer) => (
+                <DropDownElement
+                    key={employer.id}
+                    onClick={async () => {
+                        await user.write({
+                            currentEmployerID: employer.id,
+                            currentRoleID: ""
+                        })
+                        onChange?.(employer.id)
+                    }}
+                >
+                    {employer.name}
+                </DropDownElement>
+            ))}
+    </DropDown>
+
+};
+
+
+export const RoleDropDown: React.FC<{
+    onChange,
+    onNew,
+    onLoad,
+    onError,
+    employerID: string
+    roleID: string
+}> = ({onChange, onNew, onLoad, onError, employerID, roleID}) => {
+
+    const {
+        result: {role, allRoles},
+        loading,
+        error
+    } = useAsync<{ role: Role, allRoles: Role[] }>(async () => {
+        const role = EmployerCollection.fromID(employerID).roles;
+        const allRolesForEmployer = await role.readFromCollection();
+        const currentRole = await role.read(roleID);
+        onLoad?.(currentRole)
+        return {
+            role: currentRole,
+            allRoles: allRolesForEmployer,
+        };
+
+    }, [employerID, roleID]);
+
+
+    error && onError?.(error)
+
+    return loading ? <Loader/> : <DropDown
+        value={role.name}
+    >
+        <DropDownElement
+            key={'new'}
+            onClick={onNew}
+        >
+            Create New
+        </DropDownElement>
+        {allRoles
+            .filter(
+                (role) =>
+                    role.id !== role.id
+            )
+            .map((role) => (
+                <DropDownElement
+                    key={role.id}
+                    onClick={async () => {
+                        await user.write({
+                            currentRoleID: role.id
+                        })
+                        onChange?.(role.id)
+                    }}
+                >
+                    {role.name}
+                </DropDownElement>
+            ))}
+    </DropDown>
+
+};
+

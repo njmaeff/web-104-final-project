@@ -1,46 +1,40 @@
-import { Meta } from "@njmaeff/storybook-react/react";
 import React from "react";
-import "./styles/styles.scss";
-import { WithLoginUser } from "./sb/withLoginUser";
-import { WithContextLoaded } from "./sb/withContextLoaded";
-import { MenuTemplate } from "./page";
-import { usePageCtx } from "./hooks/usePageCtx";
-import { RateIssuePage, RateSuccessPage } from "./ratePage";
-import { ReviewPage } from "./reviewPage";
-import { MainPage } from "./mainPage";
-import { ProfilePage } from "./profilePage";
-import { EditPage } from "./editPage";
+import {WithLoginUser} from "./sb/withLoginUser";
+import {WithContextLoaded} from "./sb/withContextLoaded";
+import {MenuTemplate} from "./page";
+import {usePageCtx} from "./hooks/usePageCtx";
+import {RateIssuePage, RateSuccessPage} from "./ratePage";
+import {ReviewPage} from "./reviewPage";
+import {ProfilePage} from "./profilePage";
+import {EditPage} from "./editPage";
+import {Meta} from "@storybook/react";
+import {MainPage} from "../home/mainPage";
 
 export const Employer = () => {
-    const ctx = usePageCtx();
-    return <EditPage ctx={ctx} />;
+    return <EditPage/>;
 };
 
 export const Profile = () => {
-    const ctx = usePageCtx();
-    return <ProfilePage ctx={ctx} />;
+    return <ProfilePage/>;
 };
 
 export const RateYourselfSuccess = () => {
-    const ctx = usePageCtx();
-    return <RateSuccessPage ctx={ctx} />;
+    return <RateSuccessPage/>;
 };
 
 export const RateYourselfIssue = () => {
-    const ctx = usePageCtx();
-    return <RateIssuePage ctx={ctx} />;
+    return <RateIssuePage/>;
 };
 
 export const Review = () => {
-    const ctx = usePageCtx();
-    return <ReviewPage ctx={ctx} />;
+    return <ReviewPage/>;
 };
 
 export const MenuLayout = () => {
     const ctx = usePageCtx();
     return (
         <MenuTemplate
-            currentEmployer={ctx.currentEmployerID.name}
+            currentEmployer={ctx.currentEmployer}
             allEmployers={[
                 {
                     name: "My Employer",
@@ -52,8 +46,7 @@ export const MenuLayout = () => {
 };
 
 export const MainMenu = () => {
-    const ctx = usePageCtx();
-    return <MainPage ctx={ctx} />;
+    return <MainPage/>;
 };
 
 export default {

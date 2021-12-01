@@ -1,11 +1,11 @@
-import { Loader } from "./loader";
-import { Meta } from "@njmaeff/storybook-react/react";
+import {Loader} from "./loader";
 import React from "react";
-import { DropDown } from "./control";
-import { WithCenter } from "./sb/withCenter";
+import {DropDown} from "./control";
+import {WithCenter} from "./sb/withCenter";
 import "./styles/styles.scss";
+import {Meta} from "@storybook/react";
 
-export const LoaderView = () => <Loader />;
+export const LoaderView = () => <Loader/>;
 export const DropDownMenu = () => {
     const entries = [
         {
@@ -22,7 +22,7 @@ export const DropDownMenu = () => {
         },
     ];
     return (
-        <DropDown current={"My Company"}>
+        <DropDown value={"My Company"}>
             {entries.map((entry) => (
                 <div key={entry.id}>
                     <a>{entry.name}</a>

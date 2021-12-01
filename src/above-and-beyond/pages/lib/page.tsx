@@ -1,7 +1,5 @@
-import React, {useState} from "react";
-import {DropDown, DropDownElement} from "./control";
-import {usePageCtx} from "./hooks/usePageCtx";
-import {Loader} from "./loader";
+import React, {useContext} from "react";
+import {EmployerDropDown} from "./control";
 import styled from "@emotion/styled";
 import {Highlight, ScrollBar, withTablet} from "./styles/mixins";
 import {Employer} from "./orm/validate";
@@ -16,6 +14,8 @@ import {
     SettingOutlined,
     StarOutlined
 } from "@ant-design/icons";
+import {DataMeta, user} from "./orm/docs";
+import {useAsync, UseAsyncReturn} from "react-async-hook";
 
 export const FeatureButton: React.FC<{ edit?: boolean, valid?: boolean, loading?: boolean, onClick }> = ({
                                                                                                              loading,
@@ -207,6 +207,52 @@ export const HeaderControl = styled.div`
     }
 `
 
+
+export const DEFAULT_META = {
+    currentEmployerID: "",
+    currentRoleID: ""
+};
+export const MetaContext = React.createContext<DataMeta>(DEFAULT_META)
+
+export const useMeta = () => {
+    return useContext(MetaContext)
+};
+
+export class User {
+
+    async updateMeta(data: Partial<DataMeta>) {
+        await user.write(data)
+        this.data.merge({result: {...this.data.result, ...data},})
+    }
+
+
+    Provider: React.FC = ({children}) => {
+        this.data = useAsync(() => {
+            return user.read()
+        }, [])
+
+        return <this.Context.Provider value={{...this.data.result}}>
+            {children}
+        </this.Context.Provider>
+    }
+
+    private Context = React.createContext({});
+
+    data: UseAsyncReturn<DataMeta>
+}
+
+export const MetaDeps: React.FC = ({children}) => {
+
+    const data = useAsync(() => {
+        return user.read()
+    }, []);
+
+    return <MetaContext.Provider value={DEFAULT_META}>
+        {children}
+    </MetaContext.Provider>
+
+};
+
 export const MenuTemplate: React.FC<{
     currentEmployer: Employer;
     allEmployers: Employer[];
@@ -220,19 +266,13 @@ export const MenuTemplate: React.FC<{
     isLoading?: boolean;
 }> = ({
           children,
-          currentEmployer,
           heading,
-          allEmployers,
           isValid,
           isEdit,
           onClickEdit,
           onClickSave,
           disableNavigation,
-          editAllParams = {},
-          isLoading,
       }) => {
-    const [isSaving, setSaveState] = useState(false);
-    const {api} = usePageCtx();
 
     return (
         <Page>
@@ -240,45 +280,15 @@ export const MenuTemplate: React.FC<{
                 <nav>
                     <HeaderControl>
                         <h2>{heading}</h2>
-                        <DropDown
-                            value={currentEmployer?.name}
-                        >
-                            <DropDownElement
-                                href={`/main?newEmployer=true`}
-                                key={'new'}
-                            >
-                                Create New
-                            </DropDownElement>
-                            {allEmployers
-                                .filter(
-                                    (employer) =>
-                                        employer.id !== currentEmployer.id
-                                )
-                                .map((employer) => (
-                                    <DropDownElement
-                                        key={employer.id}
-                                        href={'/main'}
-                                        onClick={() =>
-                                            api.updateEmployer(employer.id)
-                                        }
-                                    >
-                                        {employer.name}
-                                    </DropDownElement>
-                                ))}
-                        </DropDown>
+                        <EmployerDropDown onChange={} onNew={} onLoad={}
+                                          onError={} employerID={}/>
                     </HeaderControl>
                     <Link href={"/profile"}>
                         <a><SettingOutlined/></a>
                     </Link>
                 </nav>
             </header>
-            {isSaving || isLoading ? (
-                <main>
-                    <Loader/>
-                </main>
-            ) : (
-                <main>{children}</main>
-            )}
+            <main>{children}</main>
             <footer>
                 <nav>
                     <FooterControlFeature>
@@ -286,15 +296,7 @@ export const MenuTemplate: React.FC<{
                             onClick={(e) => {
                                 e.preventDefault()
                                 if (isEdit && isValid) {
-                                    setSaveState(true);
-                                    Promise.resolve(onClickSave?.())
-                                        .then(() => {
-                                            setSaveState(false);
-                                        })
-                                        .catch((e) => {
-                                            setSaveState(false);
-                                            throw e;
-                                        });
+                                    onClickSave?.()
                                 } else if (!isEdit) {
                                     onClickEdit?.();
                                 }

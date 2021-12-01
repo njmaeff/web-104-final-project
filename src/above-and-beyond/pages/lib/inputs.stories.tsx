@@ -1,4 +1,3 @@
-import { Meta } from "@njmaeff/storybook-react/react";
 import React from "react";
 import { WithCenter } from "./sb/withCenter";
 
@@ -10,6 +9,7 @@ import {
     TextInput as Text,
 } from "./input";
 import { useFormWithStatus } from "./hooks/useFormWithStatus";
+import {Meta} from "@storybook/react";
 
 export const TextInput = () => {
     const [, { fieldProps }] = useFormWithStatus({
