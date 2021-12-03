@@ -16,6 +16,7 @@ import {
 } from "@ant-design/icons";
 import {auth} from "./firebase/connect-api";
 import {useEmployer} from "./orm/docs";
+import {Constructor} from "type-fest";
 
 export const FeatureButton: React.FC<{ edit?: boolean, valid?: boolean, loading?: boolean, onClick }> = ({
                                                                                                              loading,
@@ -212,18 +213,42 @@ export const DEFAULT_META = {
 };
 
 
-export abstract class ContextBase<T extends {} = any, Status = undefined> {
-    abstract initialize(): void
+export class Context<T extends ContextModel = ContextModel<any>> {
 
-    use() {
-        return useContext(this.context)
+    useData(): T['state'] {
+        const ctx = useContext(this.context)
+        return ctx.model.state
     }
 
-    Provider: React.FC = ({children}) => {
-        return <this.context.Provider value={{...this.state}}>
+    useModel(): T {
+        const ctx = useContext(this.context)
+        return ctx.model
+    }
+
+    Provider: React.FC<{ deps?, initialState? }> = ({
+                                                        deps,
+                                                        initialState,
+                                                        children
+                                                    }) => {
+        const state = useState(initialState)
+        const model = new this.Model(state);
+        useEffect(() => {
+            model.initialize();
+        }, deps ?? []);
+
+        return <this.context.Provider value={{model}}>
             {children}
         </this.context.Provider>
     }
+
+    constructor(private Model: Constructor<T>) {
+    }
+
+    protected context = React.createContext<{ model: T }>(null)
+}
+
+export abstract class ContextModel<T extends {} = any, Status = any> {
+    abstract initialize(): void
 
     setState(value: T) {
         this._state[1](value)
@@ -241,43 +266,15 @@ export abstract class ContextBase<T extends {} = any, Status = undefined> {
         return this.status === value
     }
 
-    protected _state: [T, React.Dispatch<SetStateAction<T>>]
+    constructor(protected _state: [T, React.Dispatch<SetStateAction<T>>]) {
+    }
 
     get state() {
         return this._state[0]
     }
 
-    protected context: React.Context<T>
     protected status: Status
 }
-
-export abstract class SyncContext<T extends {} = any, Status = undefined> extends ContextBase<T, Status> {
-
-    constructor() {
-        super()
-        this._state = useState(null)
-        this.initialize();
-        this.context = React.createContext<T>({...this.state});
-    }
-
-}
-
-export abstract class AsyncContext<T extends {} = any, Status = undefined> extends ContextBase<T, Status> {
-    abstract initialize(): () => Promise<void>
-
-    constructor({deps = []} = {}) {
-        super()
-        this._state = useState(null);
-        const cb = this.initialize()
-        useEffect(() => {
-            cb()
-                .catch(error => this.mergeState(error))
-        }, deps);
-        this.context = React.createContext<T>({...(this.state ?? null)});
-    }
-
-}
-
 
 export enum PageStatus {
     NewEmployer,
@@ -287,7 +284,7 @@ export enum PageStatus {
 
 export type PageState = { currentEmployerID: string, currentEmployer?: Employer, allEmployers: Employer[], currentRoleID: string };
 
-export class PageData extends AsyncContext<PageState, PageStatus> {
+export class PageData extends ContextModel<PageState, PageStatus> {
     initialize() {
         const state = JSON.parse(localStorage.getItem(auth.currentUser.uid)) ?? DEFAULT_META
         this.setStatus(
@@ -326,7 +323,8 @@ export class PageData extends AsyncContext<PageState, PageStatus> {
 
 }
 
-export const page = new PageData()
+export const page = new Context(PageData)
+
 
 export const MenuTemplate: React.FC<{
     heading?: string;
@@ -338,7 +336,7 @@ export const MenuTemplate: React.FC<{
           onClickFeature,
       }) => {
 
-    const pageData = page.use()
+    const pageData = page.useData()
     return (
         <Page>
             <header>
