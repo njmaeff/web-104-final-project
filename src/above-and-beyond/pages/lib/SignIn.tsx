@@ -24,7 +24,7 @@ export const useFirebaseUI = () => {
                         ) {
                             router.push('/getting-started');
                         } else if (authResult.user) {
-                            router.push('/home/index')
+                            router.push('/home/index', '/home/')
                         }
 
                         return false;

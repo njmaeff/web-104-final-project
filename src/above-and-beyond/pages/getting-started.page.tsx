@@ -7,7 +7,7 @@ export default () => {
         <div className={"page page-first-login"}>
             <header>
                 <div>
-                    <Link href={"/main"}>
+                    <Link href={"/home/index"} as={'/home/'}>
                         <a className={"primary"}>Continue</a>
                     </Link>
                 </div>

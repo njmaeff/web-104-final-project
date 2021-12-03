@@ -1,5 +1,5 @@
-import React, {SetStateAction, useContext, useState} from "react";
-import {EmployerDropDown} from "./control";
+import React, {SetStateAction, useContext, useEffect, useState} from "react";
+import {DropDown, DropDownElement} from "./control";
 import styled from "@emotion/styled";
 import {Highlight, ScrollBar, withTablet} from "./styles/mixins";
 import {Employer} from "./orm/validate";
@@ -15,6 +15,7 @@ import {
     StarOutlined
 } from "@ant-design/icons";
 import {auth} from "./firebase/connect-api";
+import {useEmployer} from "./orm/docs";
 
 export const FeatureButton: React.FC<{ edit?: boolean, valid?: boolean, loading?: boolean, onClick }> = ({
                                                                                                              loading,
@@ -26,7 +27,6 @@ export const FeatureButton: React.FC<{ edit?: boolean, valid?: boolean, loading?
 
 
     return <Button
-        // className={'icon-logo'}
         css={theme => css`
             ${edit && valid ? Highlight(theme.colors.success) : edit && !valid ? Highlight(theme.colors.primary) : ""}
             display: block;
@@ -54,7 +54,6 @@ export const FeatureButton: React.FC<{ edit?: boolean, valid?: boolean, loading?
         loading={loading}
         onClick={onClick}
         {...props}>
-        {/*<p className={!loading ? 'icon-logo' : ''}/>*/}
         <a><PlusCircleOutlined/></a>
     </Button>
 };
@@ -213,8 +212,8 @@ export const DEFAULT_META = {
 };
 
 
-export abstract class SyncContext<T extends {} = any, Status = undefined> {
-    abstract initialize(): { state: T, status?: Status }
+export abstract class ContextBase<T extends {} = any, Status = undefined> {
+    abstract initialize(): void
 
     use() {
         return useContext(this.context)
@@ -242,20 +241,41 @@ export abstract class SyncContext<T extends {} = any, Status = undefined> {
         return this.status === value
     }
 
-    constructor() {
-        const {state, status} = this.initialize()
-        this._state = useState(state)
-        this.context = React.createContext<T>(state);
-        this.setStatus(status)
-    }
+    protected _state: [T, React.Dispatch<SetStateAction<T>>]
 
     get state() {
         return this._state[0]
     }
 
-    protected readonly context: React.Context<T>
-    private status: Status
-    private readonly _state: [T, React.Dispatch<SetStateAction<T>>]
+    protected context: React.Context<T>
+    protected status: Status
+}
+
+export abstract class SyncContext<T extends {} = any, Status = undefined> extends ContextBase<T, Status> {
+
+    constructor() {
+        super()
+        this._state = useState(null)
+        this.initialize();
+        this.context = React.createContext<T>({...this.state});
+    }
+
+}
+
+export abstract class AsyncContext<T extends {} = any, Status = undefined> extends ContextBase<T, Status> {
+    abstract initialize(): () => Promise<void>
+
+    constructor({deps = []} = {}) {
+        super()
+        this._state = useState(null);
+        const cb = this.initialize()
+        useEffect(() => {
+            cb()
+                .catch(error => this.mergeState(error))
+        }, deps);
+        this.context = React.createContext<T>({...(this.state ?? null)});
+    }
+
 }
 
 
@@ -264,50 +284,102 @@ export enum PageStatus {
     View
 }
 
-export class PageData extends SyncContext<{ currentEmployerID: string, currentEmployer?: Employer }, PageStatus> {
+
+export type PageState = { currentEmployerID: string, currentEmployer?: Employer, allEmployers: Employer[], currentRoleID: string };
+
+export class PageData extends AsyncContext<PageState, PageStatus> {
     initialize() {
-        const state = JSON.parse(localStorage.getItem(auth.currentUser.uid))
-        return {
-            state,
-            status: state ? PageStatus.View : PageStatus.NewEmployer
-        }
+        const state = JSON.parse(localStorage.getItem(auth.currentUser.uid)) ?? DEFAULT_META
+        this.setStatus(
+            state ? PageStatus.View : PageStatus.NewEmployer
+        )
+        this.setState(state)
+
+        return () => this.fetchEmployerData()
     }
+
+    async fetchEmployerData() {
+        const currentEmployer = await useEmployer().read(this.state.currentEmployerID);
+        const allEmployers = await useEmployer().readFromCollection();
+        this.mergeState({
+            currentEmployer,
+            allEmployers
+        })
+    }
+
+    override setState(value: PageState) {
+        super.setState(value);
+        localStorage.setItem(auth.currentUser.uid, JSON.stringify({
+            currentEmployerID: value.currentEmployerID,
+            currentRoleID: value.currentRoleID
+        } as Partial<PageState>))
+    }
+
+    override mergeState(value: Partial<PageState>) {
+        super.mergeState(value);
+        localStorage.setItem(auth.currentUser.uid, JSON.stringify({
+            currentEmployerID: value.currentEmployerID,
+            currentRoleID: value.currentRoleID
+        } as Partial<PageState>))
+    }
+
+
 }
 
-const page = new PageData()
+export const page = new PageData()
 
 export const MenuTemplate: React.FC<{
-    currentEmployer: Employer;
-    allEmployers: Employer[];
     heading?: string;
-    isEdit?: boolean;
-    onClickEdit?;
-    onClickSave?;
-    isValid?: boolean;
     disableNavigation?: boolean;
-    editAllParams?: any;
-    isLoading?: boolean;
+    onClickFeature?
 }> = ({
           children,
           heading,
-          isValid,
-          isEdit,
-          onClickEdit,
-          onClickSave,
-          disableNavigation,
+          onClickFeature,
       }) => {
 
+    const pageData = page.use()
     return (
         <Page>
             <header>
                 <nav>
                     <HeaderControl>
                         <h2>{heading}</h2>
-                        <EmployerDropDown
-                            onChange={(id) => page.setState({currentEmployerID: id})}
-                            onNew={() => page.setStatus(PageStatus.NewEmployer)}
-                            onLoad={(employer) => page.mergeState({currentEmployer: employer})}
-                            employerID={page.state.currentEmployerID}/>
+                        <DropDown
+                            value={pageData.currentEmployer.name}
+                        >
+                            <DropDownElement
+                                key={'new'}
+                                onClick={
+                                    () => {
+                                    }
+                                }
+                            >
+                                Create New
+                            </DropDownElement>
+                            {pageData.allEmployers
+                                .filter(
+                                    (employer) =>
+                                        employer.id !== pageData.currentEmployer.id
+                                )
+                                .map((employer) => (
+                                    <DropDownElement
+                                        key={employer.id}
+                                        onClick={() => {
+                                        }}
+                                    >
+                                        {employer.name}
+                                    </DropDownElement>
+                                ))}
+                        </DropDown>
+                        {/*<EmployerDropDown*/}
+                        {/*    onChange={(id) => page.setState({*/}
+                        {/*        currentEmployerID: id,*/}
+                        {/*        currentRoleID: ""*/}
+                        {/*    })}*/}
+                        {/*    onNew={() => page.setStatus(PageStatus.NewEmployer)}*/}
+                        {/*    onLoad={(employer) => page.mergeState({currentEmployer: employer})}*/}
+                        {/*    employerID={page.state.currentEmployerID}/>*/}
                     </HeaderControl>
                     <Link href={"/profile"}>
                         <a><SettingOutlined/></a>
@@ -323,11 +395,7 @@ export const MenuTemplate: React.FC<{
                         <FeatureButton
                             onClick={(e) => {
                                 e.preventDefault()
-                                if (isEdit && isValid) {
-                                    onClickSave?.()
-                                } else if (!isEdit) {
-                                    onClickEdit?.();
-                                }
+                                onClickFeature?.()
                             }}
                         />
                     </FooterControlFeature>

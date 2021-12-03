@@ -1,16 +1,11 @@
 import {Page} from "../lib/types";
-import {usePageCtx} from "../lib/hooks/usePageCtx";
 import {EmployerCollection, useEmployer} from "../lib/orm/docs";
-import {
-    mergeForms,
-    PageStatus,
-    useFormWithStatus
-} from "../lib/hooks/useFormWithStatus";
+import {mergeForms, useFormWithStatus} from "../lib/hooks/useFormWithStatus";
 import {Employer, employerSchema, Role, roleSchema} from "../lib/orm/validate";
 import {router} from "next/client";
-import React, {Reducer, useEffect, useReducer} from "react";
+import React, {useEffect} from "react";
 import {useAsync} from "../lib/hooks/useAsync";
-import {MenuTemplate} from "../lib/page";
+import {MenuTemplate, page} from "../lib/page";
 import {
     FieldDatePickerRow,
     FieldDropDownInput,
@@ -33,9 +28,9 @@ export type MainReducer = {
 }
 
 
-export const MainPage: Page = () => {
+export const MainPageForm = () => {
+    const pageState = page.use()
 
-    const {user} = usePageCtx();
     const emptyRole = {
         allRolesForEmployer: [],
         currentRole: {
@@ -50,17 +45,17 @@ export const MainPage: Page = () => {
 
 
     const employer = useEmployer();
+
     const [mainProps, [employerFormik, employerForm], [roleFormik, roleForm]] =
         mergeForms(
             useFormWithStatus<Partial<Employer>>({
-                initialValues: {name: "", location: ""},
+                initialValues: pageState.currentEmployer,
                 validationSchema: employerSchema,
                 onSubmit: async (values, helpers) => {
                     employerForm.setView();
                     helpers.setValues(values)
-                    await router.push('index')
+                    await router.push('index', '')
                     const ref = await employer.write(values);
-                    await api.updateEmployer(ref.id);
                 },
             }),
             useFormWithStatus<Partial<Role>>({
@@ -76,6 +71,9 @@ export const MainPage: Page = () => {
                 onSubmit: async (values, helpers) => {
                     roleForm.setView();
                     helpers.setValues(values)
+                    page.mergeState({
+
+                    })
                     const ref = await EmployerCollection.fromID(
                         currentEmployerID
                     ).roles.write(values);
@@ -122,95 +120,78 @@ export const MainPage: Page = () => {
         }
     );
 
-    const [state, dispatch] = useReducer<Reducer<MainReducer, MainReducer>, MainReducer>((prevState, action) => {
-        return {...prevState, ...action}
-    }, {type: "init"}, arg => {
-        const data = JSON.parse(localStorage.getItem(user.uid))
-        if (data) {
-            return {
-                type: "view"
-            };
+    return <> <FieldTable>
+        <FieldInputRow
+            label={"Organization Name"}
+            {...employerForm.fieldProps.name}
+        />
+        <FieldInputRow
+            label={"Location"}
+            {...employerForm.fieldProps.location}
+        />
+    </FieldTable>
+        <FieldTable>
+            <FieldDropDownInput
+                label={"Role"}
+                {...roleForm.fieldProps.name}
+            >
+                <DropDownElement
+                    key={'new'}
+                    onClick={() => {
+                    }}
+                >
+                    Create New
+                </DropDownElement>
 
-        } else {
-            return arg
-        }
-    });
+                {allRolesForEmployer
+                    .filter((role) => role.id !== currentRoleID)
+                    .map((role) => (
+                        <DropDownElement
+                            key={role.id}
+                            onClick={() => {
+                            }}
+                        >
+                            {role.name}
+                        </DropDownElement>
+                    ))}
+            </FieldDropDownInput>
+
+            <FieldDatePickerRow
+                label={"Start Date"}
+                {...roleForm.fieldProps.startDate}
+            />
+            <FieldInputRow
+                label={"Current Salary"}
+                {...roleForm.fieldProps.salary}
+            />
+            <FieldInputRow
+                label={"Target Salary"}
+                {...roleForm.fieldProps.salaryTarget}
+            />
+        </FieldTable>
+
+        <TextInput
+            {...roleForm.fieldProps.skillTarget}
+            height={"auto"}
+            label={"Skills"}
+        />
+
+        <TextInput
+            {...roleForm.fieldProps.responsibilities}
+            height={"auto"}
+            label={"Responsibilities"}
+        /></>
+
+};
+
+export const MainPage: Page = () => {
 
 
     return (
         <MenuTemplate
-            currentEmployer={
-                isNewEmployer ? {name: "New Employer"} : currentEmployer
-            }
             heading={"Above and Beyond"}
-            allEmployers={allEmployers}
-            disableNavigation={isNewRole}
-            isLoading={!loaded}
-            {...mainProps}
         >
-            <FieldTable>
-                <FieldInputRow
-                    label={"Organization Name"}
-                    {...employerForm.fieldProps.name}
-                />
-                <FieldInputRow
-                    label={"Location"}
-                    {...employerForm.fieldProps.location}
-                />
-            </FieldTable>
-            <FieldTable>
-                <FieldDropDownInput
-                    label={"Role"}
-                    {...roleForm.fieldProps.name}
-                >
-                    {!isNewEmployer && (
-                        <DropDownElement
-                            key={'new'}
-                            onClick={() => {
-                                api.newRole();
-                            }}
-                        >
-                            Create New
-                        </DropDownElement>
-                    )}
-
-                    {allRolesForEmployer
-                        .filter((role) => role.id !== currentRoleID)
-                        .map((role) => (
-                            <DropDownElement
-                                key={role.id}
-                                onClick={() => api.updateRole(role.id)}
-                            >
-                                {role.name}
-                            </DropDownElement>
-                        ))}
-                </FieldDropDownInput>
-
-                <FieldDatePickerRow
-                    label={"Start Date"}
-                    {...roleForm.fieldProps.startDate}
-                />
-                <FieldInputRow
-                    label={"Current Salary"}
-                    {...roleForm.fieldProps.salary}
-                />
-                <FieldInputRow
-                    label={"Target Salary"}
-                    {...roleForm.fieldProps.salaryTarget}
-                />
-            </FieldTable>
-
-            <TextInput
-                {...roleForm.fieldProps.skillTarget}
-                height={"auto"}
-                label={"Skills"}
-            />
-
-            <TextInput
-                {...roleForm.fieldProps.responsibilities}
-                height={"auto"}
-                label={"Responsibilities"}
-            />
+            <MainPageForm/>
         </MenuTemplate>
     );
 };
