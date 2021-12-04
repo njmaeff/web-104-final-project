@@ -1,4 +1,4 @@
-import React, {SetStateAction, useContext, useEffect, useState} from "react";
+import React, {SetStateAction, useContext, useState} from "react";
 import {DropDown, DropDownElement} from "./control";
 import styled from "@emotion/styled";
 import {Highlight, ScrollBar, withTablet} from "./styles/mixins";
@@ -226,16 +226,13 @@ export class Context<T extends ContextModel = ContextModel<any>> {
     }
 
     Provider: React.FC<{ deps?, initialState? }> = ({
-                                                        deps,
                                                         initialState,
                                                         children
                                                     }) => {
-        const state = useState(initialState)
-        const model = new this.Model(state);
-        useEffect(() => {
-            model.initialize();
-        }, deps ?? []);
 
+
+        const model = new this.Model();
+        model.initialize();
         return <this.context.Provider value={{model}}>
             {children}
         </this.context.Provider>
@@ -248,7 +245,9 @@ export class Context<T extends ContextModel = ContextModel<any>> {
 }
 
 export abstract class ContextModel<T extends {} = any, Status = any> {
-    abstract initialize(): void
+    initialize?(initialState?) {
+        this._state = useState(initialState);
+    }
 
     setState(value: T) {
         this._state[1](value)
@@ -285,8 +284,9 @@ export enum PageStatus {
 export type PageState = { currentEmployerID: string, currentEmployer?: Employer, allEmployers: Employer[], currentRoleID: string };
 
 export class PageData extends ContextModel<PageState, PageStatus> {
-    initialize() {
+    override initialize() {
         const state = JSON.parse(localStorage.getItem(auth.currentUser.uid)) ?? DEFAULT_META
+        super.initialize(state);
         this.setStatus(
             state ? PageStatus.View : PageStatus.NewEmployer
         )
