@@ -26,11 +26,10 @@ export const MainPageForm = () => {
 
 
     const currentRole = useAsync<Role>(async () => {
-
         if (currentEmployerID) {
             return await EmployerCollection.fromID(currentEmployerID).roles.read(currentRoleID);
         }
-    }, [], {
+    }, [currentRoleID], {
         initialState: {
             name: "",
             startDate: new Date(),
@@ -47,7 +46,7 @@ export const MainPageForm = () => {
             return await EmployerCollection.fromID(currentEmployerID).roles.readFromCollection();
         }
 
-    }, [], {
+    }, [currentRoleID], {
         initialState: []
     });
 
@@ -94,6 +93,8 @@ export const MainPageForm = () => {
     //
     // }, [emptyEmployer])
 
+    currentRole.onSuccess((result) => roleFormik.setValues(result))
+    currentEmployer.onSuccess((result) => employerFormik.setValues(result))
 
     return <> <FieldTable>
         <FieldInputRow

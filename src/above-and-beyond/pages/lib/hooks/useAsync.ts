@@ -16,7 +16,12 @@ export interface AsyncHelpers {
     isError: boolean;
 }
 
-export type AsyncState<Result = any, Error = any> = { result: Result, error?: Error, status: AsyncStates };
+export type AsyncState<Result = any, Error = any> = {
+    result: Result,
+    error?: Error,
+    status: AsyncStates,
+    onSuccess?: (cb: (result: Result) => void) => void
+};
 
 export type UseAsyncReturn<Result = any, Error = any> =
     AsyncState<Result, Error>
@@ -53,12 +58,21 @@ export const useAsync = <Result = any, Error = any>(
     const isSuccess = state.status === AsyncStates.Success
     const isError = state.status === AsyncStates.Error
 
+    const onSuccess = (cb: (result: Result) => void) => {
+        useEffect(() => {
+            if (isSuccess) {
+                cb(state.result);
+            }
+        }, [isSuccess])
+    };
+
     return {
         ...state,
         isInit,
         isLoading,
         isSuccess,
-        isError
+        isError,
+        onSuccess,
     }
 };
 
