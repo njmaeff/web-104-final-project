@@ -1,6 +1,5 @@
 import React, {useEffect} from "react";
 import {MDXProvider} from "@mdx-js/react";
-import {PageCtxProvider} from "../hooks/usePageCtx";
 import {useRouter} from "next/router";
 import {checkAuthUI} from "../hooks/checkAuthUI";
 import {NextPageWithLayout} from "../types";
@@ -30,7 +29,7 @@ export const Environment = ({children}) => {
             a: MDXAnchor,
             wrapper: Wrapper,
         }}>
-            <PageCtxProvider>{children}</PageCtxProvider>
+            {children}
         </MDXProvider>
     );
 };

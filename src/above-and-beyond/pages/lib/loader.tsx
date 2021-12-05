@@ -22,8 +22,10 @@ const spin = keyframes`
 `
 
 const Spinner = styled.div`
-    border: 16px solid variables.$color-light;
-    border-top: 16px solid variables.$color-dark;
+    border: 16px solid ${({theme}) =>
+        theme.colors.light
+    };
+    border-top: 16px solid ${({theme}) => theme.colors.dark};
     border-radius: 50%;
     width: 120px;
     height: 120px;

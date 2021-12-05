@@ -11,9 +11,7 @@ import {DateLike, Doc, Employer, Rate, Review, Role} from "./validate";
  */
 export const makeUserPath = (...paths): string[] => ["users", ...paths];
 
-export const makeAsyncCallbackHook = <
-    FN extends (...args: any[]) => Promise<any>
->(
+export const makeAsyncCallbackHook = <FN extends (...args: any[]) => Promise<any>>(
     fn: FN
 ) => {
     const [state, update] = useState<Awaited<FN>>();
@@ -31,9 +29,7 @@ export const makeAsyncCallbackHook = <
  * Base class for building react hooks using firebase and wrapping the firebase
  * api for upgrading the sdk in the future
  */
-export class Firestore<
-    Doc extends firebase.firestore.DocumentData
-> extends FirestoreProvider<Doc, Doc["type"]> {
+export class Firestore<Doc extends firebase.firestore.DocumentData> extends FirestoreProvider<Doc, Doc["type"]> {
     useWrite = () =>
         makeAsyncCallbackHook(async (document: Doc) => this.write(document));
 
@@ -46,7 +42,7 @@ export class Firestore<
         makeAsyncCallbackHook((id = this.id?.()) => this.deleteDoc(id));
 
     useReadFromCollection = (init = []) =>
-        useAsync(() => this.readFromCollection(), { init, deps: [] });
+        useAsync(() => this.readFromCollection(), {init, deps: []});
 
     fromSubCollection<Doc extends firebase.firestore.DocumentData>(
         name: string,
@@ -82,14 +78,15 @@ export class UserProvider extends Firestore<DataMeta> {
 }
 
 export const user = new UserProvider();
-export const useEmployer = () => user.fromSubCollection<Employer>("employers");
+export const getEmployer = () => user.fromSubCollection<Employer>("employers");
 
 export class EmployerCollection {
     static fromID(id: string) {
         return new EmployerCollection(id);
     }
 
-    constructor(private id: string) {}
+    constructor(private id: string) {
+    }
 
     get roles() {
         return this.employer.withID(this.id).fromSubCollection<Role>("roles");
@@ -105,7 +102,7 @@ export class EmployerCollection {
         return this.employer.withID(this.id).fromSubCollection<Rate>("rate");
     }
 
-    private employer = useEmployer();
+    private employer = getEmployer();
 }
 
 export const Timestamp = firebase.firestore.Timestamp;

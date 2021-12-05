@@ -1,30 +1,64 @@
-import { useEffect, useState } from "react";
-import { PromiseValue } from "type-fest";
+import {useEffect, useState} from "react";
 
-export const useAsync = <
-    Result = any,
-    FN extends (prev: Result) => Promise<Result> = (
-        prev: Result
-    ) => Promise<Result>
->(
-    fn: FN,
-    { init = null, deps = undefined } = {} as {
-        init?: PromiseValue<ReturnType<FN>>;
-        deps?;
-    }
-) => {
-    const [data, update] = useState<PromiseValue<ReturnType<FN>>>(init);
-    const [loaded, load] = useState(false);
+
+export enum AsyncStates {
+    Init,
+    Loading,
+    Success,
+    Error,
+}
+
+
+export interface AsyncHelpers {
+    isInit: boolean;
+    isLoading: boolean;
+    isSuccess: boolean;
+    isError: boolean;
+}
+
+export type AsyncState<Result = any, Error = any> = { result: Result, error?: Error, status: AsyncStates };
+
+export type UseAsyncReturn<Result = any, Error = any> =
+    AsyncState<Result, Error>
+    & AsyncHelpers
+
+export const useAsync = <Result = any, Error = any>(
+    fn: () => Promise<Result>,
+    params?: any[],
+    {initialState = null} = {}): UseAsyncReturn<Result, Error> => {
+
+    const [state, updateState] = useState<AsyncState<Result, Error>>({
+        result: initialState,
+        status: AsyncStates.Init
+    });
 
     useEffect(() => {
-        load(false);
-        Promise.resolve(fn(data as any)).then((result) => {
-            if (result) {
-                update(result as any);
-            }
-            load(true);
-        });
-    }, deps);
+        fn()
+            .then((result) => updateState(state => ({
+                ...state,
+                result,
+                status: AsyncStates.Success
+            })))
+            .catch((error) => updateState(state => ({
+                ...state,
+                error,
+                status: AsyncStates.Error
+            })))
 
-    return [data, { loaded }] as const;
+        updateState(state => ({...state, status: AsyncStates.Loading}))
+    }, params)
+
+    const isInit = state.status === AsyncStates.Init
+    const isLoading = state.status === AsyncStates.Loading
+    const isSuccess = state.status === AsyncStates.Success
+    const isError = state.status === AsyncStates.Error
+
+    return {
+        ...state,
+        isInit,
+        isLoading,
+        isSuccess,
+        isError
+    }
 };
+

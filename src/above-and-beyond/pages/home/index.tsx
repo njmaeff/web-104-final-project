@@ -6,7 +6,7 @@ import {routeComponent} from "./routeComponent";
 
 const routes = new Map([
     ["index", routeComponent(MainPage)],
-    ["new", routeComponent(MainPage, {newEmployer: true})],
+    ["new", routeComponent(MainPage)],
 ])
 
 export const useRoutes = (routes) => {

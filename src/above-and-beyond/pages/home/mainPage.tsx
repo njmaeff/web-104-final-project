@@ -1,11 +1,9 @@
 import {Page} from "../lib/types";
-import {EmployerCollection, useEmployer} from "../lib/orm/docs";
+import {EmployerCollection, getEmployer} from "../lib/orm/docs";
 import {mergeForms, useFormWithStatus} from "../lib/hooks/useFormWithStatus";
 import {Employer, employerSchema, Role, roleSchema} from "../lib/orm/validate";
-import {router} from "next/client";
-import React, {useEffect} from "react";
-import {useAsync} from "../lib/hooks/useAsync";
-import {MenuTemplate, page} from "../lib/page";
+import React from "react";
+import {MenuTemplate} from "../lib/page";
 import {
     FieldDatePickerRow,
     FieldDropDownInput,
@@ -14,111 +12,88 @@ import {
     TextInput
 } from "../lib/input";
 import {DropDownElement} from "../lib/control";
-
-export type MainReducer = {
-    type: "init"
-} | {
-    type: "new-employer"
-} | {
-    type: "new-role"
-} | {
-    type: "view"
-} | {
-    type: "edit"
-}
-
+import {useEmployer} from "./useEmployer";
+import {useRole} from "./useRole";
+import {useAsync} from "../lib/hooks/useAsync";
 
 export const MainPageForm = () => {
-    const pageState = page.use()
+    const {
+        currentEmployerID,
+        updateEmployer,
+        currentEmployer
+    } = useEmployer()
+    const {currentRoleID, updateRole} = useRole();
 
-    const emptyRole = {
-        allRolesForEmployer: [],
-        currentRole: {
+
+    const currentRole = useAsync<Role>(async () => {
+
+        if (currentEmployerID) {
+            return await EmployerCollection.fromID(currentEmployerID).roles.read(currentRoleID);
+        }
+    }, [], {
+        initialState: {
             name: "",
             startDate: new Date(),
             salary: "",
             skillTarget: "",
             salaryTarget: "",
             responsibilities: "",
-        },
-    };
+        }
+
+    });
+
+    const allRoles = useAsync<Role[]>(async () => {
+        if (currentEmployerID) {
+            return await EmployerCollection.fromID(currentEmployerID).roles.readFromCollection();
+        }
+
+    }, [], {
+        initialState: []
+    });
 
 
-    const employer = useEmployer();
+    const employerAPI = getEmployer();
 
     const [mainProps, [employerFormik, employerForm], [roleFormik, roleForm]] =
         mergeForms(
             useFormWithStatus<Partial<Employer>>({
-                initialValues: pageState.currentEmployer,
+                initialValues: currentEmployer.result,
                 validationSchema: employerSchema,
                 onSubmit: async (values, helpers) => {
                     employerForm.setView();
                     helpers.setValues(values)
-                    await router.push('index', '')
-                    const ref = await employer.write(values);
+                    const ref = await employerAPI.write(values);
+                    updateEmployer(ref.id)
                 },
             }),
             useFormWithStatus<Partial<Role>>({
-                initialValues: {
-                    name: "",
-                    startDate: new Date(),
-                    salary: "",
-                    skillTarget: "",
-                    salaryTarget: "",
-                    responsibilities: "",
-                },
+                initialValues: currentRole.result,
                 validationSchema: roleSchema,
                 onSubmit: async (values, helpers) => {
                     roleForm.setView();
                     helpers.setValues(values)
-                    page.mergeState({
-
-                    })
                     const ref = await EmployerCollection.fromID(
                         currentEmployerID
                     ).roles.write(values);
+                    updateRole(ref.id)
 
-                    await api.updateRole(ref.id);
                 },
             })
         );
 
-    useEffect(() => {
-        if (newEmployer) {
-            employerFormik.setValues({
-                name: "",
-                location: ""
-            });
-            employerForm.setEdit();
-            roleFormik.setValues(emptyRole.currentRole);
-            roleForm.setView();
-        }
+    // useEffect(() => {
+    //     if (emptyEmployer) {
+    //         employerFormik.setValues({
+    //             name: "",
+    //             location: ""
+    //         });
+    //         employerForm.setEdit();
+    //         roleFormik.setValues(emptyRole.currentRole);
+    //         roleForm.setView();
+    //     }
+    //
+    // }, [emptyEmployer])
 
-    }, [newEmployer])
-
-
-    const [{allRolesForEmployer}, {loaded}] = useAsync<{
-        currentRole: Role;
-        allRolesForEmployer: Role[];
-    }>(
-        async () => {
-            if (!isNewRole && currentRoleID) {
-                const role = EmployerCollection.fromID(currentEmployerID).roles;
-                const allRolesForEmployer = await role.readFromCollection();
-                const currentRole = await role.read(currentRoleID);
-                await roleFormik.setValues(currentRole)
-
-                return {
-                    currentRole,
-                    allRolesForEmployer,
-                };
-            }
-        },
-        {
-            deps: [currentRoleID],
-            init: emptyRole,
-        }
-    );
 
     return <> <FieldTable>
         <FieldInputRow
@@ -143,7 +118,7 @@ export const MainPageForm = () => {
                     Create New
                 </DropDownElement>
 
-                {allRolesForEmployer
+                {allRoles.result
                     .filter((role) => role.id !== currentRoleID)
                     .map((role) => (
                         <DropDownElement
@@ -185,7 +160,6 @@ export const MainPageForm = () => {
 };
 
 export const MainPage: Page = () => {
-
 
     return (
         <MenuTemplate

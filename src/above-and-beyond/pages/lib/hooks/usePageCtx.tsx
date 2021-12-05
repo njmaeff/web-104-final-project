@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from "react";
-import {DataMeta, EmployerCollection, useEmployer, user} from "../orm/docs";
+import {DataMeta, EmployerCollection, getEmployer, user} from "../orm/docs";
 import {auth} from "../firebase/connect-api";
 import firebase from "firebase/compat";
 import {Employer} from "../orm/validate";
@@ -34,7 +34,7 @@ export const useMetaApi = () => {
     }, []);
 
     const updateEmployer = async (id: string) => {
-        const employerDoc = await useEmployer().read(id);
+        const employerDoc = await getEmployer().read(id);
         const allRolesForCurrentEmployer = await EmployerCollection.fromID(
             id
         ).roles.readFromCollection();
@@ -45,7 +45,7 @@ export const useMetaApi = () => {
             currentRoleID: currentRoleID,
         });
 
-        const allEmployers = await useEmployer().readFromCollection();
+        const allEmployers = await getEmployer().readFromCollection();
 
         updateData({
             currentEmployerID: id,

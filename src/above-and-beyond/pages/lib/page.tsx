@@ -1,8 +1,7 @@
-import React, {SetStateAction, useContext, useState} from "react";
-import {DropDown, DropDownElement} from "./control";
+import React from "react";
+import {EmployerDropDown} from "./control";
 import styled from "@emotion/styled";
 import {Highlight, ScrollBar, withTablet} from "./styles/mixins";
-import {Employer} from "./orm/validate";
 import Link from "next/link";
 import {Button} from "antd";
 import {css} from "@emotion/react";
@@ -14,9 +13,8 @@ import {
     SettingOutlined,
     StarOutlined
 } from "@ant-design/icons";
-import {auth} from "./firebase/connect-api";
-import {useEmployer} from "./orm/docs";
-import {Constructor} from "type-fest";
+import {EmployerProvider} from "../home/useEmployer";
+import {RoleProvider} from "../home/useRole";
 
 export const FeatureButton: React.FC<{ edit?: boolean, valid?: boolean, loading?: boolean, onClick }> = ({
                                                                                                              loading,
@@ -207,125 +205,6 @@ export const HeaderControl = styled.div`
 `
 
 
-export const DEFAULT_META = {
-    currentEmployerID: "",
-    currentRoleID: ""
-};
-
-
-export class Context<T extends ContextModel = ContextModel<any>> {
-
-    useData(): T['state'] {
-        const ctx = useContext(this.context)
-        return ctx.model.state
-    }
-
-    useModel(): T {
-        const ctx = useContext(this.context)
-        return ctx.model
-    }
-
-    Provider: React.FC<{ deps?, initialState? }> = ({
-                                                        initialState,
-                                                        children
-                                                    }) => {
-
-
-        const model = new this.Model();
-        model.initialize();
-        return <this.context.Provider value={{model}}>
-            {children}
-        </this.context.Provider>
-    }
-
-    constructor(private Model: Constructor<T>) {
-    }
-
-    protected context = React.createContext<{ model: T }>(null)
-}
-
-export abstract class ContextModel<T extends {} = any, Status = any> {
-    initialize?(initialState?) {
-        this._state = useState(initialState);
-    }
-
-    setState(value: T) {
-        this._state[1](value)
-    }
-
-    mergeState(value: Partial<T>) {
-        this._state[1]((prev) => ({...prev, ...value}))
-    }
-
-    setStatus(value: Status) {
-        this.status = value
-    }
-
-    isStatus(value: Status) {
-        return this.status === value
-    }
-
-    constructor(protected _state: [T, React.Dispatch<SetStateAction<T>>]) {
-    }
-
-    get state() {
-        return this._state[0]
-    }
-
-    protected status: Status
-}
-
-export enum PageStatus {
-    NewEmployer,
-    View
-}
-
-
-export type PageState = { currentEmployerID: string, currentEmployer?: Employer, allEmployers: Employer[], currentRoleID: string };
-
-export class PageData extends ContextModel<PageState, PageStatus> {
-    override initialize() {
-        const state = JSON.parse(localStorage.getItem(auth.currentUser.uid)) ?? DEFAULT_META
-        super.initialize(state);
-        this.setStatus(
-            state ? PageStatus.View : PageStatus.NewEmployer
-        )
-        this.setState(state)
-
-        return () => this.fetchEmployerData()
-    }
-
-    async fetchEmployerData() {
-        const currentEmployer = await useEmployer().read(this.state.currentEmployerID);
-        const allEmployers = await useEmployer().readFromCollection();
-        this.mergeState({
-            currentEmployer,
-            allEmployers
-        })
-    }
-
-    override setState(value: PageState) {
-        super.setState(value);
-        localStorage.setItem(auth.currentUser.uid, JSON.stringify({
-            currentEmployerID: value.currentEmployerID,
-            currentRoleID: value.currentRoleID
-        } as Partial<PageState>))
-    }
-
-    override mergeState(value: Partial<PageState>) {
-        super.mergeState(value);
-        localStorage.setItem(auth.currentUser.uid, JSON.stringify({
-            currentEmployerID: value.currentEmployerID,
-            currentRoleID: value.currentRoleID
-        } as Partial<PageState>))
-    }
-
-
-}
-
-export const page = new Context(PageData)
-
-
 export const MenuTemplate: React.FC<{
     heading?: string;
     disableNavigation?: boolean;
@@ -336,48 +215,13 @@ export const MenuTemplate: React.FC<{
           onClickFeature,
       }) => {
 
-    const pageData = page.useData()
     return (
         <Page>
             <header>
                 <nav>
                     <HeaderControl>
                         <h2>{heading}</h2>
-                        <DropDown
-                            value={pageData.currentEmployer.name}
-                        >
-                            <DropDownElement
-                                key={'new'}
-                                onClick={
-                                    () => {
-                                    }
-                                }
-                            >
-                                Create New
-                            </DropDownElement>
-                            {pageData.allEmployers
-                                .filter(
-                                    (employer) =>
-                                        employer.id !== pageData.currentEmployer.id
-                                )
-                                .map((employer) => (
-                                    <DropDownElement
-                                        key={employer.id}
-                                        onClick={() => {
-                                        }}
-                                    >
-                                        {employer.name}
-                                    </DropDownElement>
-                                ))}
-                        </DropDown>
-                        {/*<EmployerDropDown*/}
-                        {/*    onChange={(id) => page.setState({*/}
-                        {/*        currentEmployerID: id,*/}
-                        {/*        currentRoleID: ""*/}
-                        {/*    })}*/}
-                        {/*    onNew={() => page.setStatus(PageStatus.NewEmployer)}*/}
-                        {/*    onLoad={(employer) => page.mergeState({currentEmployer: employer})}*/}
-                        {/*    employerID={page.state.currentEmployerID}/>*/}
+                        <EmployerProvider><EmployerDropDown/></EmployerProvider>
                     </HeaderControl>
                     <Link href={"/profile"}>
                         <a><SettingOutlined/></a>
@@ -385,7 +229,11 @@ export const MenuTemplate: React.FC<{
                 </nav>
             </header>
             <main>
-                <page.Provider>{children}</page.Provider>
+                <EmployerProvider>
+                    <RoleProvider>
+                        {children}
+                    </RoleProvider>
+                </EmployerProvider>
             </main>
             <footer>
                 <nav>
