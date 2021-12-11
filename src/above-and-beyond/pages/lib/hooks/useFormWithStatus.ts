@@ -81,9 +81,22 @@ export const mergeForms = <T extends ReturnType<typeof useFormWithStatus>[]>(
     ...forms: [...T]
 ) => {
     const mainForms = forms.map(([_, form]) => form.mainProps);
+    const isEdit = mainForms.some((form) => form.isEdit || form.isNew)
+    const isValid = mainForms.every((form) => (form.isEdit ? form.isValid : true))
+    const onIsValid = (cb) => {
+        useEffect(() => {
+            if (isValid) {
+                cb()
+            }
+
+        }, [isValid]);
+    };
+
+
     const mainProps = {
-        isEdit: mainForms.some((form) => form.isEdit || form.isNew),
-        isValid: mainForms.every((form) => (form.isEdit ? form.isValid : true)),
+        isEdit,
+        isValid,
+        onIsValid: onIsValid,
         onClickEdit: () => mainForms.map((form) => form.onClickEdit()),
         onClickSave: (e) => {
             const run = async () => {
@@ -97,5 +110,6 @@ export const mergeForms = <T extends ReturnType<typeof useFormWithStatus>[]>(
             return run();
         },
     };
+
     return [mainProps, ...forms] as const;
 };

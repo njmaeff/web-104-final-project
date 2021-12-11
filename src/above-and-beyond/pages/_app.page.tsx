@@ -5,7 +5,6 @@ import {createEmotionCache} from "./lib/util/create-emotion-cache";
 import "firebaseui/dist/firebaseui.css"
 import "react-datepicker/dist/react-datepicker.min.css"
 import "antd/dist/antd.min.css"
-import "./lib/styles/styles.scss"
 import {ThemeEnvironment} from "./lib/styles/theme";
 
 const clientSideEmotionCache = createEmotionCache()

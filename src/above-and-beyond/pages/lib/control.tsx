@@ -48,9 +48,8 @@ export const DropDownElement: React.FC<{
 
 export const EmployerDropDown: React.FC<{}> = () => {
 
-    const {currentEmployer, allEmployers} = useEmployer();
+    const {currentEmployer, allEmployers, updateEmployer} = useEmployer();
 
-    console.log(allEmployers)
     return <DropDown
         value={currentEmployer.result?.name ?? "New Employer"}
     >
@@ -69,6 +68,7 @@ export const EmployerDropDown: React.FC<{}> = () => {
                 <DropDownElement
                     key={employer.id}
                     onClick={() => {
+                        updateEmployer(employer.id)
                     }}
                 >
                     {employer.name}

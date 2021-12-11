@@ -1,61 +1,18 @@
 import React from "react";
 import {EmployerDropDown} from "./control";
 import styled from "@emotion/styled";
-import {Highlight, ScrollBar, withTablet} from "./styles/mixins";
+import {ScrollBar, withTablet} from "./styles/mixins";
 import Link from "next/link";
-import {Button} from "antd";
 import {css} from "@emotion/react";
 import {
     HomeOutlined,
     LikeOutlined,
     LineChartOutlined,
-    PlusCircleOutlined,
     SettingOutlined,
     StarOutlined
 } from "@ant-design/icons";
 import {EmployerProvider} from "../home/useEmployer";
 import {RoleProvider} from "../home/useRole";
-
-export const FeatureButton: React.FC<{ edit?: boolean, valid?: boolean, loading?: boolean, onClick }> = ({
-                                                                                                             loading,
-                                                                                                             onClick,
-                                                                                                             edit,
-                                                                                                             valid,
-                                                                                                             ...props
-                                                                                                         }) => {
-
-
-    return <Button
-        css={theme => css`
-            ${edit && valid ? Highlight(theme.colors.success) : edit && !valid ? Highlight(theme.colors.primary) : ""}
-            display: block;
-            background-color: ${theme.colors.primary} !important;
-            color: ${theme.colors.light} !important;
-            border: none;
-            padding: 0.5rem;
-            border-radius: 30px;
-            width: 3.5rem;
-            height: 3.5rem;
-
-            span {
-                padding: 0 !important;
-                margin-top: -0.5rem !important;
-            }
-
-            p {
-                font-size: 2rem;
-                background-color: ${theme.colors.primary} !important;
-                color: ${theme.colors.light} !important;
-                margin: 0;
-            }
-        `}
-        type="primary"
-        loading={loading}
-        onClick={onClick}
-        {...props}>
-        <a><PlusCircleOutlined/></a>
-    </Button>
-};
 
 export const Page = styled.div`
     display: flex;
@@ -149,7 +106,7 @@ export const Page = styled.div`
     }
 `
 
-const FooterControlFeature = styled.div`
+const ControlFeature = styled.div`
     position: absolute;
     top: 0;
     left: 50%;
@@ -162,13 +119,16 @@ const FooterControlFeature = styled.div`
 
 `
 
-const FooterControl = styled.div`
+const FooterControl = styled.div<{ position?: 'left' | 'right' }>`
     display: flex;
-    justify-content: space-between;
-    margin: 0 1.5rem;
+    justify-content: ${(props) => props.position === 'right' ? 'flex-end' : 'flex-start'};
+    margin-left: ${(props) => props.position === 'left' && '2.5rem'};
+    margin-right: ${(props) => props.position === 'right' && '2.5rem'};
+    width: 100%;
 
     a {
         display: block;
+        margin: 0 0.5rem;
         font-size: 1.5rem;
         padding: 0.5rem;
         border-radius: 30px;
@@ -208,44 +168,34 @@ export const HeaderControl = styled.div`
 export const MenuTemplate: React.FC<{
     heading?: string;
     disableNavigation?: boolean;
-    onClickFeature?
 }> = ({
           children,
           heading,
-          onClickFeature,
       }) => {
 
     return (
         <Page>
-            <header>
-                <nav>
-                    <HeaderControl>
-                        <h2>{heading}</h2>
-                        <EmployerProvider><EmployerDropDown/></EmployerProvider>
-                    </HeaderControl>
-                    <Link href={"/profile"}>
-                        <a><SettingOutlined/></a>
-                    </Link>
-                </nav>
-            </header>
-            <main>
-                <EmployerProvider>
+            <EmployerProvider>
+                <header>
+                    <nav>
+                        <HeaderControl>
+                            <h2>{heading}</h2>
+                            <EmployerDropDown/>
+                        </HeaderControl>
+                        <Link href={"/profile"}>
+                            <a><SettingOutlined/></a>
+                        </Link>
+                    </nav>
+                </header>
+                <main>
                     <RoleProvider>
                         {children}
                     </RoleProvider>
-                </EmployerProvider>
-            </main>
+                </main>
+            </EmployerProvider>
             <footer>
                 <nav>
-                    <FooterControlFeature>
-                        <FeatureButton
-                            onClick={(e) => {
-                                e.preventDefault()
-                                onClickFeature?.()
-                            }}
-                        />
-                    </FooterControlFeature>
-                    <FooterControl>
+                    <FooterControl position={'right'}>
                         <Link
                             href={"/main"}
                         ><a><HomeOutlined/></a></Link>
@@ -255,7 +205,7 @@ export const MenuTemplate: React.FC<{
                             <a><LineChartOutlined/></a>
                         </Link>
                     </FooterControl>
-                    <FooterControl>
+                    <FooterControl position={'left'}>
                         <Link
                             href={"/review"}
                         ><a><StarOutlined/></a></Link>

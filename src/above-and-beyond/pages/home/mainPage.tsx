@@ -15,6 +15,17 @@ import {DropDownElement} from "../lib/control";
 import {useEmployer} from "./useEmployer";
 import {useRole} from "./useRole";
 import {useAsync} from "../lib/hooks/useAsync";
+import {FeatureButton} from "../lib/featureButton";
+import styled from "@emotion/styled";
+
+export const AbsoluteFeatureButton = styled(FeatureButton)`
+    position: fixed;
+    bottom: 1rem;
+    left: 50%;
+    transform: translate(-50%, 0);
+    border-radius: 50%;
+    z-index: 100;
+`
 
 export const MainPageForm = () => {
     const {
@@ -80,32 +91,20 @@ export const MainPageForm = () => {
             })
         );
 
-    // useEffect(() => {
-    //     if (emptyEmployer) {
-    //         employerFormik.setValues({
-    //             name: "",
-    //             location: ""
-    //         });
-    //         employerForm.setEdit();
-    //         roleFormik.setValues(emptyRole.currentRole);
-    //         roleForm.setView();
-    //     }
-    //
-    // }, [emptyEmployer])
-
     currentRole.onSuccess((result) => roleFormik.setValues(result))
     currentEmployer.onSuccess((result) => employerFormik.setValues(result))
 
-    return <> <FieldTable>
-        <FieldInputRow
-            label={"Organization Name"}
-            {...employerForm.fieldProps.name}
-        />
-        <FieldInputRow
-            label={"Location"}
-            {...employerForm.fieldProps.location}
-        />
-    </FieldTable>
+    return <>
+        <FieldTable>
+            <FieldInputRow
+                label={"Organization Name"}
+                {...employerForm.fieldProps.name}
+            />
+            <FieldInputRow
+                label={"Location"}
+                {...employerForm.fieldProps.location}
+            />
+        </FieldTable>
         <FieldTable>
             <FieldDropDownInput
                 label={"Role"}
@@ -156,16 +155,16 @@ export const MainPageForm = () => {
             {...roleForm.fieldProps.responsibilities}
             height={"auto"}
             label={"Responsibilities"}
-        /></>
+        />
+        <AbsoluteFeatureButton/>
+    </>;
 
 };
 
 export const MainPage: Page = () => {
 
     return (
-        <MenuTemplate
-            heading={"Above and Beyond"}
-        >
+        <MenuTemplate heading={"Above and Beyond"}>
             <MainPageForm/>
         </MenuTemplate>
     );
