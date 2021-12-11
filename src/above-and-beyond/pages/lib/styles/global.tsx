@@ -278,5 +278,9 @@ export const GlobalStyles = () => {
             display: none !important;
         }
 
+        div.ant-dropdown ul {
+            background-color: ${theme.colors.light};
+        }
+
     `}/>
 };

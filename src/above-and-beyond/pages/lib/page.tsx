@@ -80,8 +80,8 @@ export const Page = styled.div`
 
     footer {
         position: relative;
-        min-height: 4.5rem;
-        padding-top: 1rem;
+        min-height: 3.5rem;
+        //padding-top: 1rem;
 
         nav {
             height: 100%;

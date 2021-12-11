@@ -6,6 +6,9 @@ export interface MainOpts {
 }
 
 export default {
+    features: {
+        emotionAlias: false,
+    },
     babel: (options) => {
         // https://github.com/storybookjs/storybook/issues/13834#issuecomment-880646396
         return {
