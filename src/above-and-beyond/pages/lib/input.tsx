@@ -2,7 +2,7 @@ import React from "react";
 import {ensureDate} from "./orm/docs";
 import DatePicker from "react-datepicker"
 import {Button, Dropdown, Form, Input, Menu} from "antd";
-import {css, Theme} from "@emotion/react";
+import {css} from "@emotion/react";
 import {Highlight, ScrollBar} from "./styles/mixins";
 import {ParagraphSize, SectionSize} from "./styles/size";
 import {DownOutlined} from "@ant-design/icons";
@@ -50,7 +50,7 @@ export const TextInput: React.FC<{
     return (
         <div
             css={
-                (theme: Theme) => css`
+                (theme) => css`
                     height: ${height};
                     position: relative;
                     width: 100%;
