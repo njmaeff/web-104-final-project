@@ -1,13 +1,14 @@
 import React from "react";
 import About from "./lib/mdx/about.mdx";
 import Link from "next/link";
+import {routes} from "./routes";
 
 export default () => {
     return (
         <div className={"page page-first-login"}>
             <header>
                 <div>
-                    <Link href={"/home/index"} as={'/home/'}>
+                    <Link href={routes.home()}>
                         <a className={"primary"}>Continue</a>
                     </Link>
                 </div>
@@ -17,7 +18,7 @@ export default () => {
                     <About/>
                 </section>
             </main>
-            <footer></footer>
+            <footer/>
         </div>
     );
 };

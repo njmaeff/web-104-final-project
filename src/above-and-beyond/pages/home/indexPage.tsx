@@ -15,17 +15,7 @@ import {DropDownElement} from "../lib/control";
 import {useEmployer} from "./useEmployer";
 import {useRole} from "./useRole";
 import {useAsync} from "../lib/hooks/useAsync";
-import {FeatureButton} from "../lib/featureButton";
-import styled from "@emotion/styled";
-
-export const AbsoluteFeatureButton = styled(FeatureButton)`
-    position: fixed;
-    bottom: 1rem;
-    left: 50%;
-    transform: translate(-50%, 0);
-    border-radius: 50%;
-    z-index: 100;
-`
+import {AbsoluteFeatureButton} from "../lib/absoluteFeatureButton";
 
 export const MainPageForm = () => {
     const {
@@ -182,3 +172,5 @@ export const MainPage: Page = () => {
         </MenuTemplate>
     );
 };
+
+export default MainPage

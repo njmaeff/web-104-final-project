@@ -13,7 +13,8 @@ import {
 } from "@ant-design/icons";
 import {EmployerProvider} from "../home/useEmployer";
 import {RoleProvider} from "../home/useRole";
-import FullScreen from "../home/FullScreen";
+import FullScreen from "./FullScreen";
+import {routes} from "../routes";
 
 export const Page = styled.div`
     position: absolute;
@@ -185,7 +186,7 @@ export const MenuTemplate: React.FC<{
                                 <h2>{heading}</h2>
                                 <EmployerDropDown/>
                             </HeaderControl>
-                            <Link href={"/profile"}>
+                            <Link href={routes.profile()}>
                                 <a css={
                                     {
                                         fontSize: '2.5rem'
