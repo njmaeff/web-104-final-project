@@ -1,6 +1,6 @@
 import React from "react";
-import { MenuTemplate } from "./page";
 import { usePageCtx } from "./hooks/usePageCtx";
+import {MenuTemplate} from "./menuTemplate";
 
 export const EditPage: React.FC = () => {
     const { allEmployers, currentEmployer } = usePageCtx();

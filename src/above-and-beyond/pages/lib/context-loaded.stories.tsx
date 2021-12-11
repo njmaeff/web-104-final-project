@@ -1,7 +1,6 @@
 import React from "react";
 import {WithLoginUser} from "./sb/withLoginUser";
 import {WithContextLoaded} from "./sb/withContextLoaded";
-import {MenuTemplate} from "./page";
 import {usePageCtx} from "./hooks/usePageCtx";
 import {RateIssuePage, RateSuccessPage} from "./ratePage";
 import {ReviewPage} from "./reviewPage";
@@ -9,6 +8,7 @@ import {ProfilePage} from "./profilePage";
 import {EditPage} from "./editPage";
 import {Meta} from "@storybook/react";
 import {MainPage} from "../home/mainPage";
+import {MenuTemplate} from "./menuTemplate";
 
 export const Employer = () => {
     return <EditPage/>;

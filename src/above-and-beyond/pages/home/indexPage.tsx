@@ -3,7 +3,6 @@ import {EmployerCollection, getEmployer} from "../lib/orm/docs";
 import {mergeForms, useFormWithStatus} from "../lib/hooks/useFormWithStatus";
 import {Employer, employerSchema, Role, roleSchema} from "../lib/orm/validate";
 import React from "react";
-import {MenuTemplate} from "../lib/page";
 import {
     FieldDatePickerRow,
     FieldDropDownInput,
@@ -15,7 +14,8 @@ import {DropDownElement} from "../lib/control";
 import {useEmployer} from "./useEmployer";
 import {useRole} from "./useRole";
 import {useAsync} from "../lib/hooks/useAsync";
-import {AbsoluteFeatureButton} from "../lib/absoluteFeatureButton";
+import {AbsoluteFeatureButton} from "../lib/button/absoluteFeatureButton";
+import {MenuTemplate} from "../lib/menuTemplate";
 
 export const MainPageForm = () => {
     const {

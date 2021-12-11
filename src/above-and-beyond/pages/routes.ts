@@ -12,6 +12,7 @@ export const routes = {
     profile: makeRoute('profile'),
     rate: makeRoute('rate'),
     review: makeRoute('review'),
+    report: makeRoute('report'),
     index: makeRoute('index'),
     login: makeRoute('login'),
     gettingStarted: makeRoute('getting-started'),

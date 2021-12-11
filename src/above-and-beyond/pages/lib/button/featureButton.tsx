@@ -1,7 +1,7 @@
 import React from "react";
 import {Button} from "antd";
 import {css} from "@emotion/react";
-import {Highlight} from "./styles/mixins";
+import {Highlight} from "../styles/mixins";
 import {PlusCircleOutlined} from "@ant-design/icons";
 
 export const FeatureButton: React.FC<{ edit?: boolean, valid?: boolean, loading?: boolean, onClick?: React.MouseEventHandler<HTMLElement> }> = ({

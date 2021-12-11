@@ -1,14 +1,16 @@
 import {User, userSchema} from "../lib/orm/validate";
 import {PageStatus, useFormWithStatus} from "../lib/hooks/useFormWithStatus";
 import {FieldInputRow, FieldTable} from "../lib/input";
-import {AbsoluteFeatureButton} from "../lib/absoluteFeatureButton";
+import {AbsoluteFeatureButton} from "../lib/button/absoluteFeatureButton";
 import React from "react";
 import {auth} from "../lib/firebase/connect-api";
 import {router} from "next/client";
 import Link from "next/link";
 import {routes} from "../routes";
 import {Page} from "../lib/types";
-import {MenuTemplate} from "../lib/page";
+import {PrimaryLink} from "../lib/link/primaryLink";
+import {PrimaryButton} from "../lib/button/primaryButton";
+import {MenuTemplate} from "../lib/menuTemplate";
 
 export const ProfileForm = () => {
     const user = auth.currentUser;
@@ -48,8 +50,7 @@ export const ProfileForm = () => {
                 {...userForm.fieldProps.email}
             />
         </FieldTable>
-        <button
-            className={"primary"}
+        <PrimaryButton
             onClick={() => {
                 auth.signOut().then(() => {
                     router.push(routes.login())
@@ -57,11 +58,11 @@ export const ProfileForm = () => {
             }}
         >
             Logout
-        </button>
+        </PrimaryButton>
         <Link href={routes.gettingStarted()}>
-            <a className={"primary"}>
+            <PrimaryLink>
                 About
-            </a>
+            </PrimaryLink>
         </Link>
         <AbsoluteFeatureButton edit={mainProps.isEdit} valid={mainProps.isValid}
                                onClick={async () => {

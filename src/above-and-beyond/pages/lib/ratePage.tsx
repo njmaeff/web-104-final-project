@@ -5,7 +5,6 @@ import {
     FieldTable,
     TextInput,
 } from "./input";
-import {MenuTemplate} from "./page";
 import {QueryProps} from "./types";
 import {PageStatus, useFormWithStatus} from "./hooks/useFormWithStatus";
 import {EmployerCollection} from "./orm/docs";
@@ -19,6 +18,7 @@ import {
 import {Highlight} from "./styles/mixins";
 import Link from "next/link";
 import styled from "@emotion/styled";
+import {MenuTemplate} from "./menuTemplate";
 
 export const RateSuccessPage: React.FC = () => {
     const {currentEmployerID, currentEmployer, allEmployers} = usePageCtx();

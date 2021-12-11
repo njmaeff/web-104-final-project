@@ -5,11 +5,11 @@ import {
     FieldTable,
     TextInput,
 } from "./input";
-import {MenuTemplate} from "./page";
 import {PageStatus, useFormWithStatus} from "./hooks/useFormWithStatus";
 import {EmployerCollection} from "./orm/docs";
 import {usePageCtx} from "./hooks/usePageCtx";
 import {Review, reviewSchema} from "./orm/validate";
+import {MenuTemplate} from "./menuTemplate";
 
 export const ReviewPage: React.FC = () => {
     const {currentEmployer, allEmployers, currentRoleID, currentEmployerID} =

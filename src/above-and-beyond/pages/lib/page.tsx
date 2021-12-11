@@ -1,20 +1,7 @@
 import React from "react";
-import {EmployerDropDown} from "./control";
 import styled from "@emotion/styled";
 import {ScrollBar, withTablet} from "./styles/mixins";
-import Link from "next/link";
 import {css} from "@emotion/react";
-import {
-    HomeOutlined,
-    LikeOutlined,
-    LineChartOutlined,
-    SettingOutlined,
-    StarOutlined
-} from "@ant-design/icons";
-import {EmployerProvider} from "../home/useEmployer";
-import {RoleProvider} from "../home/useRole";
-import FullScreen from "./FullScreen";
-import {routes} from "../routes";
 
 export const Page = styled.div`
     position: absolute;
@@ -84,7 +71,7 @@ export const Page = styled.div`
     footer {
         position: relative;
         height: 100%;
-        max-height: 3.5rem;
+        max-height: 4.5rem;
 
         nav {
             height: 100%;
@@ -109,20 +96,8 @@ export const Page = styled.div`
     }
 `
 
-const ControlFeature = styled.div`
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translate(-50%, 0);
-    padding: 0.2rem 0;
 
-    a {
-        font-size: 2rem;
-    }
-
-`
-
-const FooterControl = styled.div<{ position?: 'left' | 'right' }>`
+export const FooterControl = styled.div<{ position?: 'left' | 'right' }>`
     display: flex;
     justify-content: ${(props) => props.position === 'right' ? 'flex-end' : 'flex-start'};
     margin-left: ${(props) => props.position === 'left' && '2.5rem'};
@@ -168,61 +143,3 @@ export const HeaderControl = styled.div`
 `
 
 
-export const MenuTemplate: React.FC<{
-    heading?: string;
-    disableNavigation?: boolean;
-}> = ({
-          children,
-          heading,
-      }) => {
-
-    return (
-        <FullScreen>
-            <Page>
-                <EmployerProvider>
-                    <header>
-                        <nav>
-                            <HeaderControl>
-                                <h2>{heading}</h2>
-                                <EmployerDropDown/>
-                            </HeaderControl>
-                            <Link href={routes.profile()}>
-                                <a css={
-                                    {
-                                        fontSize: '2.5rem'
-                                    }
-                                }><SettingOutlined/></a>
-                            </Link>
-                        </nav>
-                    </header>
-                    <main>
-                        <RoleProvider>
-                            {children}
-                        </RoleProvider>
-                    </main>
-                </EmployerProvider>
-                <footer>
-                    <nav>
-                        <FooterControl position={'right'}>
-                            <Link
-                                href={"/main"}
-                            ><a><HomeOutlined/></a></Link>
-                            <Link
-                                href={"/analyze"}
-                            >
-                                <a><LineChartOutlined/></a>
-                            </Link>
-                        </FooterControl>
-                        <FooterControl position={'left'}>
-                            <Link
-                                href={"/review"}
-                            ><a><StarOutlined/></a></Link>
-                            <Link
-                                href={"/rate-success"}
-                            ><a><LikeOutlined/></a></Link>
-                        </FooterControl>
-                    </nav>
-                </footer>
-            </Page></FullScreen>
-    );
-};
