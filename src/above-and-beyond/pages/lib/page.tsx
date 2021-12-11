@@ -183,7 +183,11 @@ export const MenuTemplate: React.FC<{
                             <EmployerDropDown/>
                         </HeaderControl>
                         <Link href={"/profile"}>
-                            <a><SettingOutlined/></a>
+                            <a css={
+                                {
+                                    fontSize: '2.5rem'
+                                }
+                            }><SettingOutlined/></a>
                         </Link>
                     </nav>
                 </header>
