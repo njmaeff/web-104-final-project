@@ -17,17 +17,19 @@ export default function App({
     const Layout = Component.getLayout ?? (({children}) => <>{children}</>)
 
     return (
-        <CacheProvider value={emotionCache}>
+        <>
             <Head>
                 <meta name="viewport"
                       content="width=device-width, initial-scale=1, maximum-scale=1"/>
                 <link rel="shortcut icon" href="/img/favicon.ico"/>
             </Head>
-            <ThemeEnvironment>
-                <Layout>
-                    <Component {...pageProps} />
-                </Layout>
-            </ThemeEnvironment>
-        </CacheProvider>
+            <CacheProvider value={emotionCache}>
+                <ThemeEnvironment>
+                    <Layout>
+                        <Component {...pageProps} />
+                    </Layout>
+                </ThemeEnvironment>
+            </CacheProvider>
+        </>
     );
 }

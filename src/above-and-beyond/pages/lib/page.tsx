@@ -13,11 +13,13 @@ import {
 } from "@ant-design/icons";
 import {EmployerProvider} from "../home/useEmployer";
 import {RoleProvider} from "../home/useRole";
+import FullScreen from "../home/FullScreen";
 
 export const Page = styled.div`
+    position: absolute;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    height: 100vh;
     width: 100%;
 
     &::before {
@@ -80,8 +82,8 @@ export const Page = styled.div`
 
     footer {
         position: relative;
-        min-height: 3.5rem;
-        //padding-top: 1rem;
+        height: 100%;
+        max-height: 3.5rem;
 
         nav {
             height: 100%;
@@ -174,51 +176,52 @@ export const MenuTemplate: React.FC<{
       }) => {
 
     return (
-        <Page>
-            <EmployerProvider>
-                <header>
+        <FullScreen>
+            <Page>
+                <EmployerProvider>
+                    <header>
+                        <nav>
+                            <HeaderControl>
+                                <h2>{heading}</h2>
+                                <EmployerDropDown/>
+                            </HeaderControl>
+                            <Link href={"/profile"}>
+                                <a css={
+                                    {
+                                        fontSize: '2.5rem'
+                                    }
+                                }><SettingOutlined/></a>
+                            </Link>
+                        </nav>
+                    </header>
+                    <main>
+                        <RoleProvider>
+                            {children}
+                        </RoleProvider>
+                    </main>
+                </EmployerProvider>
+                <footer>
                     <nav>
-                        <HeaderControl>
-                            <h2>{heading}</h2>
-                            <EmployerDropDown/>
-                        </HeaderControl>
-                        <Link href={"/profile"}>
-                            <a css={
-                                {
-                                    fontSize: '2.5rem'
-                                }
-                            }><SettingOutlined/></a>
-                        </Link>
+                        <FooterControl position={'right'}>
+                            <Link
+                                href={"/main"}
+                            ><a><HomeOutlined/></a></Link>
+                            <Link
+                                href={"/analyze"}
+                            >
+                                <a><LineChartOutlined/></a>
+                            </Link>
+                        </FooterControl>
+                        <FooterControl position={'left'}>
+                            <Link
+                                href={"/review"}
+                            ><a><StarOutlined/></a></Link>
+                            <Link
+                                href={"/rate-success"}
+                            ><a><LikeOutlined/></a></Link>
+                        </FooterControl>
                     </nav>
-                </header>
-                <main>
-                    <RoleProvider>
-                        {children}
-                    </RoleProvider>
-                </main>
-            </EmployerProvider>
-            <footer>
-                <nav>
-                    <FooterControl position={'right'}>
-                        <Link
-                            href={"/main"}
-                        ><a><HomeOutlined/></a></Link>
-                        <Link
-                            href={"/analyze"}
-                        >
-                            <a><LineChartOutlined/></a>
-                        </Link>
-                    </FooterControl>
-                    <FooterControl position={'left'}>
-                        <Link
-                            href={"/review"}
-                        ><a><StarOutlined/></a></Link>
-                        <Link
-                            href={"/rate-success"}
-                        ><a><LikeOutlined/></a></Link>
-                    </FooterControl>
-                </nav>
-            </footer>
-        </Page>
+                </footer>
+            </Page></FullScreen>
     );
 };

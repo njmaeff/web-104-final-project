@@ -91,8 +91,12 @@ export const MainPageForm = () => {
             })
         );
 
-    currentRole.onSuccess((result) => roleFormik.setValues(result))
-    currentEmployer.onSuccess((result) => employerFormik.setValues(result))
+    currentRole.onSuccess((result) => {
+        roleFormik.resetForm({values: result});
+    })
+    currentEmployer.onSuccess((result) => {
+        employerFormik.resetForm({values: result})
+    })
 
     return <>
         <FieldTable>

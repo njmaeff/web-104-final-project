@@ -202,6 +202,7 @@ export const GlobalStyles = () => {
         :root {
             font-family: 'Rubik', sans-serif;
             ${ScrollBar(theme)}
+            overscroll-behavior: contain;
         }
 
 
@@ -211,7 +212,6 @@ export const GlobalStyles = () => {
 
         body {
             max-width: 960px;
-            height: 100%;
             background-color: ${theme.colors.light};
             color: ${theme.colors.dark};
             margin: 0 auto;
