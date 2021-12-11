@@ -29,11 +29,6 @@
     "jsxImportSource": "@emotion/react",
     "incremental": true
   },
-  "references": [
-    {
-      "path": "../habitat-lib"
-    }
-  ],
   "include": [
     "next-env.d.ts",
     "**/*.ts",

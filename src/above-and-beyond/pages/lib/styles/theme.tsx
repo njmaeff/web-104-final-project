@@ -4,7 +4,6 @@ import {GlobalStyles} from "./global";
 import {lighten} from "polished";
 
 declare module "@emotion/react" {
-
     interface Theme {
         colors?: {
             primary: string

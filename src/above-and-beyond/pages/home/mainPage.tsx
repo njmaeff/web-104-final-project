@@ -156,7 +156,16 @@ export const MainPageForm = () => {
             height={"auto"}
             label={"Responsibilities"}
         />
-        <AbsoluteFeatureButton/>
+        <AbsoluteFeatureButton edit={mainProps.isEdit} valid={mainProps.isValid}
+                               onClick={async (e) => {
+                                   if (!mainProps.isEdit) {
+                                       mainProps.setEdit()
+                                   } else if (mainProps.isEdit && mainProps.isValid) {
+                                       await mainProps.onClickSave(e);
+                                       mainProps.setView();
+                                   }
+
+                               }}/>
     </>;
 
 };

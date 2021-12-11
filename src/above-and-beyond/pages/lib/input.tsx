@@ -2,7 +2,7 @@ import React from "react";
 import {ensureDate} from "./orm/docs";
 import DatePicker from "react-datepicker"
 import {Button, Dropdown, Form, Input, Menu} from "antd";
-import {css} from "@emotion/react";
+import {css, Theme} from "@emotion/react";
 import {Highlight, ScrollBar} from "./styles/mixins";
 import {ParagraphSize, SectionSize} from "./styles/size";
 import {DownOutlined} from "@ant-design/icons";
@@ -50,7 +50,7 @@ export const TextInput: React.FC<{
     return (
         <div
             css={
-                theme => css`
+                (theme: Theme) => css`
                     height: ${height};
                     position: relative;
                     width: 100%;
@@ -68,14 +68,13 @@ export const TextInput: React.FC<{
                     textarea, p {
                         font-family: inherit;
                         font-size: 0.8rem;
-                        border: thin solid ${theme.colors.light};
+                        border: thin solid ${theme.colors.grayLight};
                         width: 100%;
                         min-height: 9rem;
                         max-height: 15rem;
                         padding: 1.5rem 1rem 2rem;
                         margin: 0;
 
-                        overflow-y: scroll;
                         resize: none;
                         outline: none;
 

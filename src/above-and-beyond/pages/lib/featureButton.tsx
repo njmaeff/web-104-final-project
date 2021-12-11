@@ -4,12 +4,13 @@ import {css} from "@emotion/react";
 import {Highlight} from "./styles/mixins";
 import {PlusCircleOutlined} from "@ant-design/icons";
 
-export const FeatureButton: React.FC<{ edit?: boolean, valid?: boolean, loading?: boolean }> = ({
-                                                                                                    edit,
-                                                                                                    valid,
-                                                                                                    loading,
-                                                                                                    ...props
-                                                                                                }) => {
+export const FeatureButton: React.FC<{ edit?: boolean, valid?: boolean, loading?: boolean, onClick?: React.MouseEventHandler<HTMLElement> }> = ({
+                                                                                                                                                    edit,
+                                                                                                                                                    valid,
+                                                                                                                                                    loading,
+                                                                                                                                                    onClick,
+                                                                                                                                                    ...props
+                                                                                                                                                }) => {
 
     return <Button
         css={theme => css`
@@ -28,6 +29,10 @@ export const FeatureButton: React.FC<{ edit?: boolean, valid?: boolean, loading?
                 color: ${theme.colors.light} !important;
             }
         `}
+        onClick={(e) => {
+            e.preventDefault();
+            onClick?.(e)
+        }}
         type="primary"
         loading={loading}
         {...props}>
