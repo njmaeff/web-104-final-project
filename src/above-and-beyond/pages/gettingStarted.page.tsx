@@ -15,7 +15,11 @@ export default () => {
                 <header>
                     <div>
                         <Link href={routes.home()}>
-                            <PrimaryLink>Continue</PrimaryLink>
+                            <PrimaryLink css={
+                                css`
+                                    display: block;
+                                `
+                            }>Continue</PrimaryLink>
                         </Link>
                     </div>
                 </header>

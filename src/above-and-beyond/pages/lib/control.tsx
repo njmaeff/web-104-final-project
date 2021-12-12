@@ -8,6 +8,8 @@ import {Role} from "./orm/validate";
 import {EmployerCollection, user} from "./orm/docs";
 import {useEmployer} from "../home/useEmployer";
 import {useAsync} from "./hooks/useAsync";
+import {useRouter} from "next/router";
+import {routes} from "../routes";
 
 export const DropDown: React.FC<{ value }> = ({children, value}) => {
 
@@ -48,14 +50,25 @@ export const DropDownElement: React.FC<{
 
 export const EmployerDropDown: React.FC<{}> = () => {
 
-    const {currentEmployer, allEmployers, updateEmployer} = useEmployer();
-
+    const {
+        currentEmployer,
+        allEmployers,
+        updateEmployer,
+        newEmployer
+    } = useEmployer();
+    const router = useRouter();
     return <DropDown
         value={currentEmployer.result?.name ?? "New Employer"}
     >
         <DropDownElement
             key={'new'}
             onClick={() => {
+                newEmployer()
+                router.push(routes.home({
+                    query: {
+                        action: 'new'
+                    }
+                }))
             }}
         >
             Create New
