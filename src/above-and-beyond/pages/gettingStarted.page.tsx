@@ -14,7 +14,7 @@ export default () => {
             <Page>
                 <header>
                     <div>
-                        <Link href={routes.home()}>
+                        <Link href={routes.employer()}>
                             <PrimaryLink css={
                                 css`
                                     display: block;

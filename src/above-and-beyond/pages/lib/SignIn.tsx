@@ -2,12 +2,13 @@ import {useEffect} from "react";
 import {auth} from "./firebase/connect-api";
 import * as firebaseui from "firebaseui"
 import firebase from "firebase/compat/app";
-import {router} from "next/client";
 import styled from "@emotion/styled";
 import {darken} from "polished";
+import {useRouter} from "../routes";
 
 
 export const useFirebaseUI = () => {
+    const router = useRouter();
 
     useEffect(() => {
         let ui = firebaseui.auth.AuthUI.getInstance();
@@ -22,9 +23,9 @@ export const useFirebaseUI = () => {
                         if (
                             authResult.additionalUserInfo.isNewUser
                         ) {
-                            router.push('/getting-started');
+                            router.gettingStarted.push();
                         } else if (authResult.user) {
-                            router.push('/home/index', '/home/')
+                            router.employer.push()
                         }
 
                         return false;

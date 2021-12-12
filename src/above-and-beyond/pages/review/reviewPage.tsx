@@ -4,12 +4,12 @@ import {
     FieldInputRow,
     FieldTable,
     TextInput,
-} from "./input";
-import {PageStatus, useFormWithStatus} from "./hooks/useFormWithStatus";
-import {EmployerCollection} from "./orm/docs";
-import {usePageCtx} from "./hooks/usePageCtx";
-import {Review, reviewSchema} from "./orm/validate";
-import {MenuTemplate} from "./menuTemplate";
+} from "../lib/input";
+import {PageStatus, useFormWithStatus} from "../lib/hooks/useFormWithStatus";
+import {EmployerCollection} from "../lib/orm/docs";
+import {usePageCtx} from "../lib/hooks/usePageCtx";
+import {Review, reviewSchema} from "../lib/orm/validate";
+import {MenuTemplate} from "../lib/menuTemplate";
 
 export const ReviewPage: React.FC = () => {
     const {currentEmployer, allEmployers, currentRoleID, currentEmployerID} =

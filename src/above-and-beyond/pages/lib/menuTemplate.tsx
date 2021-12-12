@@ -1,6 +1,6 @@
 import React from "react";
 import FullScreen from "./FullScreen";
-import {EmployerProvider} from "../home/useEmployer";
+import {EmployerProvider} from "../employer/useEmployer";
 import {EmployerDropDown} from "./control";
 import Link from "next/link";
 import {routes} from "../routes";
@@ -11,7 +11,7 @@ import {
     SettingOutlined,
     StarOutlined
 } from "@ant-design/icons";
-import {RoleProvider} from "../home/useRole";
+import {RoleProvider} from "../employer/useRole";
 import {FooterControl, HeaderControl, Page} from "./page";
 
 export const MenuTemplate: React.FC<{
@@ -51,7 +51,7 @@ export const MenuTemplate: React.FC<{
                     <nav>
                         <FooterControl position={'right'}>
                             <Link
-                                href={routes.home()}
+                                href={routes.employer()}
                             ><a><HomeOutlined/></a></Link>
                             <Link
                                 href={routes.report()}

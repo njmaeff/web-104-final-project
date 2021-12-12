@@ -4,9 +4,15 @@ import {useRouter as useNextRouter} from "next/router"
 export const makeAbsolutePath = (...paths) => `/` + paths.filter((p) => !!p).join(`/`)
 
 export interface Routes {
-    home
+    employer: {
+        query: {
+            action: 'new'
+        }
+    }
     profile
     rate
+    'rate/issue'
+    'rate/success'
     review
     report
     index
@@ -22,17 +28,19 @@ export const makeRouteUrlObject = (name: keyof Routes) => ({
 }
 
 
-export type RouteOptions = {
-    [P in keyof Routes]: (opts: UrlObject) => UrlObject
+export type RouteOptions<Routes> = {
+    [P in keyof Routes]: (opts?: UrlObject) => UrlObject
 }
 
-export type UseRouter = {
-    [P in keyof Routes]: (opts: UrlObject) => void
+export type UseRouterPush<Routes> = {
+    [P in keyof Routes]: (opts?: UrlObject) => Promise<void>
 }
 
-export const routes: RouteOptions = {
-    home: makeRouteUrlObject('home'),
+export const routes: RouteOptions<Routes> = {
+    employer: makeRouteUrlObject('employer'),
     profile: makeRouteUrlObject('profile'),
+    'rate/success': makeRouteUrlObject('rate/success'),
+    'rate/issue': makeRouteUrlObject('rate/issue'),
     rate: makeRouteUrlObject('rate'),
     review: makeRouteUrlObject('review'),
     report: makeRouteUrlObject('report'),
@@ -54,7 +62,15 @@ export const useRouter = () => {
     const routeMap = {};
     for (const [key, fn] of Object.entries(routes)) {
 
-        routeMap[key] = (opts) => router.push(fn(opts))
+        routeMap[key] = {
+            push: (opts) => router.push(fn(opts)),
+            query: () => router.query,
+        }
     }
-    return routeMap as UseRouter
+    return routeMap as {
+        [P in keyof Routes]: {
+            push: (opts?: UrlObject) => Promise<void>,
+            query: () => Routes[P]['query']
+        }
+    }
 };

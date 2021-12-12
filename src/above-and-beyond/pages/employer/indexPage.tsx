@@ -16,6 +16,7 @@ import {useRole} from "./useRole";
 import {useAsync} from "../lib/hooks/useAsync";
 import {AbsoluteFeatureButton} from "../lib/button/absoluteFeatureButton";
 import {MenuTemplate} from "../lib/menuTemplate";
+import {useRouter} from "../routes";
 
 export const MainPageForm = () => {
     const {
@@ -24,7 +25,7 @@ export const MainPageForm = () => {
         currentEmployer
     } = useEmployer()
     const {currentRoleID, updateRole} = useRole();
-
+    const {action} = useRouter().employer.query()
 
     const currentRole = useAsync<Role>(async () => {
         if (currentEmployerID) {

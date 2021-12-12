@@ -6,7 +6,7 @@ import {DownOutlined} from "@ant-design/icons";
 import {Loader} from "./loader";
 import {Role} from "./orm/validate";
 import {EmployerCollection, user} from "./orm/docs";
-import {useEmployer} from "../home/useEmployer";
+import {useEmployer} from "../employer/useEmployer";
 import {useAsync} from "./hooks/useAsync";
 import {useRouter} from "next/router";
 import {routes} from "../routes";
@@ -64,7 +64,7 @@ export const EmployerDropDown: React.FC<{}> = () => {
             key={'new'}
             onClick={() => {
                 newEmployer()
-                router.push(routes.home({
+                router.push(routes.employer({
                     query: {
                         action: 'new'
                     }
