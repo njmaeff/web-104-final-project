@@ -8,10 +8,17 @@ import {
     getFirestore,
 } from "firebase-admin/firestore";
 import faker from "faker";
-import { DataMeta} from "../pages/lib/orm/docs";
-import { testEmail, testPassword } from "./setup";
+import {testEmail, testPassword} from "./setup";
 import range from "lodash/range";
-import {Employer, Role} from "../pages/lib/orm/validate";
+import {
+    Employer,
+    Rate,
+    RateIssue,
+    RateSuccess,
+    Review,
+    Role
+} from "../pages/lib/orm/validate";
+import {flatten} from "lodash";
 
 faker.seed(19);
 
@@ -38,7 +45,7 @@ const seed = async () => {
 
         const employerDocs = await createDocsFromData(employerPath, employers);
 
-        await mapEachDoc(employerDocs, (doc) => {
+        const roles = await mapEachDoc(employerDocs, (doc) => {
             const roles = range(2).map(() => {
                 const salary = faker.finance.amount(50000, 80000);
                 return {
@@ -57,18 +64,44 @@ const seed = async () => {
             return createDocsFromData(doc.collection("roles"), roles);
         });
 
-        const currentEmployerRef = employerDocs[0];
-        const currentRolesSnapshot = await currentEmployerRef
-            .collection("roles")
-            .get();
+        await mapEachDoc(roles, async (doc) => {
+            const ratings = range(5).map((index) => {
 
-        // create profile
-        const currentEmployer = await currentEmployerRef.get();
-        const currentRole = currentRolesSnapshot.docs[0];
-        await userPath.create({
-            currentEmployerID: currentEmployer.id,
-            currentRoleID: currentRole.id,
-        } as DataMeta);
+                const props = {
+                    date: faker.date.past(1),
+                    value: faker.finance.amount(100, 200),
+                    situation: faker.lorem.lines(3),
+                    result: faker.lorem.lines(2)
+                } as Rate
+
+                if (index % 2 === 0) {
+                    return {
+                        ...props,
+                        correction: faker.lorem.lines(3),
+                        type: "issue",
+                    } as RateIssue;
+                } else {
+                    return {
+                        ...props,
+                        type: "success"
+                    } as RateSuccess;
+                }
+
+            });
+            const reviews = range(4).map(() => {
+
+                return {
+                    date: faker.date.past(1),
+                    adjustedSalary: faker.finance.amount(500, 3000),
+                    manager: faker.name.firstName(),
+                    outcome: faker.lorem.lines(3)
+                } as Review
+            });
+
+            await createDocsFromData(doc.collection('rate'), ratings)
+            await createDocsFromData(doc.collection('review'), reviews)
+        });
+
     } catch (e) {
         console.error(e);
     }
@@ -93,7 +126,11 @@ export const createDocsFromData = <T extends any[]>(
 
 export const mapEachDoc = async (
     docs: DocumentReference[],
-    fn: (docRef: DocumentReference) => Promise<DocumentReference[]>
-) => {
-    return (await Promise.all(docs.map((doc) => fn(doc))))[0];
+    fn: (docRef: DocumentReference) => Promise<DocumentReference[]> | Promise<void>
+): Promise<DocumentReference[]> => {
+    return flatten(
+        await Promise.all(
+            docs.map((doc) => fn(doc))
+        ) as any
+    );
 };
