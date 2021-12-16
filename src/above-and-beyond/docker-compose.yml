@@ -6,10 +6,10 @@ services:
       dockerfile: .docker/firebase.Dockerfile
       context: .
     command: firebase emulators:start --import /home/node/.cache/firebase/data --export-on-exit
-    working_dir: /workspace
+    working_dir: /workspace/.docker/firebase
     user: node
     volumes:
-      - ./.docker/firebase:/workspace
+      - ./:/workspace
       #        Persist data and emulators. Normally the emulators and data will be re-downloaded / created on every run.
       - firebase:/home/node/.cache/firebase
 
@@ -17,5 +17,19 @@ services:
       - "9099:9099"
       - "8080:8080"
       - "8081:8081"
+      - "9005:9005"
+
+  search-engine:
+    image: typesense/typesense:0.22.0
+    command: --data-dir /data --api-key=xyz --enable-cors
+    ports:
+      - "8108:8108"
+    volumes:
+      - search-engine:/data
+    depends_on:
+      - firebase
+
+
 volumes:
   firebase:
+  search-engine:

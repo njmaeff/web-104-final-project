@@ -9,7 +9,7 @@
   },
   "extends": "../node-tsconfig.json",
   "compilerOptions": {
-    "target": "es5",
+    "target": "ES2016",
     "lib": [
       "dom",
       "dom.iterable",

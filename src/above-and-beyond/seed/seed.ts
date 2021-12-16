@@ -19,10 +19,18 @@ import {
     Role
 } from "../pages/lib/orm/validate";
 import {flatten} from "lodash";
+import {makeCollections} from "./seed-search";
 
 faker.seed(19);
 
 const seed = async () => {
+    try {
+
+        await makeCollections();
+    } catch (e) {
+        console.error(e)
+    }
+
     connectFirebaseAdmin();
     try {
         const user = await addUserByEmail(testEmail, testPassword, {
