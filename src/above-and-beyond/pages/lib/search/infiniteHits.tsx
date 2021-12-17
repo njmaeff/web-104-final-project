@@ -26,7 +26,7 @@ export const InfiniteHits = ({hasMore, refineNext, hits}) => {
 
     return (
         <List>
-            {hits.map((item, index) => {
+            {hits.map((item) => {
                 return <List.Item
                     key={item.id}
                 >
@@ -44,15 +44,13 @@ export const InfiniteHits = ({hasMore, refineNext, hits}) => {
                             </Link>
                         }
                         description={
-                            <Highlight css={css`
+                            <Highlight css={theme => css`
                                 .ais-Highlight-highlighted {
-                                    background-color: aqua;
+                                    background-color: ${theme.colors.grayLight};
                                 }
                             `} attribute="result" hit={item}/>
                         }
                     />
-
-                    {index}
                 </List.Item>
 
             })}

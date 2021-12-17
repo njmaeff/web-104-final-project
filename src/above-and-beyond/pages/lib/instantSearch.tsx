@@ -13,6 +13,7 @@ import {Input} from "antd";
 import React from "react";
 import {useRole} from "../employer/useRole";
 import {InfiniteHits} from "./search/infiniteHits";
+import {css} from "@emotion/react";
 
 const {Search} = Input
 
@@ -47,8 +48,11 @@ export const useSearchClient = () => {
     }, []);
 };
 
-const PoweredBy = connectPoweredBy(({url}) => <a href={url}>Powered by
-    Typesense</a>);
+const PoweredBy = connectPoweredBy(({url}) => <a css={css`
+    font-size: 0.8rem;
+`} href={'https://typesense.org/'}>Powered by
+    Typesense</a>
+);
 
 const SearchBox = connectSearchBox(({
                                         currentRefinement,
@@ -56,7 +60,13 @@ const SearchBox = connectSearchBox(({
                                         refine,
                                         children
                                     }) => (
-    <form noValidate action="" role="search">
+    <form css={css`
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        max-width: 24rem;
+    `} noValidate action="" role="search">
         <Search
             type="search"
             value={currentRefinement}
