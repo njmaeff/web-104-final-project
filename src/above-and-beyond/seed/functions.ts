@@ -16,12 +16,13 @@ export const onRateCreate = functions.firestore.document(ratePath)
     .onCreate((snapshot, context) => {
         // Grab the document id as id value.
 
-        const {userID, rateID} = context.params
+        const {userID, roleID,rateID} = context.params
         const {date, ...doc} = snapshot.data() as RateData
         // Index the document in Rates collection
         return client.collections(rateCollection).documents().create({
             id: rateID,
             userID,
+            roleID,
             date: date._seconds, ...doc
         })
     })
@@ -54,12 +55,13 @@ export const onReviewCreate = functions.firestore.document(reviewPath)
     .onCreate((snapshot, context) => {
         // Grab the document id as id value.
 
-        const {userID, reviewID} = context.params
+        const {userID, roleID, reviewID} = context.params
         const {date, ...doc} = snapshot.data() as ReviewData
         // Index the document in Reviews collection
         return client.collections(reviewCollection).documents().create({
             id: reviewID,
             userID,
+            roleID,
             date: date._seconds, ...doc
         })
     })

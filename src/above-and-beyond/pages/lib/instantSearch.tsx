@@ -1,8 +1,9 @@
 import {
+    Configure,
     connectHits,
     InstantSearch,
     SearchBox,
-    Stats
+    Stats,
 } from "react-instantsearch-dom"
 import TypesenseInstantSearchAdapter from "typesense-instantsearch-adapter"
 import {auth} from "./firebase/connect-api";
@@ -16,6 +17,7 @@ import Link from "next/link";
 import {routes} from "../routes";
 import React from "react";
 import {Timestamp} from "./orm/docs";
+import {useRole} from "../employer/useRole";
 
 
 export const useSearchClient = () => {
@@ -84,8 +86,10 @@ export const AllHits = connectHits(({hits}) => {
 
 export const SearchInterface = () => {
     const client = useSearchClient();
+    const role = useRole()
     return client.isSuccess ? (
         <InstantSearch searchClient={client.result} indexName="rate">
+            <Configure facetFilters={[`roleID:${role.currentRoleID}`]}/>
             <SearchBox/>
             <Stats/>
             <AllHits/>
