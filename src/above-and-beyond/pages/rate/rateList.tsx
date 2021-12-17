@@ -4,16 +4,21 @@ import {Rate} from "../lib/orm/validate";
 import {SearchInterface} from "../lib/instantSearch";
 import {List} from "antd";
 import {ExclamationCircleOutlined, LikeOutlined} from "@ant-design/icons";
-import Link from "next/link";
-import {routes} from "../routes";
+import {useRouter} from "../routes";
 import {Timestamp} from "../lib/orm/docs";
 import {Highlight} from "react-instantsearch-dom";
 import {css} from "@emotion/react";
 
 export const RateListHits: React.FC<{ hits }> = ({hits}) => {
+    const routes = useRouter();
     return hits.map((item) => {
         return <List.Item
             key={item.id}
+            onClick={() => routes.rate.push({
+                query: {
+                    id: item.id
+                }
+            })}
         >
             <List.Item.Meta
                 avatar={
@@ -21,12 +26,7 @@ export const RateListHits: React.FC<{ hits }> = ({hits}) => {
                         <ExclamationCircleOutlined/>
                 }
                 title={
-                    <Link href={routes.rate({
-                        query: {
-                            id: item.id
-                        }
-                    })}><a>{new Timestamp(item.date, 0).toDate().toLocaleString()}</a>
-                    </Link>
+                    new Timestamp(item.date, 0).toDate().toLocaleString()
                 }
                 description={
                     <Highlight css={theme => css`

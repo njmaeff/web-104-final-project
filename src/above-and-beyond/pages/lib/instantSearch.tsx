@@ -11,7 +11,6 @@ import {useAsync} from "./hooks/useAsync";
 import {Loader} from "./loader";
 import {Input} from "antd";
 import React from "react";
-import {useRole} from "../employer/useRole";
 import {InfiniteHits} from "./search/infiniteHits";
 import {css} from "@emotion/react";
 
@@ -78,7 +77,7 @@ const SearchBox = connectSearchBox(({
     </form>
 ));
 
-const Hits = connectInfiniteHits(InfiniteHits)
+const Hits = connectInfiniteHits(InfiniteHits) as React.ComponentClass<{ HitsComponent }, any>
 
 export const SearchInterface: React.FC<{
     indexName: string
@@ -90,13 +89,11 @@ export const SearchInterface: React.FC<{
           HitsComponent
       }) => {
     const client = useSearchClient();
-    const role = useRole()
     return client.isSuccess ? (
         <InstantSearch searchClient={client.result} indexName={indexName}>
             <Configure
                 hitsPerPage={10}
                 facetFilters={filters}
-                // facetFilters={[`roleID:${role.currentRoleID}`]}
             />
             <SearchBox>
                 <PoweredBy/>
