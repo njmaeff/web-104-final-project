@@ -1,14 +1,25 @@
 import admin from "firebase-admin";
 
-export const connectFirebaseAdmin = ({
-    projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-} = {}): admin.auth.Auth => {
+export const connectFirebaseAdminAuth = ({
+                                             projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+                                         } = {}): admin.auth.Auth => {
     if (!admin.apps.length) {
         admin.initializeApp({
             projectId,
         });
     }
     return admin.auth();
+};
+
+export const connectFirebaseAdminFirestore = ({
+                                                  projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+                                              } = {}): admin.firestore.Firestore => {
+    if (!admin.apps.length) {
+        admin.initializeApp({
+            projectId,
+        });
+    }
+    return admin.firestore();
 };
 
 export const removeUserByEmail = async (email: string) => {

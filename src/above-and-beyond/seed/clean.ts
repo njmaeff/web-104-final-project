@@ -1,7 +1,7 @@
 import {getFirestore} from "firebase-admin/firestore";
 import {testEmail} from "./setup";
 import {
-    connectFirebaseAdmin,
+    connectFirebaseAdminAuth,
     removeUserByEmail
 } from "../pages/lib/firebase/connect-admin";
 import {createClient} from "./search";
@@ -37,7 +37,7 @@ export const cleanFunctions = async () => {
 
 export const clean = async () => {
     await cleanFunctions()
-    connectFirebaseAdmin();
+    connectFirebaseAdminAuth();
     await clearFirestoreData();
     await removeUserByEmail(testEmail);
 };

@@ -12,6 +12,7 @@ export const makeCollections = () => {
                 name: 'rate',
                 fields: [
                     {'name': 'id', 'type': 'string'},
+                    {'name': 'userID', 'type': 'string'},
                     {'name': 'date', 'type': 'int32'},
                     {'name': 'type', 'type': 'string'},
                     {'name': 'result', 'type': 'string'},
@@ -22,6 +23,7 @@ export const makeCollections = () => {
                 name: 'review',
                 fields: [
                     {'name': 'id', 'type': 'string'},
+                    {'name': 'userID', 'type': 'string'},
                     {'name': 'date', 'type': 'int32'},
                     {'name': 'outcome', 'type': 'string'},
                 ],

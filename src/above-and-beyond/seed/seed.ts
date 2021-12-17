@@ -1,6 +1,6 @@
 import {
     addUserByEmail,
-    connectFirebaseAdmin,
+    connectFirebaseAdminAuth,
 } from "../pages/lib/firebase/connect-admin";
 import {
     CollectionReference,
@@ -31,7 +31,7 @@ const seed = async () => {
         console.error(e)
     }
 
-    connectFirebaseAdmin();
+    connectFirebaseAdminAuth();
     try {
         const user = await addUserByEmail(testEmail, testPassword, {
             displayName: "Nik Jmaeff",

@@ -5,10 +5,142 @@ __metadata:
   version: 5
   cacheKey: 8
 
+"@algolia/cache-browser-local-storage@npm:4.11.0":
+  version: 4.11.0
+  resolution: "@algolia/cache-browser-local-storage@npm:4.11.0"
+  dependencies:
+    "@algolia/cache-common": 4.11.0
+  checksum: bf06711107209b2ea7824bab80c4df60ffaf82af1a9648b417b123dea7588c9e348d1eded194dfbc693fbeaf9d3c51b78ea0300804f1383994711e58dce6b829
+  languageName: node
+  linkType: hard
+
+"@algolia/cache-common@npm:4.11.0":
+  version: 4.11.0
+  resolution: "@algolia/cache-common@npm:4.11.0"
+  checksum: d69a0f4e1b3baeebd0cea77568ac4911f2053536be14ca7676e8c4b9d4022f9122f78ba2f24405e308af45eff8a9a1e1c17b53079bfddc5131dd94f4d6bd3064
+  languageName: node
+  linkType: hard
+
+"@algolia/cache-in-memory@npm:4.11.0":
+  version: 4.11.0
+  resolution: "@algolia/cache-in-memory@npm:4.11.0"
+  dependencies:
+    "@algolia/cache-common": 4.11.0
+  checksum: 59f788eb5590de26db97147c5a601b326071599a2b04dbaf0a636875dfc462aed86348b5d1405958a28a6b0d2a9145e848e1614b1f8d18cb886da61b996367b2
+  languageName: node
+  linkType: hard
+
+"@algolia/client-account@npm:4.11.0":
+  version: 4.11.0
+  resolution: "@algolia/client-account@npm:4.11.0"
+  dependencies:
+    "@algolia/client-common": 4.11.0
+    "@algolia/client-search": 4.11.0
+    "@algolia/transporter": 4.11.0
+  checksum: a35833bfedaf3d3588588c635167c6c1293b91597940d4ef897ca83203da3b9bf33990165b4bf486f663356799277076a5f31364e97397e93c666898a0985842
+  languageName: node
+  linkType: hard
+
+"@algolia/client-analytics@npm:4.11.0":
+  version: 4.11.0
+  resolution: "@algolia/client-analytics@npm:4.11.0"
+  dependencies:
+    "@algolia/client-common": 4.11.0
+    "@algolia/client-search": 4.11.0
+    "@algolia/requester-common": 4.11.0
+    "@algolia/transporter": 4.11.0
+  checksum: d85ccf8f51061df30336e71a85bb197e0469a5688b89ae29b28314b7af95bc6f7b7fb890895ff79d4b6a610b5bed2ce655826f893359b6e6d2056994fff017a0
+  languageName: node
+  linkType: hard
+
+"@algolia/client-common@npm:4.11.0":
+  version: 4.11.0
+  resolution: "@algolia/client-common@npm:4.11.0"
+  dependencies:
+    "@algolia/requester-common": 4.11.0
+    "@algolia/transporter": 4.11.0
+  checksum: 791fda2cc2c8d86012b72c5e1d22bdd7a89f37a497f176e875105b55297112ac41f735e53b1980aac35b13d908b791d4de7c017a5b74e73358c46b9f728f03b3
+  languageName: node
+  linkType: hard
+
+"@algolia/client-personalization@npm:4.11.0":
+  version: 4.11.0
+  resolution: "@algolia/client-personalization@npm:4.11.0"
+  dependencies:
+    "@algolia/client-common": 4.11.0
+    "@algolia/requester-common": 4.11.0
+    "@algolia/transporter": 4.11.0
+  checksum: fd9230b375f2e4635f6f5c18fd1272ab0dd83267bd644431501544679e677b9b98dfd4e42e9a735ba961f25468741f90ae8eb8a7a4458c17bff057d704e7d06c
+  languageName: node
+  linkType: hard
+
+"@algolia/client-search@npm:4.11.0":
+  version: 4.11.0
+  resolution: "@algolia/client-search@npm:4.11.0"
+  dependencies:
+    "@algolia/client-common": 4.11.0
+    "@algolia/requester-common": 4.11.0
+    "@algolia/transporter": 4.11.0
+  checksum: 3e6c518a43ba9f327a338d428ba709bb78100faf107888f4500743f802e7ad384f1e7b8647f6d68e4bcca389ffb19e7f29b0d0d8af15a45df7b0eaa21da3740c
+  languageName: node
+  linkType: hard
+
 "@algolia/events@npm:^4.0.1":
   version: 4.0.1
   resolution: "@algolia/events@npm:4.0.1"
   checksum: 4f63943f4554cfcfed91d8b8c009a49dca192b81056d8c75e532796f64828cd69899852013e81ff3fff07030df8782b9b95c19a3da0845786bdfe22af42442c2
+  languageName: node
+  linkType: hard
+
+"@algolia/logger-common@npm:4.11.0":
+  version: 4.11.0
+  resolution: "@algolia/logger-common@npm:4.11.0"
+  checksum: 1b081abbf80e36bb4e43e4b30a09e31443a1b79f71096226a647f5fa2e653876f0f4215951435c7151a63b6a0537e69cfc158f573583128b2bbf148452055f8e
+  languageName: node
+  linkType: hard
+
+"@algolia/logger-console@npm:4.11.0":
+  version: 4.11.0
+  resolution: "@algolia/logger-console@npm:4.11.0"
+  dependencies:
+    "@algolia/logger-common": 4.11.0
+  checksum: 974a65e5b98c999840fbc2313d62f5ca1b466960f5641e4d407c406359d214b557a4ca619dc49247ee1fe7b23de1d32bc181048c6c7f3ee9a4fe36ceeee91932
+  languageName: node
+  linkType: hard
+
+"@algolia/requester-browser-xhr@npm:4.11.0":
+  version: 4.11.0
+  resolution: "@algolia/requester-browser-xhr@npm:4.11.0"
+  dependencies:
+    "@algolia/requester-common": 4.11.0
+  checksum: 8e0f0a848a5df4a41415a74955c14dd9f42d8e8e1da7f5db05efbeec4f9b7e7cca1ce638624a80eed985c8cfdf59a13933821e7efc2b5b363dde5a77008370e1
+  languageName: node
+  linkType: hard
+
+"@algolia/requester-common@npm:4.11.0":
+  version: 4.11.0
+  resolution: "@algolia/requester-common@npm:4.11.0"
+  checksum: d503d488c582cc126cb35076a28671aba7fcb8658f5a69995f1fd2f22bb4cc1b63de6e255791306c142877503830ab17fd7cacde6e9430c8b0b1da2e5f32ed38
+  languageName: node
+  linkType: hard
+
+"@algolia/requester-node-http@npm:4.11.0":
+  version: 4.11.0
+  resolution: "@algolia/requester-node-http@npm:4.11.0"
+  dependencies:
+    "@algolia/requester-common": 4.11.0
+  checksum: 148a2053aab568fcc8f1df2478afad20cc9a7a326a1c17ee437058a35b4904a3a606fd9b12ff22a1b6b9086350b1437f6edbb7ed9e7995f4bbaf2470263ea002
+  languageName: node
+  linkType: hard
+
+"@algolia/transporter@npm:4.11.0":
+  version: 4.11.0
+  resolution: "@algolia/transporter@npm:4.11.0"
+  dependencies:
+    "@algolia/cache-common": 4.11.0
+    "@algolia/logger-common": 4.11.0
+    "@algolia/requester-common": 4.11.0
+  checksum: 650eee6c5ac7792baf7b10b63afd006ca51e62b6827a0b09b5b45d2b7af9dcf5d68dd9cdb2ffec25febe3a9e5549df0460a32f775b8efa24162b01df2b16e884
   languageName: node
   linkType: hard
 
@@ -3084,7 +3216,10 @@ __metadata:
     "@types/react": ^17.0.20
     "@types/react-datepicker": ^4.3.2
     "@types/react-dom": ^17.0.9
+    "@types/react-instantsearch-dom": ^6.12.1
     antd: ^4.17.2
+    axios: ^0.24.0
+    axios-hooks: ^3.0.0
     babel-loader: ^8.2.3
     dotenv: ^10.0.0
     esbuild: ^0.14.5
@@ -3104,7 +3239,7 @@ __metadata:
     react-datepicker: ^4.3.0
     react-dom: ^17.0.2
     react-firebaseui: ^6.0.0
-    react-instantsearch-dom: ^6.17.0
+    react-instantsearch-dom: ^6.18.0
     sass: ^1.43.5
     storybook-addon-next-router: ^3.0.8
     ts-node: ^10.2.1
@@ -4913,6 +5048,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-instantsearch-core@npm:*":
+  version: 6.10.5
+  resolution: "@types/react-instantsearch-core@npm:6.10.5"
+  dependencies:
+    "@types/react": "*"
+    algoliasearch: ">=4"
+    algoliasearch-helper: ">=3"
+  checksum: 834555321b41fe238660b5feab02310d5bd2656ca76dcb0e3a31c8a72d046c7a1cb141d613d8b57126eb88cc3add36c2bffcc6bd5526687b88eafab1c9aadd93
+  languageName: node
+  linkType: hard
+
+"@types/react-instantsearch-dom@npm:^6.12.1":
+  version: 6.12.1
+  resolution: "@types/react-instantsearch-dom@npm:6.12.1"
+  dependencies:
+    "@types/react": "*"
+    "@types/react-instantsearch-core": "*"
+  checksum: 3f2babb8b6d722ff1507d02554b10c924a446d3522771ed403d072eab5aa117d95643f52c3a8d9693e07e4e1b9e4858370616d32c14494bc7a0a29656c4e3b89
+  languageName: node
+  linkType: hard
+
 "@types/react-syntax-highlighter@npm:11.0.5":
   version: 11.0.5
   resolution: "@types/react-syntax-highlighter@npm:11.0.5"
@@ -5465,7 +5621,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"algoliasearch-helper@npm:^3.6.2":
+"algoliasearch-helper@npm:>=3, algoliasearch-helper@npm:^3.6.2":
   version: 3.7.0
   resolution: "algoliasearch-helper@npm:3.7.0"
   dependencies:
@@ -5473,6 +5629,28 @@ __metadata:
   peerDependencies:
     algoliasearch: ">= 3.1 < 5"
   checksum: 34afebf5aa6db2f032b6e8aab7e3a3bdd062ea2eebd9120000dbc02367126ac99e7402ea3cb4e8cdff58df0661805adc52219fd932ed4435fb1058b8e78a61d4
+  languageName: node
+  linkType: hard
+
+"algoliasearch@npm:>=4":
+  version: 4.11.0
+  resolution: "algoliasearch@npm:4.11.0"
+  dependencies:
+    "@algolia/cache-browser-local-storage": 4.11.0
+    "@algolia/cache-common": 4.11.0
+    "@algolia/cache-in-memory": 4.11.0
+    "@algolia/client-account": 4.11.0
+    "@algolia/client-analytics": 4.11.0
+    "@algolia/client-common": 4.11.0
+    "@algolia/client-personalization": 4.11.0
+    "@algolia/client-search": 4.11.0
+    "@algolia/logger-common": 4.11.0
+    "@algolia/logger-console": 4.11.0
+    "@algolia/requester-browser-xhr": 4.11.0
+    "@algolia/requester-common": 4.11.0
+    "@algolia/requester-node-http": 4.11.0
+    "@algolia/transporter": 4.11.0
+  checksum: 016f5812fcd892df962ebc4b3788443352618ea882698a15c5f0c3c6f4bb72c50754156cb960e21fa8dcfe7234f96cb4d07605b3ea930a59de9b683f16fe33bc
   languageName: node
   linkType: hard
 
@@ -5977,12 +6155,35 @@ __metadata:
   languageName: node
   linkType: hard
 
+"axios-hooks@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "axios-hooks@npm:3.0.0"
+  dependencies:
+    "@babel/runtime": 7.15.4
+    dequal: 2.0.2
+    lru-cache: 6.0.0
+  peerDependencies:
+    axios: ^0.24.0
+    react: ^16.8.0-0 || ^17.0.0
+  checksum: 55529fd204aa093db53cf6542838c8be3534843033017cd2e5ca0bc35aae9f45578c9c0604ca82d7130870341c786c2f9dbc95a05209ec568cc16547364e953f
+  languageName: node
+  linkType: hard
+
 "axios@npm:0.21.4, axios@npm:^0.21.1":
   version: 0.21.4
   resolution: "axios@npm:0.21.4"
   dependencies:
     follow-redirects: ^1.14.0
   checksum: 44245f24ac971e7458f3120c92f9d66d1fc695e8b97019139de5b0cc65d9b8104647db01e5f46917728edfc0cfd88eb30fc4c55e6053eef4ace76768ce95ff3c
+  languageName: node
+  linkType: hard
+
+"axios@npm:^0.24.0":
+  version: 0.24.0
+  resolution: "axios@npm:0.24.0"
+  dependencies:
+    follow-redirects: ^1.14.4
+  checksum: 468cf496c08a6aadfb7e699bebdac02851e3043d4e7d282350804ea8900e30d368daa6e3cd4ab83b8ddb5a3b1e17a5a21ada13fc9cebd27b74828f47a4236316
   languageName: node
   linkType: hard
 
@@ -8192,6 +8393,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dequal@npm:2.0.2":
+  version: 2.0.2
+  resolution: "dequal@npm:2.0.2"
+  checksum: 86c7a2c59f7b0797ed397c74b5fcdb744e48fc19440b70ad6ac59f57550a96b0faef3f1cfd5760ec5e6d3f7cb101f634f1f80db4e727b1dc8389bf62d977c0a0
+  languageName: node
+  linkType: hard
+
 "des.js@npm:^1.0.0":
   version: 1.0.1
   resolution: "des.js@npm:1.0.1"
@@ -9766,6 +9974,16 @@ __metadata:
     debug:
       optional: true
   checksum: f004a76b2ee3a849772c2816e30928253bf47537b0f00184d89f4966413add96a228a4d96ca8c702bc045a683c52c2ba41545c915cc1a5e33bf8fd9d07b59aee
+  languageName: node
+  linkType: hard
+
+"follow-redirects@npm:^1.14.4":
+  version: 1.14.6
+  resolution: "follow-redirects@npm:1.14.6"
+  peerDependenciesMeta:
+    debug:
+      optional: true
+  checksum: 7fcdb089a733d2aa39041880790e9f772df009fcd0b243fee7e10acf0e14a8dab5208cf79eb1de35b9cc6033d4dde7f95becadfaa360c50d460b4c730b375e80
   languageName: node
   linkType: hard
 
@@ -13272,21 +13490,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lru-cache@npm:6.0.0, lru-cache@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "lru-cache@npm:6.0.0"
+  dependencies:
+    yallist: ^4.0.0
+  checksum: f97f499f898f23e4585742138a22f22526254fdba6d75d41a1c2526b3b6cc5747ef59c5612ba7375f42aca4f8461950e925ba08c991ead0651b4918b7c978297
+  languageName: node
+  linkType: hard
+
 "lru-cache@npm:^5.1.1":
   version: 5.1.1
   resolution: "lru-cache@npm:5.1.1"
   dependencies:
     yallist: ^3.0.2
   checksum: c154ae1cbb0c2206d1501a0e94df349653c92c8cbb25236d7e85190bcaf4567a03ac6eb43166fabfa36fd35623694da7233e88d9601fbf411a9a481d85dbd2cb
-  languageName: node
-  linkType: hard
-
-"lru-cache@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "lru-cache@npm:6.0.0"
-  dependencies:
-    yallist: ^4.0.0
-  checksum: f97f499f898f23e4585742138a22f22526254fdba6d75d41a1c2526b3b6cc5747ef59c5612ba7375f42aca4f8461950e925ba08c991ead0651b4918b7c978297
   languageName: node
   linkType: hard
 
@@ -16352,9 +16570,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-instantsearch-core@npm:^6.17.0":
-  version: 6.17.0
-  resolution: "react-instantsearch-core@npm:6.17.0"
+"react-instantsearch-core@npm:^6.18.0":
+  version: 6.18.0
+  resolution: "react-instantsearch-core@npm:6.18.0"
   dependencies:
     "@babel/runtime": ^7.1.2
     algoliasearch-helper: ^3.6.2
@@ -16363,24 +16581,24 @@ __metadata:
   peerDependencies:
     algoliasearch: ">= 3.1 < 5"
     react: ">= 16.3.0 < 18"
-  checksum: 7efb9eb9e5e564d61e456ed0064eacc10e9b39dc2b1a10d6a97088beef00a2ba5f95ff7825ba55895a902691e5d3bd31f36cc7776afa454c0d6e2dd73f52aad1
+  checksum: 58cbad7e48c3fcf9d8ce4814716d7af93e9e3eb219e3f0ce66fe463a8674ff930e903b20e81086fd8ddbc00e8397aa1ef4630c20448c993a2fc3cb6ab2760a54
   languageName: node
   linkType: hard
 
-"react-instantsearch-dom@npm:^6.17.0":
-  version: 6.17.0
-  resolution: "react-instantsearch-dom@npm:6.17.0"
+"react-instantsearch-dom@npm:^6.18.0":
+  version: 6.18.0
+  resolution: "react-instantsearch-dom@npm:6.18.0"
   dependencies:
     "@babel/runtime": ^7.1.2
     algoliasearch-helper: ^3.6.2
     classnames: ^2.2.5
     prop-types: ^15.6.2
     react-fast-compare: ^3.0.0
-    react-instantsearch-core: ^6.17.0
+    react-instantsearch-core: ^6.18.0
   peerDependencies:
     react: ">= 16.3.0 < 18"
     react-dom: ">= 16.3.0 < 18"
-  checksum: 084c5917d69858b8378844a35698993490ad88ad8bf9fff95ead30e5bbe672310da8935421adb2191f9ac8ab0e1056b732a1e7af0aa41856b4c93688107763ad
+  checksum: 5d435332a806de0ee5765f87c7812ef31009f32dfb5c822dcadae02a3f3a280efd790280f37d0083e9856f3988ede467ba0257a8bb61a886ab7859823e08770c
   languageName: node
   linkType: hard
 
