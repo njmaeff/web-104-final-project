@@ -1,27 +1,25 @@
-import {MenuTemplate} from "../lib/menuTemplate";
-import React from 'react';
-import {Rate} from "../lib/orm/validate";
 import {SearchInterface} from "../lib/instantSearch";
+import {MenuTemplate} from "../lib/menuTemplate";
+import React from "react";
 import {List} from "antd";
-import {ExclamationCircleOutlined, LikeOutlined} from "@ant-design/icons";
+import {StarOutlined} from "@ant-design/icons";
 import Link from "next/link";
 import {routes} from "../routes";
 import {Timestamp} from "../lib/orm/docs";
 import {Highlight} from "react-instantsearch-dom";
 import {css} from "@emotion/react";
 
-export const RateListHits: React.FC<{ hits }> = ({hits}) => {
+export const ReviewListHits: React.FC<{ hits }> = ({hits}) => {
     return hits.map((item) => {
         return <List.Item
             key={item.id}
         >
             <List.Item.Meta
                 avatar={
-                    item.type === 'success' ? <LikeOutlined/> :
-                        <ExclamationCircleOutlined/>
+                    <StarOutlined/>
                 }
                 title={
-                    <Link href={routes.rate({
+                    <Link href={routes.review({
                         query: {
                             id: item.id
                         }
@@ -33,7 +31,7 @@ export const RateListHits: React.FC<{ hits }> = ({hits}) => {
                         .ais-Highlight-highlighted {
                             background-color: ${theme.colors.grayLight};
                         }
-                    `} attribute="result" hit={item}/>
+                    `} attribute="outcome" hit={item}/>
                 }
             />
         </List.Item>
@@ -41,18 +39,19 @@ export const RateListHits: React.FC<{ hits }> = ({hits}) => {
     })
 };
 
-export const RateList = () => {
+
+export const ReviewList = () => {
 
     return (
-        <SearchInterface indexName={'rate'} HitsComponent={RateListHits}/>
+        <SearchInterface indexName={'review'} HitsComponent={ReviewListHits}/>
     );
 };
 
 export default () => {
 
     return <MenuTemplate
-        heading={'Rate'}
+        heading={'Review'}
     >
-        <RateList/>
+        <ReviewList/>
     </MenuTemplate>
 };

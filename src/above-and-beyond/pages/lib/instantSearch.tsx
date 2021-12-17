@@ -49,9 +49,9 @@ export const useSearchClient = () => {
 };
 
 const PoweredBy = connectPoweredBy(({url}) => <a css={css`
-    font-size: 0.8rem;
-`} href={'https://typesense.org/'}>Powered by
-    Typesense</a>
+        font-size: 0.8rem;
+    `} href={'https://typesense.org/'}>Powered by
+        Typesense</a>
 );
 
 const SearchBox = connectSearchBox(({
@@ -80,20 +80,29 @@ const SearchBox = connectSearchBox(({
 
 const Hits = connectInfiniteHits(InfiniteHits)
 
-export const SearchInterface = () => {
+export const SearchInterface: React.FC<{
+    indexName: string
+    HitsComponent
+    filters?: string[]
+}> = ({
+          indexName,
+          filters,
+          HitsComponent
+      }) => {
     const client = useSearchClient();
     const role = useRole()
     return client.isSuccess ? (
-        <InstantSearch searchClient={client.result} indexName="rate">
+        <InstantSearch searchClient={client.result} indexName={indexName}>
             <Configure
                 hitsPerPage={10}
+                facetFilters={filters}
                 // facetFilters={[`roleID:${role.currentRoleID}`]}
             />
             <SearchBox>
                 <PoweredBy/>
             </SearchBox>
 
-            <Hits/>
+            <Hits HitsComponent={HitsComponent}/>
         </InstantSearch>
     ) : <Loader/>
 }

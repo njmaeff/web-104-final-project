@@ -1,13 +1,13 @@
 import React, {useEffect, useRef} from 'react';
-import {Highlight} from 'react-instantsearch-dom';
 import {List} from "antd";
-import {ExclamationCircleOutlined, LikeOutlined} from "@ant-design/icons";
-import Link from "next/link";
-import {routes} from "../../routes";
-import {Timestamp} from "../orm/docs";
-import {css} from "@emotion/react";
+import {InfiniteHitsProvided} from "react-instantsearch-core";
 
-export const InfiniteHits = ({hasMore, refineNext, hits}) => {
+export const InfiniteHits: React.ComponentType<InfiniteHitsProvided & { HitsComponent }> = ({
+                                                                                                hasMore,
+                                                                                                refineNext,
+                                                                                                hits,
+                                                                                                HitsComponent
+                                                                                            }) => {
 
     const sentinel = useRef(null);
     const onSentinelIntersection = entries => {
@@ -26,34 +26,7 @@ export const InfiniteHits = ({hasMore, refineNext, hits}) => {
 
     return (
         <List>
-            {hits.map((item) => {
-                return <List.Item
-                    key={item.id}
-                >
-                    <List.Item.Meta
-                        avatar={
-                            item.type === 'success' ? <LikeOutlined/> :
-                                <ExclamationCircleOutlined/>
-                        }
-                        title={
-                            <Link href={routes.rate({
-                                query: {
-                                    id: item.id
-                                }
-                            })}><a>{new Timestamp(item.date, 0).toDate().toLocaleString()}</a>
-                            </Link>
-                        }
-                        description={
-                            <Highlight css={theme => css`
-                                .ais-Highlight-highlighted {
-                                    background-color: ${theme.colors.grayLight};
-                                }
-                            `} attribute="result" hit={item}/>
-                        }
-                    />
-                </List.Item>
-
-            })}
+            <HitsComponent hits={hits}/>
             <li
                 className="ais-InfiniteHits-sentinel"
                 ref={sentinel}
