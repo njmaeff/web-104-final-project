@@ -1,4 +1,3 @@
-import {Page} from "../lib/types";
 import {EmployerCollection, getEmployer} from "../lib/orm/docs";
 import {mergeForms, useFormWithStatus} from "../lib/hooks/useFormWithStatus";
 import {Employer, employerSchema, Role, roleSchema} from "../lib/orm/validate";
@@ -165,10 +164,10 @@ export const MainPageForm = () => {
 
 };
 
-export const MainPage: Page = () => {
+export const MainPage = () => {
 
     return (
-        <MenuTemplate heading={"Above and Beyond"}>
+        <MenuTemplate heading={"Employer"}>
             <MainPageForm/>
         </MenuTemplate>
     );

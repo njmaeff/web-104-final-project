@@ -1,24 +1,20 @@
 import {
     Configure,
-    connectHits,
+    connectInfiniteHits,
+    connectPoweredBy,
+    connectSearchBox,
     InstantSearch,
-    SearchBox,
-    Stats,
 } from "react-instantsearch-dom"
 import TypesenseInstantSearchAdapter from "typesense-instantsearch-adapter"
 import {auth} from "./firebase/connect-api";
 import {useAsync} from "./hooks/useAsync";
 import {Loader} from "./loader";
-import {List} from "antd";
-import VirtualList from "rc-virtual-list";
-import {Rate} from "./orm/validate";
-import {ExclamationCircleOutlined, LikeOutlined} from "@ant-design/icons";
-import Link from "next/link";
-import {routes} from "../routes";
+import {Input} from "antd";
 import React from "react";
-import {Timestamp} from "./orm/docs";
 import {useRole} from "../employer/useRole";
+import {InfiniteHits} from "./search/infiniteHits";
 
+const {Search} = Input
 
 export const useSearchClient = () => {
     return useAsync(async () => {
@@ -51,48 +47,43 @@ export const useSearchClient = () => {
     }, []);
 };
 
-export const AllHits = connectHits(({hits}) => {
+const PoweredBy = connectPoweredBy(({url}) => <a href={url}>Powered by
+    Typesense</a>);
 
-    return <List>
-        <VirtualList
-            data={hits}
-            itemHeight={47}
-            itemKey="email"
-        >
-            {(item: Rate) => (
-                <List.Item
-                    key={item.id}
-                >
-                    <List.Item.Meta
-                        avatar={
-                            item.type === 'success' ? <LikeOutlined/> :
-                                <ExclamationCircleOutlined/>
-                        }
-                        title={
-                            <Link href={routes.rate({
-                                query: {
-                                    id: item.id
-                                }
-                            })}><a>{new Timestamp(item.date, 0).toDate().toLocaleString()}</a>
-                            </Link>
-                        }
-                        description={item.result}
-                    />
-                </List.Item>
-            )}
-        </VirtualList>
-    </List>
-});
+const SearchBox = connectSearchBox(({
+                                        currentRefinement,
+                                        isSearchStalled,
+                                        refine,
+                                        children
+                                    }) => (
+    <form noValidate action="" role="search">
+        <Search
+            type="search"
+            value={currentRefinement}
+            allowClear
+            onChange={event => refine(event.currentTarget.value)}
+        />
+        {children}
+        {isSearchStalled ? 'My search is stalled' : ''}
+    </form>
+));
+
+const Hits = connectInfiniteHits(InfiniteHits)
 
 export const SearchInterface = () => {
     const client = useSearchClient();
     const role = useRole()
     return client.isSuccess ? (
         <InstantSearch searchClient={client.result} indexName="rate">
-            <Configure facetFilters={[`roleID:${role.currentRoleID}`]}/>
-            <SearchBox/>
-            <Stats/>
-            <AllHits/>
+            <Configure
+                hitsPerPage={10}
+                // facetFilters={[`roleID:${role.currentRoleID}`]}
+            />
+            <SearchBox>
+                <PoweredBy/>
+            </SearchBox>
+
+            <Hits/>
         </InstantSearch>
     ) : <Loader/>
 }
