@@ -1,7 +1,6 @@
 import React from "react";
 import FullScreen from "./FullScreen";
 import {EmployerProvider} from "../employer/useEmployer";
-import {EmployerDropDown} from "./control";
 import Link from "next/link";
 import {routes} from "../routes";
 import {
@@ -16,12 +15,14 @@ import {FooterControl, HeaderControl, Page} from "./page";
 
 export const MenuTemplate: React.FC<{
     heading?: string;
-    HeaderDropDown?
+    HeaderDropDown?: React.ElementType
+    Main?: React.ElementType
     disableNavigation?: boolean;
 }> = ({
           children,
           heading,
-          HeaderDropDown = EmployerDropDown,
+          HeaderDropDown,
+          Main,
       }) => {
 
     return (
@@ -33,7 +34,7 @@ export const MenuTemplate: React.FC<{
                             <nav>
                                 <HeaderControl>
                                     <h2>{heading}</h2>
-                                    <HeaderDropDown/>
+                                    {HeaderDropDown && <HeaderDropDown/>}
                                 </HeaderControl>
                                 <Link href={routes.profile()}>
                                     <a css={
@@ -45,7 +46,7 @@ export const MenuTemplate: React.FC<{
                             </nav>
                         </header>
                         <main>
-                            {children}
+                            <Main/>
                         </main>
                     </RoleProvider>
                 </EmployerProvider>

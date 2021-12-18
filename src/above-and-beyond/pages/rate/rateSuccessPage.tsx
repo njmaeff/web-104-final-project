@@ -9,7 +9,6 @@ import {
     FieldTable,
     TextInput
 } from "../lib/input";
-import {RateYourselfTemplate} from "./ratePage";
 
 export const RateSuccessPage: React.FC = () => {
     const {currentEmployerID} = useEmployer();
@@ -50,13 +49,4 @@ export const RateSuccessPage: React.FC = () => {
             <TextInput label={"Result"} {...fieldProps.result} />
         </>
     );
-};
-
-export default () => {
-    return <RateYourselfTemplate
-        type={'success'}
-        heading={"Rate - Success"}
-    >
-        <RateSuccessPage/>
-    </RateYourselfTemplate>
 };

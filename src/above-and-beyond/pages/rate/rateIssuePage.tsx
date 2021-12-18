@@ -9,7 +9,6 @@ import {
     FieldTable,
     TextInput
 } from "../lib/input";
-import {RateYourselfTemplate} from "./ratePage";
 
 export const RateIssuePage: React.FC = () => {
     const {currentEmployerID} = useEmployer();
@@ -58,7 +57,3 @@ export const RateIssuePage: React.FC = () => {
     );
 };
 
-export default () => <RateYourselfTemplate
-    type={'issue'}
-    heading={"Rate - Issue"}
-><RateIssuePage/></RateYourselfTemplate>

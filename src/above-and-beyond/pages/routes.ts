@@ -11,8 +11,16 @@ export interface Routes {
     }
     profile
     rate
-    'rate/issue'
-    'rate/success'
+    'rate/new': {
+        query: {
+            type: "success" | "issue"
+        }
+    }
+    'rate/edit': {
+        query: {
+            id: string
+        }
+    }
     review
     report
     index
@@ -39,8 +47,8 @@ export type UseRouterPush<Routes> = {
 export const routes: RouteOptions<Routes> = {
     employer: makeRouteUrlObject('employer'),
     profile: makeRouteUrlObject('profile'),
-    'rate/success': makeRouteUrlObject('rate/success'),
-    'rate/issue': makeRouteUrlObject('rate/issue'),
+    'rate/new': makeRouteUrlObject('rate/new'),
+    'rate/edit': makeRouteUrlObject('rate/edit'),
     rate: makeRouteUrlObject('rate'),
     review: makeRouteUrlObject('review'),
     report: makeRouteUrlObject('report'),

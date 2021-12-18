@@ -9,6 +9,7 @@ import {Highlight} from "react-instantsearch-dom";
 import {css} from "@emotion/react";
 import {RoleDropDown} from "../lib/control";
 import {useRole} from "../employer/useRole";
+import {AbsoluteFeatureButton} from "../lib/button/absoluteFeatureButton";
 
 export const ReviewListHits: React.FC<{ hits }> = ({hits}) => {
     const routes = useRouter();
@@ -46,9 +47,15 @@ export const ReviewList = () => {
     const {currentRoleID} = useRole();
 
     return (
-        <SearchInterface indexName={'review'} HitsComponent={ReviewListHits}
-                         filters={[`roleID:${currentRoleID}`]}
-        />
+        <>
+            <SearchInterface indexName={'review'} HitsComponent={ReviewListHits}
+                             filters={[`roleID:${currentRoleID}`]}
+            />
+            <AbsoluteFeatureButton
+                onClick={async (e) => {
+
+                }}/>
+        </>
     );
 };
 

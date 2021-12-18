@@ -78,9 +78,7 @@ export const ProfileForm = () => {
 export const ProfilePage: NextPageWithLayout = () => {
 
     return (
-        <MenuTemplate heading={"Profile"}>
-            <ProfileForm/>
-        </MenuTemplate>
+        <MenuTemplate heading={"Profile"} Main={ProfileForm}/>
     );
 };
 export default ProfilePage;
