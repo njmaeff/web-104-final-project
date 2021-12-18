@@ -16,36 +16,38 @@ import {FooterControl, HeaderControl, Page} from "./page";
 
 export const MenuTemplate: React.FC<{
     heading?: string;
+    HeaderDropDown?
     disableNavigation?: boolean;
 }> = ({
           children,
           heading,
+          HeaderDropDown = EmployerDropDown,
       }) => {
 
     return (
         <FullScreen>
             <Page>
                 <EmployerProvider>
-                    <header>
-                        <nav>
-                            <HeaderControl>
-                                <h2>{heading}</h2>
-                                <EmployerDropDown/>
-                            </HeaderControl>
-                            <Link href={routes.profile()}>
-                                <a css={
-                                    {
-                                        fontSize: '2.5rem'
-                                    }
-                                }><SettingOutlined/></a>
-                            </Link>
-                        </nav>
-                    </header>
-                    <main>
-                        <RoleProvider>
+                    <RoleProvider>
+                        <header>
+                            <nav>
+                                <HeaderControl>
+                                    <h2>{heading}</h2>
+                                    <HeaderDropDown/>
+                                </HeaderControl>
+                                <Link href={routes.profile()}>
+                                    <a css={
+                                        {
+                                            fontSize: '2.5rem'
+                                        }
+                                    }><SettingOutlined/></a>
+                                </Link>
+                            </nav>
+                        </header>
+                        <main>
                             {children}
-                        </RoleProvider>
-                    </main>
+                        </main>
+                    </RoleProvider>
                 </EmployerProvider>
                 <footer>
                     <nav>

@@ -5,13 +5,14 @@ import {css} from "@emotion/react";
 import {DownOutlined} from "@ant-design/icons";
 import {Loader} from "./loader";
 import {Role} from "./orm/validate";
-import {EmployerCollection, user} from "./orm/docs";
+import {EmployerCollection} from "./orm/docs";
 import {useEmployer} from "../employer/useEmployer";
 import {useAsync} from "./hooks/useAsync";
 import {useRouter} from "next/router";
 import {routes} from "../routes";
+import {useRole} from "../employer/useRole";
 
-export const DropDown: React.FC<{ value }> = ({children, value}) => {
+export const DropDownMenu: React.FC<{ value }> = ({children, value}) => {
 
     return <Dropdown css={theme => css`
         background-color: ${theme.colors.light};
@@ -19,13 +20,33 @@ export const DropDown: React.FC<{ value }> = ({children, value}) => {
     `} overlay={
         <Menu>{children}</Menu>
     }
-
                      trigger={['click']}>
         <Button css={theme =>
             css`
+                display: block;
                 border: 2px solid ${theme.colors.grayLight};
+
+                div {
+                    width: 100%;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    text-align: center;
+                    max-width: 100%;
+                    margin: 0;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+
+                    p {
+                        margin: 0;
+                        margin-right: 0.5rem;
+                    }
+                }
             `
-        }>{value}<DownOutlined/></Button>
+        }>
+            <div><p>{value}</p><DownOutlined/></div>
+        </Button>
     </Dropdown>
 };
 export const DropDownElement: React.FC<{
@@ -57,7 +78,7 @@ export const EmployerDropDown: React.FC<{}> = () => {
         newEmployer
     } = useEmployer();
     const router = useRouter();
-    return <DropDown
+    return <DropDownMenu
         value={currentEmployer.result?.name ?? "New Employer"}
     >
         <DropDownElement
@@ -87,67 +108,61 @@ export const EmployerDropDown: React.FC<{}> = () => {
                     {employer.name}
                 </DropDownElement>
             ))}
-    </DropDown>
+    </DropDownMenu>
 
 };
 
 
 export const RoleDropDown: React.FC<{
-    onChange,
-    onNew,
-    onLoad,
-    onError,
-    employerID: string
-    roleID: string
-}> = ({onChange, onNew, onLoad, onError, employerID, roleID}) => {
+    disableNew?: boolean
+}> = ({
+          disableNew
+      }) => {
+    const {
+        currentEmployerID: employerID,
+    } = useEmployer();
+    const {
+        currentRoleID: roleID,
+        updateRole,
+        newRole
+    } = useRole()
 
     const {
-        result: {role, allRoles},
-        isLoading,
-        error
+        result: {role: currentRole, allRoles},
+        isInProgress,
     } = useAsync<{ role: Role, allRoles: Role[] }>(async () => {
         const role = EmployerCollection.fromID(employerID).roles;
         const allRolesForEmployer = await role.readFromCollection();
         const currentRole = await role.read(roleID);
-        onLoad?.(currentRole)
         return {
             role: currentRole,
             allRoles: allRolesForEmployer,
         };
 
-    }, [employerID, roleID]);
+    }, [employerID, roleID], {initialState: {}});
 
-
-    error && onError?.(error)
-
-    return isLoading ? <Loader/> : <DropDown
-        value={role.name}
+    return isInProgress ? <Loader/> : <DropDownMenu
+        value={currentRole.name}
     >
-        <DropDownElement
+        {!disableNew && <DropDownElement
             key={'new'}
-            onClick={onNew}
+            onClick={() => newRole()}
         >
             Create New
-        </DropDownElement>
+        </DropDownElement>}
         {allRoles
             .filter(
                 (role) =>
-                    role.id !== role.id
+                    role.id !== currentRole.id
             )
             .map((role) => (
                 <DropDownElement
                     key={role.id}
-                    onClick={async () => {
-                        await user.write({
-                            currentRoleID: role.id
-                        })
-                        onChange?.(role.id)
-                    }}
+                    onClick={() => updateRole(role.id)}
                 >
                     {role.name}
                 </DropDownElement>
             ))}
-    </DropDown>
-
+    </DropDownMenu>;
 };
 

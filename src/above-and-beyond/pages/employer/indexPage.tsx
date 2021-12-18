@@ -9,7 +9,7 @@ import {
     FieldTable,
     TextInput
 } from "../lib/input";
-import {DropDownElement} from "../lib/control";
+import {RoleDropDown} from "../lib/control";
 import {useEmployer} from "./useEmployer";
 import {useRole} from "./useRole";
 import {useAsync} from "../lib/hooks/useAsync";
@@ -102,28 +102,9 @@ export const MainPageForm = () => {
         <FieldTable>
             <FieldDropDownInput
                 label={"Role"}
+                DropDown={RoleDropDown}
                 {...roleForm.fieldProps.name}
-            >
-                <DropDownElement
-                    key={'new'}
-                    onClick={() => {
-                    }}
-                >
-                    Create New
-                </DropDownElement>
-
-                {allRoles.result
-                    .filter((role) => role.id !== currentRoleID)
-                    .map((role) => (
-                        <DropDownElement
-                            key={role.id}
-                            onClick={() => {
-                            }}
-                        >
-                            {role.name}
-                        </DropDownElement>
-                    ))}
-            </FieldDropDownInput>
+            />
 
             <FieldDatePickerRow
                 label={"Start Date"}

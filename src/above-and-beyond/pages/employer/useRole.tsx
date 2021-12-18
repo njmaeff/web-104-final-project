@@ -37,7 +37,7 @@ export const RoleProvider: React.FC = ({children}) => {
 
     // select a default role when none is set
     useEffect(() => {
-        if (currentEmployerID && !roleState.currentRoleID) {
+        if (currentEmployerID) {
             (async () => {
                 const result = await EmployerCollection.fromID(currentEmployerID).roles.readFromCollection();
                 if (result.length > 0) {

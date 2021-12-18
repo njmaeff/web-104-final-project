@@ -1,11 +1,10 @@
 import React from "react";
 import {ensureDate} from "./orm/docs";
 import DatePicker from "react-datepicker"
-import {Button, Dropdown, Form, Input, Menu} from "antd";
+import {Form, Input} from "antd";
 import {css} from "@emotion/react";
 import {Highlight, ScrollBar} from "./styles/mixins";
 import {ParagraphSize, SectionSize} from "./styles/size";
-import {DownOutlined} from "@ant-design/icons";
 
 interface FieldProps<Value = any> {
     label: string;
@@ -259,33 +258,21 @@ export const FieldDateTimePickerRow: React.FC<FieldProps<Date>> = ({
     );
 };
 
-export const FieldDropDownInput: React.FC<FieldProps> = ({
-                                                             value,
-                                                             onChange,
-                                                             readonly,
-                                                             name,
-                                                             label,
-                                                             error,
-                                                             children,
-                                                         }) => {
+export const FieldDropDownInput: React.FC<FieldProps & { DropDown }> = ({
+                                                                            value,
+                                                                            onChange,
+                                                                            readonly,
+                                                                            name,
+                                                                            label,
+                                                                            error,
+                                                                            children,
+                                                                            DropDown,
+                                                                        }) => {
 
     return (
         <FieldRowWrapper label={label} error={error} readonly={readonly}>
             {readonly ? (
-                <Dropdown css={theme => css`
-                    background-color: ${theme.colors.light};
-
-                `} overlay={
-                    <Menu>{children}</Menu>
-                }
-
-                          trigger={['click']}>
-                    <Button css={theme =>
-                        css`
-                            border: 2px solid ${theme.colors.grayLight};
-                        `
-                    }>{value}<DownOutlined/></Button>
-                </Dropdown>
+                <DropDown/>
             ) : (
                 <FormInput
                     name={name}

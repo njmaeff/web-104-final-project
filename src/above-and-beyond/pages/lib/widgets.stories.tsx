@@ -1,6 +1,6 @@
 import {Loader} from "./loader";
 import React from "react";
-import {DropDown} from "./control";
+import {DropDownMenu} from "./control";
 import {WithCenter} from "./sb/withCenter";
 import "./styles/styles.scss";
 import {Meta} from "@storybook/react";
@@ -22,13 +22,13 @@ export const DropDownMenu = () => {
         },
     ];
     return (
-        <DropDown value={"My Company"}>
+        <DropDownMenu value={"My Company"}>
             {entries.map((entry) => (
                 <div key={entry.id}>
                     <a>{entry.name}</a>
                 </div>
             ))}
-        </DropDown>
+        </DropDownMenu>
     );
 };
 export default {

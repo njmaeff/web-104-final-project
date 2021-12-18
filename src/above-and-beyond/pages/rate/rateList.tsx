@@ -8,6 +8,8 @@ import {useRouter} from "../routes";
 import {Timestamp} from "../lib/orm/docs";
 import {Highlight} from "react-instantsearch-dom";
 import {css} from "@emotion/react";
+import {RoleDropDown} from "../lib/control";
+import {useRole} from "../employer/useRole";
 
 export const RateListHits: React.FC<{ hits }> = ({hits}) => {
     const routes = useRouter();
@@ -43,8 +45,12 @@ export const RateListHits: React.FC<{ hits }> = ({hits}) => {
 
 export const RateList = () => {
 
+    const {currentRoleID} = useRole();
+
     return (
-        <SearchInterface indexName={'rate'} HitsComponent={RateListHits}/>
+        <SearchInterface indexName={'rate'} HitsComponent={RateListHits}
+                         filters={[`roleID:${currentRoleID}`]}
+        />
     );
 };
 
@@ -52,6 +58,7 @@ export default () => {
 
     return <MenuTemplate
         heading={'Rate'}
+        HeaderDropDown={() => <RoleDropDown disableNew/>}
     >
         <RateList/>
     </MenuTemplate>

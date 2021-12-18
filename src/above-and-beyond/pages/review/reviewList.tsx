@@ -7,6 +7,8 @@ import {useRouter} from "../routes";
 import {Timestamp} from "../lib/orm/docs";
 import {Highlight} from "react-instantsearch-dom";
 import {css} from "@emotion/react";
+import {RoleDropDown} from "../lib/control";
+import {useRole} from "../employer/useRole";
 
 export const ReviewListHits: React.FC<{ hits }> = ({hits}) => {
     const routes = useRouter();
@@ -41,9 +43,12 @@ export const ReviewListHits: React.FC<{ hits }> = ({hits}) => {
 
 
 export const ReviewList = () => {
+    const {currentRoleID} = useRole();
 
     return (
-        <SearchInterface indexName={'review'} HitsComponent={ReviewListHits}/>
+        <SearchInterface indexName={'review'} HitsComponent={ReviewListHits}
+                         filters={[`roleID:${currentRoleID}`]}
+        />
     );
 };
 
@@ -51,6 +56,7 @@ export default () => {
 
     return <MenuTemplate
         heading={'Review'}
+        HeaderDropDown={() => <RoleDropDown disableNew/>}
     >
         <ReviewList/>
     </MenuTemplate>

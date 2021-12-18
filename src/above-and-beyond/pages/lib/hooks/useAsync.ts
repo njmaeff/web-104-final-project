@@ -12,6 +12,7 @@ export enum AsyncStates {
 export interface AsyncHelpers {
     isInit: boolean;
     isLoading: boolean;
+    isInProgress: boolean;
     isSuccess: boolean;
     isError: boolean;
 }
@@ -55,6 +56,7 @@ export const useAsync = <Result = any, Error = any>(
 
     const isInit = state.status === AsyncStates.Init
     const isLoading = state.status === AsyncStates.Loading
+    const isInProgress = isInit || isLoading;
     const isSuccess = state.status === AsyncStates.Success
     const isError = state.status === AsyncStates.Error
 
@@ -67,13 +69,13 @@ export const useAsync = <Result = any, Error = any>(
     };
 
 
-
     return {
         ...state,
         isInit,
         isLoading,
         isSuccess,
         isError,
+        isInProgress,
         onSuccess,
     }
 };
