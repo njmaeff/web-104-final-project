@@ -11,8 +11,13 @@ export enum PageStatus {
 
 export const useFormWithStatus = <T = any>({
                                                onSubmit,
+                                               initialValues,
+                                               validationSchema,
                                                ...config
                                            }: formik.FormikConfig<T>) => {
+
+    const values: typeof initialValues = initialValues ? validationSchema.cast(initialValues) : validationSchema.default()
+
     const form = formik.useFormik<T>({
         initialStatus: PageStatus.VIEW,
         onSubmit: async (values, helpers) => {
@@ -22,6 +27,8 @@ export const useFormWithStatus = <T = any>({
                 setView();
             }
         },
+        initialValues: values,
+        validationSchema,
         ...config,
     });
 
@@ -39,7 +46,7 @@ export const useFormWithStatus = <T = any>({
 
     const fieldProps: { [P in keyof T]: { value; name } } = {} as any;
 
-    for (const [key, value] of Object.entries(config.initialValues)) {
+    for (const [key, value] of Object.entries(values)) {
         const props = form.getFieldProps(key);
         const meta = form.getFieldMeta(key);
         if (isDateLike(value)) {

@@ -3,12 +3,13 @@ import {AnySchema} from "yup/lib/schema";
 import Reference from "yup/lib/Reference";
 import Lazy from "yup/lib/Lazy";
 import type firebase from "firebase/compat";
+import {ensureDate} from "./docs";
 
 export type ConvertToObjectShape<T> = {
     [P in keyof T]: AnySchema | Reference | Lazy<any, any>
 }
-export const makeSchema = <T = {}>(shape: ConvertToObjectShape<T>) => {
-    return yup.object().shape<ConvertToObjectShape<T>>(shape)
+export const makeSchema = <T = {}>(shape: ConvertToObjectShape<T>, defaults?: T) => {
+    return yup.object().shape<ConvertToObjectShape<T>>(shape).default(defaults ?? {})
 };
 
 export type DateLike = firebase.firestore.Timestamp | Date;
@@ -60,6 +61,8 @@ export interface Review extends Doc {
 
 export type Rate = RateIssue | RateSuccess;
 
+const dateValidator = yup.mixed().transform((current) => ensureDate(current)).required()
+
 export const userSchema = makeSchema<User>({
     email: yup.string().email(),
     displayName: yup.string().required(),
@@ -79,28 +82,33 @@ export const roleSchema = makeSchema<Role>({
 })
 
 export const reviewSchema = makeSchema<Review>({
-    date: yup.date().required(),
+    date: dateValidator,
     adjustedSalary: yup.number().required(),
     manager: yup.string().required(),
     outcome: yup.string().required(),
 })
 
 export const rateSuccessSchema = makeSchema<Omit<RateSuccess, "type">>({
-    date: yup.date().required(),
+    date: dateValidator,
     result: yup.string().required(),
     situation: yup.string().required(),
     value: yup.number().required(),
+}, {
+    date: new Date(),
+    result: "",
+    value: 0,
+    situation: ""
 })
 export const rateIssueSchema = makeSchema<Omit<RateIssue, "type">>({
-    date: yup.date().required(),
+    date: dateValidator,
     result: yup.string().required(),
     situation: yup.string().required(),
     correction: yup.string().required(),
     value: yup.number().required(),
+}, {
+    date: new Date(),
+    result: "",
+    value: 0,
+    correction: "",
+    situation: ""
 })
-
-export const validateDate = (date: DateLike) => {
-    if (!yup.date().required().validateSync(date)) {
-        return "Required";
-    }
-};

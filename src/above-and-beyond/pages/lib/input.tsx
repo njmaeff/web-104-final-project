@@ -1,5 +1,4 @@
 import React from "react";
-import {ensureDate} from "./orm/docs";
 import DatePicker from "react-datepicker"
 import {Form, Input} from "antd";
 import {css} from "@emotion/react";
@@ -206,12 +205,11 @@ export const FieldDatePickerRow: React.FC<FieldProps<Date>> = ({
                                                                    label,
                                                                    error,
                                                                }) => {
-    const date = ensureDate(value);
     return (
         <FieldRowWrapper label={label} error={error} readonly={readonly}>
             {readonly ? (
                 <p>
-                    {date.toLocaleString("en", {
+                    {value.toLocaleString("en", {
                         year: "numeric",
                         month: "2-digit",
                         day: "2-digit",
@@ -222,7 +220,7 @@ export const FieldDatePickerRow: React.FC<FieldProps<Date>> = ({
                     className={error ? "border-highlight__primary" : ""}
                     name={name}
                     readOnly={readonly}
-                    selected={date}
+                    selected={value}
                     onChange={onChange}
                 />
             )}
@@ -238,17 +236,16 @@ export const FieldDateTimePickerRow: React.FC<FieldProps<Date>> = ({
                                                                        label,
                                                                        error,
                                                                    }) => {
-    const date = ensureDate(value);
     return (
         <FieldRowWrapper label={label} error={error} readonly={readonly}>
             {readonly ? (
-                <p>{date.toLocaleString()}</p>
+                <p>{value.toLocaleString()}</p>
             ) : (
                 <DatePicker
                     className={error ? "border-highlight__primary" : ""}
                     name={name}
                     readOnly={readonly}
-                    selected={date}
+                    selected={value}
                     onChange={onChange}
                     showTimeSelect
                     dateFormat="MMMM d, yyyy h:mm aa"

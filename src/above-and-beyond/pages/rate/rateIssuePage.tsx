@@ -9,25 +9,22 @@ import {
     FieldTable,
     TextInput
 } from "../lib/input";
+import {useRole} from "../employer/useRole";
+import {AbsoluteFeatureButton} from "../lib/button/absoluteFeatureButton";
 
-export const RateIssuePage: React.FC = () => {
+export const RateIssuePage: React.FC<{ data?: RateIssue }> = ({data}) => {
     const {currentEmployerID} = useEmployer();
+    const {currentRoleID} = useRole()
 
     const [formik, {
         fieldProps,
     }] = useFormWithStatus<Partial<RateIssue>>({
-        initialValues: {
-            date: new Date(),
-            value: "",
-            situation: "",
-            result: "",
-            correction: "",
-        },
+        initialValues: data,
         initialStatus: PageStatus.EDIT,
         validationSchema: rateIssueSchema,
         onSubmit: async (values) => {
             await EmployerCollection.fromID(currentEmployerID)
-                .roles.withID(currentEmployerID)
+                .roles.withID(currentRoleID)
                 .fromSubCollection("rate")
                 .write({
                     ...values,
@@ -53,6 +50,10 @@ export const RateIssuePage: React.FC = () => {
             <TextInput label={"Result"} {...fieldProps.result} />
             <TextInput
                 label={"Correction"} {...fieldProps.correction} />
+
+            <AbsoluteFeatureButton
+
+            />
         </>
     );
 };

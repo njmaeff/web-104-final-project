@@ -9,18 +9,16 @@ import {
     FieldTable,
     TextInput
 } from "../lib/input";
+import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
+import {Button} from "antd";
+import {SaveOutlined} from "@ant-design/icons";
 
-export const RateSuccessPage: React.FC = () => {
+export const RateSuccessPage: React.FC<{data?: RateSuccess}> = ({data}) => {
     const {currentEmployerID} = useEmployer();
     const [formik, {
         fieldProps,
     }] = useFormWithStatus<Partial<RateSuccess>>({
-        initialValues: {
-            date: new Date(),
-            value: "",
-            situation: "",
-            result: "",
-        },
+        initialValues: data,
         initialStatus: PageStatus.EDIT,
         validationSchema: rateSuccessSchema,
         onSubmit: async (values) => {
@@ -47,6 +45,14 @@ export const RateSuccessPage: React.FC = () => {
             </FieldTable>
             <TextInput label={"Situation"} {...fieldProps.situation} />
             <TextInput label={"Result"} {...fieldProps.result} />
+            <AbsoluteButton>
+                <Button
+                    type="primary"
+                    icon={<SaveOutlined/>}
+                    // loading={loadings[2]}
+                    // onClick={() => this.enterLoading(2)}
+                />
+            </AbsoluteButton>
         </>
     );
 };

@@ -16,7 +16,7 @@ export interface Routes {
             type: "success" | "issue"
         }
     }
-    'rate/edit': {
+    'rate/view': {
         query: {
             id: string
         }
@@ -48,7 +48,7 @@ export const routes: RouteOptions<Routes> = {
     employer: makeRouteUrlObject('employer'),
     profile: makeRouteUrlObject('profile'),
     'rate/new': makeRouteUrlObject('rate/new'),
-    'rate/edit': makeRouteUrlObject('rate/edit'),
+    'rate/view': makeRouteUrlObject('rate/view'),
     rate: makeRouteUrlObject('rate'),
     review: makeRouteUrlObject('review'),
     report: makeRouteUrlObject('report'),

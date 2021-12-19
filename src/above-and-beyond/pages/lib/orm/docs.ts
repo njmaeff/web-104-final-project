@@ -34,15 +34,13 @@ export class Firestore<Doc extends firebase.firestore.DocumentData> extends Fire
         makeAsyncCallbackHook(async (document: Doc) => this.write(document));
 
     useRead = (id = this.id?.()) =>
-        useAsync(() => this.read(id), {
-            deps: [],
-        });
+        useAsync<Doc>(() => this.read(id) as any, []);
 
     useDeleteDoc = () =>
         makeAsyncCallbackHook((id = this.id?.()) => this.deleteDoc(id));
 
     useReadFromCollection = (init = []) =>
-        useAsync(() => this.readFromCollection(), {init, deps: []});
+        useAsync(() => this.readFromCollection(), [], {initialState: init});
 
     fromSubCollection<Doc extends firebase.firestore.DocumentData>(
         name: string,

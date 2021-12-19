@@ -17,7 +17,7 @@ export const RateListHits: React.FC<{ hits }> = ({hits}) => {
     return hits.map((item) => {
         return <List.Item
             key={item.id}
-            onClick={() => routes["rate/edit"].push({
+            onClick={() => routes["rate/view"].push({
                 query: {
                     id: item.id
                 }

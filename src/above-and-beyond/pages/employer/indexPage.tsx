@@ -9,7 +9,7 @@ import {
     FieldTable,
     TextInput
 } from "../lib/input";
-import {RoleDropDown} from "../lib/control";
+import {EmployerDropDown, RoleDropDown} from "../lib/control";
 import {useEmployer} from "./useEmployer";
 import {useRole} from "./useRole";
 import {useAsync} from "../lib/hooks/useAsync";
@@ -148,9 +148,11 @@ export const MainPageForm = () => {
 export const MainPage = () => {
 
     return (
-        <MenuTemplate heading={"Employer"}>
-            <MainPageForm/>
-        </MenuTemplate>
+        <MenuTemplate
+            heading={"Employer"}
+            HeaderDropDown={EmployerDropDown}
+            Main={MainPageForm}
+        />
     );
 };
 
