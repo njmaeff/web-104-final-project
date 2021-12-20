@@ -70,6 +70,9 @@ export const userSchema = makeSchema<User>({
 export const employerSchema = makeSchema<Employer>({
     name: yup.string().required(),
     location: yup.string().required(),
+}, {
+    name: "",
+    location: ""
 })
 
 export const roleSchema = makeSchema<Role>({
@@ -78,7 +81,13 @@ export const roleSchema = makeSchema<Role>({
     salary: yup.number().required(),
     salaryTarget: yup.number().required(),
     skillTarget: yup.string().required(),
-    startDate: yup.date().required()
+    startDate: dateValidator
+}, {
+    name: "",
+    salary: 0,
+    salaryTarget: 0,
+    skillTarget: "",
+    startDate: new Date()
 })
 
 export const reviewSchema = makeSchema<Review>({
@@ -86,6 +95,11 @@ export const reviewSchema = makeSchema<Review>({
     adjustedSalary: yup.number().required(),
     manager: yup.string().required(),
     outcome: yup.string().required(),
+}, {
+    date: new Date(),
+    adjustedSalary: 0,
+    manager: "",
+    outcome: ""
 })
 
 export const rateSuccessSchema = makeSchema<Omit<RateSuccess, "type">>({

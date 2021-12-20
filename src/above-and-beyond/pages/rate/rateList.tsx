@@ -2,15 +2,19 @@ import {MenuTemplate} from "../lib/menuTemplate";
 import React from 'react';
 import {Rate} from "../lib/orm/validate";
 import {SearchInterface} from "../lib/instantSearch";
-import {List} from "antd";
-import {ExclamationCircleOutlined, LikeOutlined} from "@ant-design/icons";
+import {Button, List} from "antd";
+import {
+    ExclamationCircleOutlined,
+    LikeOutlined,
+    PlusCircleOutlined
+} from "@ant-design/icons";
 import {useRouter} from "../routes";
 import {Timestamp} from "../lib/orm/docs";
 import {Highlight} from "react-instantsearch-dom";
 import {css} from "@emotion/react";
 import {RoleDropDown} from "../lib/control";
 import {useRole} from "../employer/useRole";
-import {AbsoluteFeatureButton} from "../lib/button/absoluteFeatureButton";
+import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
 
 export const RateListHits: React.FC<{ hits }> = ({hits}) => {
     const routes = useRouter();
@@ -53,10 +57,14 @@ export const RateList = () => {
             <SearchInterface indexName={'rate'} HitsComponent={RateListHits}
                              filters={[`roleID:${currentRoleID}`]}
             />
-            <AbsoluteFeatureButton
-                onClick={
-                    () => router["rate/new"].push()
-                }/>
+            <AbsoluteButton>
+                <Button
+                    type="primary"
+                    icon={<PlusCircleOutlined/>}
+                    // loading={loadings[2]}
+                    onClick={() => router["rate/new"].push()}
+                />
+            </AbsoluteButton>
         </>
     );
 };

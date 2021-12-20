@@ -1,15 +1,15 @@
 import {SearchInterface} from "../lib/instantSearch";
 import {MenuTemplate} from "../lib/menuTemplate";
 import React from "react";
-import {List} from "antd";
-import {StarOutlined} from "@ant-design/icons";
+import {Button, List} from "antd";
+import {PlusCircleOutlined, StarOutlined} from "@ant-design/icons";
 import {useRouter} from "../routes";
 import {Timestamp} from "../lib/orm/docs";
 import {Highlight} from "react-instantsearch-dom";
 import {css} from "@emotion/react";
 import {RoleDropDown} from "../lib/control";
 import {useRole} from "../employer/useRole";
-import {AbsoluteFeatureButton} from "../lib/button/absoluteFeatureButton";
+import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
 
 export const ReviewListHits: React.FC<{ hits }> = ({hits}) => {
     const routes = useRouter();
@@ -51,10 +51,14 @@ export const ReviewList = () => {
             <SearchInterface indexName={'review'} HitsComponent={ReviewListHits}
                              filters={[`roleID:${currentRoleID}`]}
             />
-            <AbsoluteFeatureButton
-                onClick={async (e) => {
-
-                }}/>
+            <AbsoluteButton>
+                <Button
+                    type="primary"
+                    icon={<PlusCircleOutlined/>}
+                    // loading={loadings[2]}
+                    // onClick={() => this.enterLoading(2)}
+                />
+            </AbsoluteButton>
         </>
     );
 };
@@ -64,7 +68,7 @@ export default () => {
     return <MenuTemplate
         heading={'Review'}
         HeaderDropDown={() => <RoleDropDown disableNew/>}
+        Main={ReviewList}
     >
-        <ReviewList/>
     </MenuTemplate>
 };

@@ -16,7 +16,10 @@ export const useFormWithStatus = <T = any>({
                                                ...config
                                            }: formik.FormikConfig<T>) => {
 
-    const values: typeof initialValues = initialValues ? validationSchema.cast(initialValues) : validationSchema.default()
+    const makeValues = (values): typeof initialValues => {
+        return values ? validationSchema.cast(values) : validationSchema.default()
+    };
+    const values = makeValues(initialValues)
 
     const form = formik.useFormik<T>({
         initialStatus: PageStatus.VIEW,
@@ -31,6 +34,11 @@ export const useFormWithStatus = <T = any>({
         validationSchema,
         ...config,
     });
+
+    const reset = form.resetForm
+    form.resetForm = ({values, ...props}) => {
+        reset({values: makeValues(values), ...props})
+    }
 
     useEffect(() => {
         form.validateForm();

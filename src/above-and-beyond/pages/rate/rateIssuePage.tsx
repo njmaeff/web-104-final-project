@@ -10,7 +10,9 @@ import {
     TextInput
 } from "../lib/input";
 import {useRole} from "../employer/useRole";
-import {AbsoluteFeatureButton} from "../lib/button/absoluteFeatureButton";
+import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
+import {Button} from "antd";
+import {SaveOutlined} from "@ant-design/icons";
 
 export const RateIssuePage: React.FC<{ data?: RateIssue }> = ({data}) => {
     const {currentEmployerID} = useEmployer();
@@ -51,9 +53,14 @@ export const RateIssuePage: React.FC<{ data?: RateIssue }> = ({data}) => {
             <TextInput
                 label={"Correction"} {...fieldProps.correction} />
 
-            <AbsoluteFeatureButton
-
-            />
+            <AbsoluteButton>
+                <Button
+                    type="primary"
+                    icon={<SaveOutlined/>}
+                    // loading={loadings[2]}
+                    // onClick={() => this.enterLoading(2)}
+                />
+            </AbsoluteButton>
         </>
     );
 };

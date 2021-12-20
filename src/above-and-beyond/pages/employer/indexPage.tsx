@@ -13,9 +13,10 @@ import {EmployerDropDown, RoleDropDown} from "../lib/control";
 import {useEmployer} from "./useEmployer";
 import {useRole} from "./useRole";
 import {useAsync} from "../lib/hooks/useAsync";
-import {AbsoluteFeatureButton} from "../lib/button/absoluteFeatureButton";
+import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
 import {MenuTemplate} from "../lib/menuTemplate";
-import {useRouter} from "../routes";
+import {Button} from "antd";
+import {EditOutlined, SaveOutlined} from "@ant-design/icons";
 
 export const MainPageForm = () => {
     const {
@@ -24,33 +25,12 @@ export const MainPageForm = () => {
         currentEmployer
     } = useEmployer()
     const {currentRoleID, updateRole} = useRole();
-    const {action} = useRouter().employer.query()
 
     const currentRole = useAsync<Role>(async () => {
         if (currentEmployerID) {
             return await EmployerCollection.fromID(currentEmployerID).roles.read(currentRoleID);
         }
-    }, [currentRoleID], {
-        initialState: {
-            name: "",
-            startDate: new Date(),
-            salary: "",
-            skillTarget: "",
-            salaryTarget: "",
-            responsibilities: "",
-        }
-
-    });
-
-    const allRoles = useAsync<Role[]>(async () => {
-        if (currentEmployerID) {
-            return await EmployerCollection.fromID(currentEmployerID).roles.readFromCollection();
-        }
-
-    }, [currentRoleID], {
-        initialState: []
-    });
-
+    }, [currentRoleID]);
 
     const employerAPI = getEmployer();
 
@@ -84,6 +64,7 @@ export const MainPageForm = () => {
     currentRole.onSuccess((result) => {
         roleFormik.resetForm({values: result});
     })
+
     currentEmployer.onSuccess((result) => {
         employerFormik.resetForm({values: result})
     })
@@ -131,16 +112,22 @@ export const MainPageForm = () => {
             height={"auto"}
             label={"Responsibilities"}
         />
-        <AbsoluteFeatureButton edit={mainProps.isEdit} valid={mainProps.isValid}
-                               onClick={async (e) => {
-                                   if (!mainProps.isEdit) {
-                                       mainProps.setEdit()
-                                   } else if (mainProps.isEdit && mainProps.isValid) {
-                                       await mainProps.onClickSave(e);
-                                       mainProps.setView();
-                                   }
+        <AbsoluteButton>
+            <Button
+                type="primary"
+                icon={mainProps.isEdit ? <SaveOutlined/> : <EditOutlined/>}
+                // loading={loadings[2]}
+                onClick={async (e) => {
+                    if (!mainProps.isEdit) {
+                        mainProps.setEdit()
+                    } else if (mainProps.isEdit && mainProps.isValid) {
+                        await mainProps.onClickSave(e);
+                        mainProps.setView();
+                    }
 
-                               }}/>
+                }}
+            />
+        </AbsoluteButton>
     </>;
 
 };
