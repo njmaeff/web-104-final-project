@@ -16,7 +16,7 @@ export const ReviewListHits: React.FC<{ hits }> = ({hits}) => {
     return hits.map((item) => {
         return <List.Item
             key={item.id}
-            onClick={() => routes.review.push({
+            onClick={() => routes["review/view"].push({
                 query: {
                     id: item.id
                 }
@@ -44,6 +44,7 @@ export const ReviewListHits: React.FC<{ hits }> = ({hits}) => {
 
 
 export const ReviewList = () => {
+    const router = useRouter();
     const {currentRoleID} = useRole();
 
     return (
@@ -51,14 +52,12 @@ export const ReviewList = () => {
             <SearchInterface indexName={'review'} HitsComponent={ReviewListHits}
                              filters={[`roleID:${currentRoleID}`]}
             />
-            <AbsoluteButton>
-                <Button
-                    type="primary"
-                    icon={<PlusCircleOutlined/>}
-                    // loading={loadings[2]}
-                    // onClick={() => this.enterLoading(2)}
-                />
-            </AbsoluteButton>
+            <AbsoluteButton Control={() => <Button
+                type="primary"
+                icon={<PlusCircleOutlined/>}
+                onClick={() => router["review/new"].push()}
+            />}/>
+
         </>
     );
 };

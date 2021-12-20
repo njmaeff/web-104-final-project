@@ -112,22 +112,23 @@ export const MainPageForm = () => {
             height={"auto"}
             label={"Responsibilities"}
         />
-        <AbsoluteButton>
-            <Button
-                type="primary"
-                icon={mainProps.isEdit ? <SaveOutlined/> : <EditOutlined/>}
-                // loading={loadings[2]}
-                onClick={async (e) => {
-                    if (!mainProps.isEdit) {
-                        mainProps.setEdit()
-                    } else if (mainProps.isEdit && mainProps.isValid) {
-                        await mainProps.onClickSave(e);
-                        mainProps.setView();
-                    }
+        <AbsoluteButton Control={({save}) => <Button
+            type="primary"
+            icon={mainProps.isEdit ? <SaveOutlined/> : <EditOutlined/>}
+            // loading={loadings[2]}
+            onClick={async (e) => {
+                if (!mainProps.isEdit) {
+                    mainProps.setEdit()
+                } else if (mainProps.isEdit && mainProps.isValid) {
+                    await save(() => {
+                        return mainProps.onClickSave(e)
+                    })
+                    mainProps.setView();
+                }
 
-                }}
-            />
-        </AbsoluteButton>
+            }}
+        />}
+        />
     </>;
 
 };

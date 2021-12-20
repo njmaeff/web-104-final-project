@@ -21,6 +21,12 @@ export interface Routes {
             id: string
         }
     }
+    'review/new'
+    'review/view': {
+        query: {
+            id: string
+        }
+    }
     review
     report
     index
@@ -50,6 +56,8 @@ export const routes: RouteOptions<Routes> = {
     'rate/new': makeRouteUrlObject('rate/new'),
     'rate/view': makeRouteUrlObject('rate/view'),
     rate: makeRouteUrlObject('rate'),
+    'review/new': makeRouteUrlObject('review/new'),
+    'review/view': makeRouteUrlObject('review/view'),
     review: makeRouteUrlObject('review'),
     report: makeRouteUrlObject('report'),
     index: makeRouteUrlObject('index'),

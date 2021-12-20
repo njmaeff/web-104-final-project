@@ -3233,6 +3233,7 @@ __metadata:
     lodash: ^4.17.21
     msw: ^0.35.0
     next: ^12.0.4
+    p-min-delay: ^4.0.1
     polished: ^4.1.3
     rc-virtual-list: ^3.4.2
     react: ^17.0.2
@@ -14950,6 +14951,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"p-min-delay@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "p-min-delay@npm:4.0.1"
+  dependencies:
+    yoctodelay: ^1.2.0
+  checksum: 97348123e210c7e9e377d3f474ca58e15f25ad513d59ed7f8b77a19b57f3cffaf3727fa74582475df044917b74dc93e5aa79116002409f62542b991eb35f787e
+  languageName: node
+  linkType: hard
+
 "p-timeout@npm:^3.1.0":
   version: 3.2.0
   resolution: "p-timeout@npm:3.2.0"
@@ -20496,6 +20506,13 @@ __metadata:
   version: 0.1.0
   resolution: "yocto-queue@npm:0.1.0"
   checksum: f77b3d8d00310def622123df93d4ee654fc6a0096182af8bd60679ddcdfb3474c56c6c7190817c84a2785648cdee9d721c0154eb45698c62176c322fb46fc700
+  languageName: node
+  linkType: hard
+
+"yoctodelay@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "yoctodelay@npm:1.2.0"
+  checksum: 5c66a350a0fb17f68ac8659aca47e837aac5bf288185ce2942605c88bd9fc9c5f410de377445d5a475a39c25a1e568961c6e6906f37c751a33937d27f3f329ef
   languageName: node
   linkType: hard
 

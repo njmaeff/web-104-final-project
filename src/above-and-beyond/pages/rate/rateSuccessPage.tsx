@@ -11,15 +11,19 @@ import {
 } from "../lib/input";
 import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
 import {Button} from "antd";
-import {SaveOutlined} from "@ant-design/icons";
+import {EditOutlined, SaveOutlined} from "@ant-design/icons";
 
-export const RateSuccessPage: React.FC<{data?: RateSuccess}> = ({data}) => {
+export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
     const {currentEmployerID} = useEmployer();
-    const [formik, {
+    const [, {
         fieldProps,
+        setEdit,
+        setView,
+        isEdit,
+        onClickSave
     }] = useFormWithStatus<Partial<RateSuccess>>({
         initialValues: data,
-        initialStatus: PageStatus.EDIT,
+        initialStatus: data ? PageStatus.VIEW : PageStatus.EDIT,
         validationSchema: rateSuccessSchema,
         onSubmit: async (values) => {
             await EmployerCollection.fromID(currentEmployerID)
@@ -29,9 +33,6 @@ export const RateSuccessPage: React.FC<{data?: RateSuccess}> = ({data}) => {
                     ...values,
                     type: "success",
                 });
-            formik.resetForm({
-                values: formik.initialValues,
-            });
         },
     });
     return (
@@ -45,14 +46,20 @@ export const RateSuccessPage: React.FC<{data?: RateSuccess}> = ({data}) => {
             </FieldTable>
             <TextInput label={"Situation"} {...fieldProps.situation} />
             <TextInput label={"Result"} {...fieldProps.result} />
-            <AbsoluteButton>
-                <Button
-                    type="primary"
-                    icon={<SaveOutlined/>}
-                    // loading={loadings[2]}
-                    // onClick={() => this.enterLoading(2)}
-                />
-            </AbsoluteButton>
+            <AbsoluteButton Control={({save}) => <Button
+                type="primary"
+                icon={isEdit ? <SaveOutlined/> : <EditOutlined/>}
+                onClick={async () => {
+                    if (isEdit) {
+                        await save(() => onClickSave());
+                        setView()
+
+                    } else {
+                        setEdit()
+                    }
+                }}
+            />
+            }/>
         </>
     );
 };

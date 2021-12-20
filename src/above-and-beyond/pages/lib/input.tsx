@@ -9,6 +9,7 @@ interface FieldProps<Value = any> {
     label: string;
     name?: string;
     onChange?;
+    onBlur?
     readonly?: boolean;
     error?: boolean;
     touched?: boolean;
@@ -111,16 +112,17 @@ export const TextInput: React.FC<{
     );
 };
 
-export const FieldRowWrapper: React.FC<{ label: string, error?: boolean, readonly?: boolean }> = ({
-                                                                                                      label,
-                                                                                                      error,
-                                                                                                      readonly,
-                                                                                                      children,
-                                                                                                  }) => {
+export const FieldRowWrapper: React.FC<{ label: string, error?: boolean, readonly?: boolean, touched?: boolean }> = ({
+                                                                                                                         label,
+                                                                                                                         error,
+                                                                                                                         readonly,
+                                                                                                                         touched,
+                                                                                                                         children,
+                                                                                                                     }) => {
     return (
         <Form.Item
             label={label}
-            hasFeedback={!readonly}
+            // hasFeedback={!readonly && touched}
             validateStatus={error ? 'error' : 'success'}
             css={theme => css`
 
@@ -158,12 +160,13 @@ export const FieldRowWrapper: React.FC<{ label: string, error?: boolean, readonl
     );
 };
 
-export const FormInput: React.FC<{ name: string, onChange: any, value: any, error }> = ({
-                                                                                            name,
-                                                                                            onChange,
-                                                                                            value,
-                                                                                            error,
-                                                                                        }) => {
+export const FormInput: React.FC<{ name: string, onChange: any, value: any, error, onBlur}> = ({
+                                                                                                             name,
+                                                                                                             onChange,
+                                                                                                             onBlur,
+                                                                                                             value,
+                                                                                                             error,
+                                                                                                         }) => {
     return <Input
         css={theme => css`
             ${Highlight(error ? theme.colors.primary : 'inherit')}
@@ -173,6 +176,7 @@ export const FormInput: React.FC<{ name: string, onChange: any, value: any, erro
         type="text"
         name={name}
         onChange={onChange}
+        onBlur={onBlur}
         value={value}
     />
 }
@@ -181,17 +185,20 @@ export const FieldInputRow: React.FC<FieldProps> = ({
                                                         label,
                                                         readonly,
                                                         onChange,
+                                                        onBlur,
                                                         value,
+                                                        touched,
                                                         name,
                                                         error,
                                                     }) => {
     return (
-        <FieldRowWrapper label={label} error={error} readonly={readonly}>
+        <FieldRowWrapper label={label} error={error} readonly={readonly}
+                         touched={touched}>
             {readonly ? (
                 <p>{value}</p>
             ) : (
                 <FormInput name={name} onChange={onChange} value={value}
-                           error={error}/>
+                           error={error} onBlur={onBlur}/>
             )}
         </FieldRowWrapper>
     );
@@ -200,13 +207,16 @@ export const FieldInputRow: React.FC<FieldProps> = ({
 export const FieldDatePickerRow: React.FC<FieldProps<Date>> = ({
                                                                    value,
                                                                    onChange,
+                                                                   onBlur,
+                                                                   touched,
                                                                    readonly,
                                                                    name,
                                                                    label,
                                                                    error,
                                                                }) => {
     return (
-        <FieldRowWrapper label={label} error={error} readonly={readonly}>
+        <FieldRowWrapper label={label} error={error} readonly={readonly}
+                         touched={touched}>
             {readonly ? (
                 <p>
                     {value.toLocaleString("en", {
@@ -222,6 +232,7 @@ export const FieldDatePickerRow: React.FC<FieldProps<Date>> = ({
                     readOnly={readonly}
                     selected={value}
                     onChange={onChange}
+                    onBlur={onBlur}
                 />
             )}
         </FieldRowWrapper>
@@ -231,13 +242,16 @@ export const FieldDatePickerRow: React.FC<FieldProps<Date>> = ({
 export const FieldDateTimePickerRow: React.FC<FieldProps<Date>> = ({
                                                                        value,
                                                                        onChange,
+                                                                       onBlur,
                                                                        readonly,
                                                                        name,
                                                                        label,
                                                                        error,
+                                                                       touched,
                                                                    }) => {
     return (
-        <FieldRowWrapper label={label} error={error} readonly={readonly}>
+        <FieldRowWrapper label={label} error={error} readonly={readonly}
+                         touched={touched}>
             {readonly ? (
                 <p>{value.toLocaleString()}</p>
             ) : (
@@ -247,6 +261,7 @@ export const FieldDateTimePickerRow: React.FC<FieldProps<Date>> = ({
                     readOnly={readonly}
                     selected={value}
                     onChange={onChange}
+                    onBlur={onBlur}
                     showTimeSelect
                     dateFormat="MMMM d, yyyy h:mm aa"
                 />
@@ -258,16 +273,19 @@ export const FieldDateTimePickerRow: React.FC<FieldProps<Date>> = ({
 export const FieldDropDownInput: React.FC<FieldProps & { DropDown }> = ({
                                                                             value,
                                                                             onChange,
+                                                                            onBlur,
                                                                             readonly,
                                                                             name,
                                                                             label,
                                                                             error,
+                                                                            touched,
                                                                             children,
                                                                             DropDown,
                                                                         }) => {
 
     return (
-        <FieldRowWrapper label={label} error={error} readonly={readonly}>
+        <FieldRowWrapper label={label} error={error} readonly={readonly}
+                         touched={touched}>
             {readonly ? (
                 <DropDown/>
             ) : (
@@ -275,6 +293,7 @@ export const FieldDropDownInput: React.FC<FieldProps & { DropDown }> = ({
                     name={name}
                     error={error}
                     onChange={onChange}
+                    onBlur={onBlur}
                     value={value}
 
                 />

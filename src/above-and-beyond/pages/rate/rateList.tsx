@@ -57,14 +57,11 @@ export const RateList = () => {
             <SearchInterface indexName={'rate'} HitsComponent={RateListHits}
                              filters={[`roleID:${currentRoleID}`]}
             />
-            <AbsoluteButton>
-                <Button
-                    type="primary"
-                    icon={<PlusCircleOutlined/>}
-                    // loading={loadings[2]}
-                    onClick={() => router["rate/new"].push()}
-                />
-            </AbsoluteButton>
+            <AbsoluteButton Control={() => <Button
+                type="primary"
+                icon={<PlusCircleOutlined/>}
+                onClick={() => router["rate/new"].push()}
+            />}/>
         </>
     );
 };

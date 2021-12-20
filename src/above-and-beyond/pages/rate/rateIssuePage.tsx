@@ -12,17 +12,22 @@ import {
 import {useRole} from "../employer/useRole";
 import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
 import {Button} from "antd";
-import {SaveOutlined} from "@ant-design/icons";
+import {EditOutlined, SaveOutlined} from "@ant-design/icons";
 
 export const RateIssuePage: React.FC<{ data?: RateIssue }> = ({data}) => {
+
     const {currentEmployerID} = useEmployer();
     const {currentRoleID} = useRole()
 
-    const [formik, {
+    const [, {
         fieldProps,
+        isEdit,
+        onClickSave,
+        setEdit,
+        setView,
     }] = useFormWithStatus<Partial<RateIssue>>({
         initialValues: data,
-        initialStatus: PageStatus.EDIT,
+        initialStatus: data ? PageStatus.VIEW : PageStatus.EDIT,
         validationSchema: rateIssueSchema,
         onSubmit: async (values) => {
             await EmployerCollection.fromID(currentEmployerID)
@@ -32,9 +37,6 @@ export const RateIssuePage: React.FC<{ data?: RateIssue }> = ({data}) => {
                     ...values,
                     type: "issue",
                 });
-            formik.resetForm({
-                values: formik.initialValues,
-            });
         },
     });
 
@@ -53,14 +55,20 @@ export const RateIssuePage: React.FC<{ data?: RateIssue }> = ({data}) => {
             <TextInput
                 label={"Correction"} {...fieldProps.correction} />
 
-            <AbsoluteButton>
-                <Button
-                    type="primary"
-                    icon={<SaveOutlined/>}
-                    // loading={loadings[2]}
-                    // onClick={() => this.enterLoading(2)}
-                />
-            </AbsoluteButton>
+            <AbsoluteButton Control={({save}) => <Button
+                type="primary"
+                icon={isEdit ? <SaveOutlined/> : <EditOutlined/>}
+                onClick={async () => {
+                    if (isEdit) {
+                        await save(() => onClickSave());
+                        setView()
+
+                    } else {
+                        setEdit()
+                    }
+                }}
+            />
+            }/>
         </>
     );
 };

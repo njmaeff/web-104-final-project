@@ -1,5 +1,9 @@
 import styled from "@emotion/styled";
 import {FeatureButton} from "./featureButton";
+import {Modal, Spin} from "antd";
+import {useState} from "react";
+import {css} from "@emotion/react";
+import pMinDelay from 'p-min-delay';
 
 export const AbsoluteFeatureButton = styled(FeatureButton)`
     position: fixed;
@@ -29,10 +33,31 @@ const AbsoluteContainer = styled.div`
     }
 `
 
-export const AbsoluteButton = ({children}) => {
+export const AbsoluteButton: React.FC<{ Control?: React.ElementType<{ save }> }> = ({
+                                                                                        children,
+                                                                                        Control
+                                                                                    }) => {
+    const [visible, setVisible] = useState(false);
+    const save = async (fn) => {
 
+        try {
+            setVisible(true)
+            await pMinDelay(fn(), 1000);
+            setVisible(false)
+        } catch (e) {
+            setVisible(false)
+            throw e;
+        }
+    };
 
     return <AbsoluteContainer>
+        <Modal css={theme => css`
+            background-color: ${theme.colors.light};
+        `} visible={visible} closable={false} footer={null}>
+            Saving...
+            <Spin/>
+        </Modal>
+        <Control save={save}/>
         {children}
     </AbsoluteContainer>
 };

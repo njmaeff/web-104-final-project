@@ -1,7 +1,7 @@
 import {User, userSchema} from "../lib/orm/validate";
 import {PageStatus, useFormWithStatus} from "../lib/hooks/useFormWithStatus";
 import {FieldInputRow, FieldTable} from "../lib/input";
-import {AbsoluteFeatureButton} from "../lib/button/absoluteFeatureButton";
+import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
 import React from "react";
 import {auth} from "../lib/firebase/connect-api";
 import Link from "next/link";
@@ -10,11 +10,13 @@ import {NextPageWithLayout} from "../lib/types";
 import {PrimaryLink} from "../lib/link/primaryLink";
 import {PrimaryButton} from "../lib/button/primaryButton";
 import {MenuTemplate} from "../lib/menuTemplate";
+import {Button} from "antd";
+import {EditOutlined, SaveOutlined} from "@ant-design/icons";
 
 export const ProfileForm = () => {
     const user = auth.currentUser;
     const router = useRouter()
-    const [form, {mainProps, ...userForm}] = useFormWithStatus<Partial<User>>(
+    const [form, mainProps] = useFormWithStatus<Partial<User>>(
         {
             initialValues: {
                 displayName: user.displayName,
@@ -42,11 +44,11 @@ export const ProfileForm = () => {
         <FieldTable>
             <FieldInputRow
                 label={"Name"}
-                {...userForm.fieldProps.displayName}
+                {...mainProps.fieldProps.displayName}
             />
             <FieldInputRow
                 label={"Email"}
-                {...userForm.fieldProps.email}
+                {...mainProps.fieldProps.email}
             />
         </FieldTable>
         <PrimaryButton
@@ -62,16 +64,20 @@ export const ProfileForm = () => {
                 About
             </PrimaryLink>
         </Link>
-        <AbsoluteFeatureButton edit={mainProps.isEdit} valid={mainProps.isValid}
-                               onClick={async () => {
-                                   if (!mainProps.isEdit) {
-                                       userForm.setEdit()
-                                   } else if (mainProps.isEdit && mainProps.isValid) {
-                                       mainProps.onClickSave();
-                                       userForm.setView();
-                                   }
+        <AbsoluteButton Control={({save}) => <Button
+            type="primary"
+            icon={mainProps.isEdit ? <SaveOutlined/> : <EditOutlined/>}
+            onClick={async () => {
+                if (mainProps.isEdit) {
+                    await save(() => mainProps.onClickSave());
+                    mainProps.setView()
 
-                               }}/>
+                } else {
+                    mainProps.setEdit()
+                }
+            }}
+        />
+        }/>
     </>;
 
 }

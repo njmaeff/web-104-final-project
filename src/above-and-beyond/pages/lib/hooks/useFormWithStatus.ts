@@ -80,14 +80,9 @@ export const useFormWithStatus = <T = any>({
             setView,
             setNew,
             fieldProps,
-            mainProps: {
-                isEdit,
-                isNew,
-                isReadonly,
-                onClickEdit: setEdit,
-                onClickSave: form.handleSubmit,
-                isValid: form.isValid,
-            },
+            onClickEdit: setEdit,
+            onClickSave: form.handleSubmit,
+            isValid: form.isValid,
         },
     ] as const;
 };
@@ -95,11 +90,10 @@ export const useFormWithStatus = <T = any>({
 export const mergeForms = <T extends ReturnType<typeof useFormWithStatus>[]>(
     ...forms: [...T]
 ) => {
-    const mainForms = forms.map(([_, form]) => form.mainProps);
     const mainFormControls = forms.map(([_, form]) => form)
 
-    const isEdit = mainForms.some((form) => form.isEdit || form.isNew)
-    const isValid = mainForms.every((form) => (form.isEdit ? form.isValid : true))
+    const isEdit = mainFormControls.some((form) => form.isEdit || form.isNew)
+    const isValid = mainFormControls.every((form) => (form.isEdit ? form.isValid : true))
 
     const setEdit = () => mainFormControls.forEach(form => form.setEdit());
     const setView = () => mainFormControls.forEach(form => form.setView());
@@ -120,11 +114,11 @@ export const mergeForms = <T extends ReturnType<typeof useFormWithStatus>[]>(
         setEdit,
         setView,
         onIsValid: onIsValid,
-        onClickEdit: () => mainForms.map((form) => form.onClickEdit()),
+        onClickEdit: () => mainFormControls.map((form) => form.onClickEdit()),
         onClickSave: (e) => {
             const run = async () => {
                 const result = [];
-                for (const form of mainForms) {
+                for (const form of mainFormControls) {
                     result.push(await form.onClickSave(e));
                 }
 
