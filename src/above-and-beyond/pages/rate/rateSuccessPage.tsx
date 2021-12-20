@@ -10,7 +10,7 @@ import {
     TextInput
 } from "../lib/input";
 import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
-import {Button} from "antd";
+import {Button, Divider} from "antd";
 import {EditOutlined, SaveOutlined} from "@ant-design/icons";
 
 export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
@@ -43,9 +43,10 @@ export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
                     label={"Estimated Value"}
                     {...fieldProps.value}
                 />
+                <Divider/>
+                <TextInput label={"Situation"} {...fieldProps.situation} />
+                <TextInput label={"Result"} {...fieldProps.result} />
             </FieldTable>
-            <TextInput label={"Situation"} {...fieldProps.situation} />
-            <TextInput label={"Result"} {...fieldProps.result} />
             <AbsoluteButton Control={({save}) => <Button
                 type="primary"
                 icon={isEdit ? <SaveOutlined/> : <EditOutlined/>}

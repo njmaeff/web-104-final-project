@@ -2,8 +2,8 @@ import React from "react";
 import DatePicker from "react-datepicker"
 import {Form, Input} from "antd";
 import {css} from "@emotion/react";
-import {Highlight, ScrollBar} from "./styles/mixins";
-import {ParagraphSize, SectionSize} from "./styles/size";
+import {ScrollBar} from "./styles/mixins";
+import {ParagraphSize, SectionSize, SubTitleSize} from "./styles/size";
 
 interface FieldProps<Value = any> {
     label: string;
@@ -16,18 +16,16 @@ interface FieldProps<Value = any> {
     value: Value;
 }
 
-export const FormTextArea: React.FC<{ error, name, onChange, value }> = ({
-                                                                             error,
-                                                                             name,
-                                                                             onChange,
-                                                                             value
-                                                                         }) => {
+export const FormTextArea: React.FC<{ error, name, onChange, onBlur, value }> = ({
+                                                                                     name,
+                                                                                     onChange,
+                                                                                     onBlur,
+                                                                                     value
+                                                                                 }) => {
 
     return <Input.TextArea
-        css={theme => css`
-            ${Highlight(error ? theme.colors.primary : 'inherit')}
-        `}
         name={name}
+        onBlur={onBlur}
         onChange={onChange}
         value={value}
     />
@@ -41,33 +39,47 @@ export const TextInput: React.FC<{
                        height,
                        label,
                        value,
+                       touched,
                        readonly,
                        onChange,
+                       onBlur,
                        name,
                        error
                    }) => {
     return (
-        <div
+        <FieldRowWrapper
+            label={label} error={error} readonly={readonly}
+            touched={touched}
             css={
                 (theme) => css`
                     height: ${height};
                     position: relative;
                     width: 100%;
 
-                    h2 {
+                    .ant-form-item-label {
+                        position: static;
+                    }
+
+                    .ant-form-item-children-icon {
+                        top: 90% !important;
+                    }
+
+                    label {
+                        display: block;
+                        ${SubTitleSize};
                         margin: 0.5rem;
                         padding: 0 0.5rem;
                         position: absolute;
-                        top: -1.4rem;
+                        top: -0.7rem;
                         z-index: 100;
-                        left: 0;
+                        left: 0.5rem;
                         background-color: ${theme.colors.light};
                     }
 
                     textarea, p {
                         font-family: inherit;
-                        font-size: 0.8rem;
-                        border: thin solid ${theme.colors.grayLight};
+                        ${ParagraphSize};
+                        border: 2px solid ${theme.colors.grayLight};
                         width: 100%;
                         min-height: 9rem;
                         max-height: 15rem;
@@ -81,14 +93,6 @@ export const TextInput: React.FC<{
                         background-color: ${theme.colors.light};
                         color: ${theme.colors.dark};
 
-                        ${!readonly && css`
-                            &:active, &:focus {
-                                outline: none !important;
-                                ${Highlight(theme.colors.primary)}
-                            }
-                        `
-                        }
-
                     }
 
                 `
@@ -97,7 +101,6 @@ export const TextInput: React.FC<{
                 !readonly ? "input-text__write-mode" : ""
             }`}
         >
-            <h2>{label}</h2>
             {readonly ? (
                 <p>{value}</p>
             ) : (
@@ -105,25 +108,28 @@ export const TextInput: React.FC<{
                     error={error}
                     name={name}
                     onChange={onChange}
+                    onBlur={onBlur}
                     value={value}
                 />
             )}
-        </div>
+        </FieldRowWrapper>
     );
 };
 
-export const FieldRowWrapper: React.FC<{ label: string, error?: boolean, readonly?: boolean, touched?: boolean }> = ({
-                                                                                                                         label,
-                                                                                                                         error,
-                                                                                                                         readonly,
-                                                                                                                         touched,
-                                                                                                                         children,
-                                                                                                                     }) => {
+export const FieldRowWrapper: React.FC<{ label: string, error?: boolean, readonly?: boolean, touched?: boolean, className? }> = ({
+                                                                                                                                     label,
+                                                                                                                                     error,
+                                                                                                                                     readonly,
+                                                                                                                                     touched,
+                                                                                                                                     children,
+                                                                                                                                     className,
+                                                                                                                                 }) => {
     return (
         <Form.Item
             label={label}
-            // hasFeedback={!readonly && touched}
-            validateStatus={error ? 'error' : 'success'}
+            hasFeedback={!readonly && touched}
+            validateStatus={touched && error ? 'error' : 'success'}
+            className={className}
             css={theme => css`
 
                 label {
@@ -160,16 +166,15 @@ export const FieldRowWrapper: React.FC<{ label: string, error?: boolean, readonl
     );
 };
 
-export const FormInput: React.FC<{ name: string, onChange: any, value: any, error, onBlur}> = ({
-                                                                                                             name,
-                                                                                                             onChange,
-                                                                                                             onBlur,
-                                                                                                             value,
-                                                                                                             error,
-                                                                                                         }) => {
+export const FormInput: React.FC<{ name: string, onChange: any, value: any, error, onBlur }> = ({
+                                                                                                    name,
+                                                                                                    onChange,
+                                                                                                    onBlur,
+                                                                                                    value,
+                                                                                                    error,
+                                                                                                }) => {
     return <Input
         css={theme => css`
-            ${Highlight(error ? theme.colors.primary : 'inherit')}
             background-color: ${theme.colors.light} !important;
             color: ${theme.colors.dark};
         `}
@@ -318,12 +323,11 @@ export const FieldTable: React.FC<{
     };
 
     return (
-        <Form css={(theme) => css`
+        <Form css={css`
             display: flex;
             flex-direction: column;
             width: 100%;
             padding-bottom: 1rem;
-            border-bottom: thin solid ${theme.colors.grayLight};
             margin-bottom: 1rem;
 
             h3 {

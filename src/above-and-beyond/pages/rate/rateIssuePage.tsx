@@ -11,8 +11,9 @@ import {
 } from "../lib/input";
 import {useRole} from "../employer/useRole";
 import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
-import {Button} from "antd";
+import {Button, Divider} from "antd";
 import {EditOutlined, SaveOutlined} from "@ant-design/icons";
+import {css} from "@emotion/react";
 
 export const RateIssuePage: React.FC<{ data?: RateIssue }> = ({data}) => {
 
@@ -49,11 +50,14 @@ export const RateIssuePage: React.FC<{ data?: RateIssue }> = ({data}) => {
                     label={"Estimated Value"}
                     {...fieldProps.value}
                 />
+                <Divider css={theme => css`
+                    background-color: ${theme.colors.grayLight};
+                `}/>
+                <TextInput label={"Situation"} {...fieldProps.situation} />
+                <TextInput label={"Result"} {...fieldProps.result} />
+                <TextInput
+                    label={"Correction"} {...fieldProps.correction} />
             </FieldTable>
-            <TextInput label={"Situation"} {...fieldProps.situation} />
-            <TextInput label={"Result"} {...fieldProps.result} />
-            <TextInput
-                label={"Correction"} {...fieldProps.correction} />
 
             <AbsoluteButton Control={({save}) => <Button
                 type="primary"

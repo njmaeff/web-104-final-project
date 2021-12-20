@@ -12,7 +12,7 @@ import {MenuTemplate} from "../lib/menuTemplate";
 import {useRole} from "../employer/useRole";
 import {useEmployer} from "../employer/useEmployer";
 import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
-import {Button} from "antd";
+import {Button, Divider} from "antd";
 import {EditOutlined, SaveOutlined} from "@ant-design/icons";
 
 export const ReviewForm: React.FC<{ data?: Review }> = ({data}) => {
@@ -44,8 +44,9 @@ export const ReviewForm: React.FC<{ data?: Review }> = ({data}) => {
                 label={"Adjusted Salary"}
                 {...fieldProps.adjustedSalary}
             />
+            <Divider/>
+            <TextInput label={"Outcome"} {...fieldProps.outcome} />
         </FieldTable>
-        <TextInput label={"Outcome"} {...fieldProps.outcome} />
         <AbsoluteButton Control={({save}) => <Button
             type="primary"
             icon={isEdit ? <SaveOutlined/> : <EditOutlined/>}
