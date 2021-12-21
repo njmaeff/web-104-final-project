@@ -47,7 +47,7 @@ export const useFormWithStatus = <T = any>({
     const isEdit = form.status === PageStatus.EDIT || isNew;
     const isSubmitted = form.status === PageStatus.SUBMITTED;
 
-    const runOnSubmitSuccess = (fn: (values: T) => any | Promise<any>) => {
+    const useSubmitSuccess = (fn: (values: T) => any | Promise<any>) => {
         useEffect(() => {
             if (isSubmitted) {
                 fn(form.values);
@@ -93,7 +93,7 @@ export const useFormWithStatus = <T = any>({
             fieldProps,
             onClickEdit: setEdit,
             onClickSave: form.submitForm,
-            onSubmitSuccess: runOnSubmitSuccess,
+            useSubmitSuccess,
             isValid: form.isValid,
         },
     ] as const;

@@ -26,7 +26,7 @@ export const ReviewForm: React.FC<{ data?: Review }> = ({data}) => {
         isSubmitting,
         setEdit,
         onClickSave,
-        onSubmitSuccess,
+        useSubmitSuccess,
         setSubmitted,
     }] = useFormWithStatus<Partial<Review>>({
         initialValues: data,
@@ -42,7 +42,7 @@ export const ReviewForm: React.FC<{ data?: Review }> = ({data}) => {
     });
 
 
-    onSubmitSuccess((values) => {
+    useSubmitSuccess((values) => {
         return router["review/view"].push({
             query: {
                 id: values.id,
@@ -66,7 +66,6 @@ export const ReviewForm: React.FC<{ data?: Review }> = ({data}) => {
             icon={isEdit ? <SaveOutlined/> : <EditOutlined/>}
             onClick={async () => {
                 if (isEdit) {
-                    // await onClickSave()
                     await save(() => onClickSave());
                     setSubmitted();
                 } else {
