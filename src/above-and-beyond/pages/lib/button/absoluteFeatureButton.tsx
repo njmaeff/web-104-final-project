@@ -51,12 +51,16 @@ export const AbsoluteButton: React.FC<{ Control?: React.ElementType<{ save }> }>
     };
 
     return <AbsoluteContainer>
-        <Modal css={theme => css`
+        {visible && <Modal css={theme => css`
             background-color: ${theme.colors.light};
-        `} visible={visible} closable={false} footer={null}>
+        `}
+                           visible={true}
+                           closable={false}
+                           footer={null}
+        >
             Saving...
             <Spin/>
-        </Modal>
+        </Modal>}
         <Control save={save}/>
         {children}
     </AbsoluteContainer>

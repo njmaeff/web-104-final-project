@@ -7,6 +7,7 @@ export enum PageStatus {
     EDIT,
     VIEW,
     NEW,
+    SUBMITTED,
 }
 
 export const useFormWithStatus = <T = any>({
@@ -17,7 +18,10 @@ export const useFormWithStatus = <T = any>({
                                            }: formik.FormikConfig<T>) => {
 
     const makeValues = (values): typeof initialValues => {
-        return values ? validationSchema.cast(values) : validationSchema.default()
+        return values ? validationSchema.cast(values) : {
+            ...validationSchema
+                .default()
+        }
     };
     const values = makeValues(initialValues)
 
@@ -26,8 +30,6 @@ export const useFormWithStatus = <T = any>({
         onSubmit: async (values, helpers) => {
             if (form.dirty) {
                 await onSubmit(values, helpers);
-            } else {
-                setView();
             }
         },
         initialValues: values,
@@ -40,16 +42,22 @@ export const useFormWithStatus = <T = any>({
         reset({values: makeValues(values), ...props})
     }
 
-    useEffect(() => {
-        form.validateForm();
-    }, [])
-
     const isReadonly = form.status === PageStatus.VIEW;
     const isNew = form.status === PageStatus.NEW;
     const isEdit = form.status === PageStatus.EDIT || isNew;
+    const isSubmitted = form.status === PageStatus.SUBMITTED;
+
+    const runOnSubmitSuccess = (fn: (values: T) => any | Promise<any>) => {
+        useEffect(() => {
+            if (isSubmitted) {
+                fn(form.values);
+            }
+        }, [isSubmitted]);
+    };
 
     const setEdit = () => form.setStatus(PageStatus.EDIT);
     const setView = () => form.setStatus(PageStatus.VIEW);
+    const setSubmitted = () => form.setStatus(PageStatus.SUBMITTED);
     const setNew = () => form.setStatus(PageStatus.NEW);
 
     const fieldProps: { [P in keyof T]: { value; name } } = {} as any;
@@ -76,12 +84,16 @@ export const useFormWithStatus = <T = any>({
             isReadonly,
             isEdit,
             isNew,
+            isSubmitting: form.isSubmitting,
+            isSubmitted,
             setEdit,
             setView,
             setNew,
+            setSubmitted,
             fieldProps,
             onClickEdit: setEdit,
-            onClickSave: form.handleSubmit,
+            onClickSave: form.submitForm,
+            onSubmitSuccess: runOnSubmitSuccess,
             isValid: form.isValid,
         },
     ] as const;

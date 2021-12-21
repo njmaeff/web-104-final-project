@@ -14,27 +14,41 @@ import {useEmployer} from "../employer/useEmployer";
 import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
 import {Button, Divider} from "antd";
 import {EditOutlined, SaveOutlined} from "@ant-design/icons";
+import {useRouter} from "../routes";
 
 export const ReviewForm: React.FC<{ data?: Review }> = ({data}) => {
+    const router = useRouter();
     const {currentEmployerID} = useEmployer()
     const {currentRoleID} = useRole()
     const [, {
         fieldProps,
         isEdit,
+        isSubmitting,
         setEdit,
-        setView,
         onClickSave,
+        onSubmitSuccess,
+        setSubmitted,
     }] = useFormWithStatus<Partial<Review>>({
         initialValues: data,
         initialStatus: data ? PageStatus.VIEW : PageStatus.EDIT,
         validationSchema: reviewSchema,
-        onSubmit: async (values) => {
-            await EmployerCollection.fromID(currentEmployerID)
+        onSubmit: async (values, helpers) => {
+            const ref = await EmployerCollection.fromID(currentEmployerID)
                 .roles.withID(currentRoleID)
                 .fromSubCollection("review")
                 .write(values);
+            helpers.setValues({...values, id: ref.id});
         },
     });
+
+
+    onSubmitSuccess((values) => {
+        return router["review/view"].push({
+            query: {
+                id: values.id,
+            }
+        })
+    })
 
     return <>
         <FieldTable>
@@ -52,9 +66,9 @@ export const ReviewForm: React.FC<{ data?: Review }> = ({data}) => {
             icon={isEdit ? <SaveOutlined/> : <EditOutlined/>}
             onClick={async () => {
                 if (isEdit) {
+                    // await onClickSave()
                     await save(() => onClickSave());
-                    setView()
-
+                    setSubmitted();
                 } else {
                     setEdit()
                 }

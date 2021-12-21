@@ -55,11 +55,11 @@ const seed = async () => {
 
         const roles = await mapEachDoc(employerDocs, (doc) => {
             const roles = range(2).map(() => {
-                const salary = faker.finance.amount(50000, 80000);
+                const salary = parseInt(faker.finance.amount(50000, 80000));
                 return {
                     name: faker.name.jobTitle(),
                     salary: salary,
-                    salaryTarget: (parseInt(salary) + 5000).toString(),
+                    salaryTarget: salary + 5000,
                     skillTarget: faker.lorem.lines(5),
                     startDate: faker.date.past(1),
                     responsibilities: [
@@ -77,7 +77,7 @@ const seed = async () => {
 
                 const props = {
                     date: faker.date.past(1),
-                    value: faker.finance.amount(100, 200),
+                    value: parseInt(faker.finance.amount(100, 200)),
                     situation: faker.lorem.lines(3),
                     result: faker.lorem.lines(2)
                 } as Rate
@@ -100,7 +100,7 @@ const seed = async () => {
 
                 return {
                     date: faker.date.past(1),
-                    adjustedSalary: faker.finance.amount(500, 3000),
+                    adjustedSalary: parseInt(faker.finance.amount(500, 3000)),
                     manager: faker.name.firstName(),
                     outcome: faker.lorem.lines(3)
                 } as Review

@@ -14,7 +14,7 @@ export const makeCollections = () => {
                     {'name': 'id', 'type': 'string'},
                     {'name': 'userID', 'type': 'string'},
                     {'name': 'roleID', 'type': 'string'},
-                    {'name': 'value', 'type': 'string'},
+                    {'name': 'value', 'type': 'int32'},
                     {'name': 'date', 'type': 'int32'},
                     {'name': 'type', 'type': 'string'},
                     {'name': 'result', 'type': 'string'},
@@ -28,7 +28,7 @@ export const makeCollections = () => {
                     {'name': 'userID', 'type': 'string'},
                     {'name': 'roleID', 'type': 'string'},
                     {'name': 'date', 'type': 'int32'},
-                    {'name': 'adjustedSalary', 'type': 'string'},
+                    {'name': 'adjustedSalary', 'type': 'int32'},
                     {'name': 'outcome', 'type': 'string'},
                 ],
                 default_sorting_field: 'date'

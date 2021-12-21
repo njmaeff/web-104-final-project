@@ -1,5 +1,5 @@
 import {UrlObject} from "url";
-import {useRouter as useNextRouter} from "next/router"
+import {NextRouter, useRouter as useNextRouter} from "next/router"
 
 export const makeAbsolutePath = (...paths) => `/` + paths.filter((p) => !!p).join(`/`)
 
@@ -81,12 +81,14 @@ export const useRouter = () => {
         routeMap[key] = {
             push: (opts) => router.push(fn(opts)),
             query: () => router.query,
+            isCurrentPath: () => new RegExp(`${key}$`).test(router.pathname),
         }
     }
     return routeMap as {
-        [P in keyof Routes]: {
-            push: (opts?: UrlObject) => Promise<void>,
-            query: () => Routes[P]['query']
-        }
+        [P in keyof Routes]: NextRouter & {
+        push: (opts?: UrlObject) => Promise<void>,
+        query: () => Routes[P]['query']
+        isCurrentPath: () => boolean
+    }
     }
 };

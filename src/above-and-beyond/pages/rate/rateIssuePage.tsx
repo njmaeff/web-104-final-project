@@ -14,9 +14,11 @@ import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
 import {Button, Divider} from "antd";
 import {EditOutlined, SaveOutlined} from "@ant-design/icons";
 import {css} from "@emotion/react";
+import {useRouter} from "../routes";
 
 export const RateIssuePage: React.FC<{ data?: RateIssue }> = ({data}) => {
 
+    const router = useRouter();
     const {currentEmployerID} = useEmployer();
     const {currentRoleID} = useRole()
 
@@ -64,8 +66,9 @@ export const RateIssuePage: React.FC<{ data?: RateIssue }> = ({data}) => {
                 icon={isEdit ? <SaveOutlined/> : <EditOutlined/>}
                 onClick={async () => {
                     if (isEdit) {
-                        await save(() => onClickSave());
-                        setView()
+                        await save(() => onClickSave(), {
+                            onComplete: () => router["rate"].push()
+                        });
 
                     } else {
                         setEdit()

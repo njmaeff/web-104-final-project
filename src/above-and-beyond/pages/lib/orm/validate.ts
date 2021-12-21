@@ -29,8 +29,8 @@ export interface Employer extends Doc {
 export interface Role extends Doc {
     name: string;
     startDate: DateLike;
-    salary: string;
-    salaryTarget: string;
+    salary: number;
+    salaryTarget: number;
     responsibilities: string;
     skillTarget: string;
 }
@@ -39,7 +39,7 @@ export interface RateIssue extends Doc {
     type: "issue";
     date: DateLike;
     situation: string;
-    value: string;
+    value: number;
     result: string;
     correction: string;
 }
@@ -48,7 +48,7 @@ export interface RateSuccess extends Doc {
     type: "success";
     date: DateLike;
     situation: string;
-    value: string;
+    value: number;
     result: string;
 }
 
@@ -56,7 +56,7 @@ export interface Review extends Doc {
     date: DateLike;
     manager: string;
     outcome: string;
-    adjustedSalary: string;
+    adjustedSalary: number;
 }
 
 export type Rate = RateIssue | RateSuccess;
@@ -87,6 +87,7 @@ export const roleSchema = makeSchema<Role>({
     salary: 0,
     salaryTarget: 0,
     skillTarget: "",
+    responsibilities: "",
     startDate: new Date()
 })
 

@@ -12,8 +12,11 @@ import {
 import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
 import {Button, Divider} from "antd";
 import {EditOutlined, SaveOutlined} from "@ant-design/icons";
+import {useRouter} from "../routes";
 
 export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
+    const router = useRouter();
+
     const {currentEmployerID} = useEmployer();
     const [, {
         fieldProps,
@@ -53,8 +56,7 @@ export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
                 onClick={async () => {
                     if (isEdit) {
                         await save(() => onClickSave());
-                        setView()
-
+                        router["rate"].push()
                     } else {
                         setEdit()
                     }

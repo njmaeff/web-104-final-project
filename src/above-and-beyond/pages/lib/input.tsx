@@ -90,8 +90,8 @@ export const TextInput: React.FC<{
                         outline: none;
 
                         line-height: 1.3rem;
-                        background-color: ${theme.colors.light};
-                        color: ${theme.colors.dark};
+                        background-color: ${theme.colors.light} !important;
+                        color: ${theme.colors.dark} !important;
 
                     }
 
