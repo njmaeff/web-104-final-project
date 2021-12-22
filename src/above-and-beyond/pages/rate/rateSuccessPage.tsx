@@ -15,6 +15,7 @@ import {EditOutlined, SaveOutlined} from "@ant-design/icons";
 import {useRouter} from "../routes";
 import {useRole} from "../employer/useRole";
 import {HorizontalRule} from "../lib/layout/divider";
+import {Uploads} from "../lib/upload";
 
 export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
     const router = useRouter();
@@ -67,6 +68,9 @@ export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
                 <TextInput label={"Situation"} {...fieldProps.situation} />
                 <TextInput label={"Result"} {...fieldProps.result} />
             </FieldTable>
+            <h3>Uploads</h3>
+            <Uploads/>
+
             <AbsoluteButton Control={({save}) => <Button
                 type="primary"
                 icon={isEdit ? <SaveOutlined/> : <EditOutlined/>}
