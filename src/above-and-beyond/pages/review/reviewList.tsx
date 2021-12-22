@@ -10,12 +10,21 @@ import {css} from "@emotion/react";
 import {RoleDropDown} from "../lib/control";
 import {useRole} from "../employer/useRole";
 import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
+import {Review} from "../lib/orm/validate";
+import {formatCurrency} from "../lib/util/currency";
 
 export const ReviewListHits: React.FC<{ hits }> = ({hits}) => {
     const routes = useRouter();
-    return hits.map((item) => {
+    return hits.map((item: Review) => {
         return <List.Item
             key={item.id}
+            css={theme =>
+                css`
+                    li {
+                        margin: 0
+                    }
+                `
+            }
             onClick={() => routes["review/view"].push({
                 query: {
                     id: item.id
@@ -30,11 +39,18 @@ export const ReviewListHits: React.FC<{ hits }> = ({hits}) => {
                     new Timestamp(item.date, 0).toDate().toLocaleString()
                 }
                 description={
-                    <Highlight css={theme => css`
-                        .ais-Highlight-highlighted {
-                            background-color: ${theme.colors.grayLight};
-                        }
-                    `} attribute="outcome" hit={item}/>
+                    <ul>
+                        <li>{item.manager}</li>
+                        <li>{formatCurrency(item.adjustedSalary)}</li>
+                        <li><Highlight css={theme => css`
+                            .ais-Highlight-highlighted {
+                                background-color: ${theme.colors.grayLight};
+                            }
+
+                            word-break: break-all;
+
+                        `} attribute="outcome" hit={item}/></li>
+                    </ul>
                 }
             />
         </List.Item>

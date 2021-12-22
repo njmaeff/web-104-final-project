@@ -19,7 +19,7 @@ export default () => {
             if (!id) {
                 router.review.push()
             }
-            
+
             const {result} = EmployerCollection
                 .fromID(currentEmployerID)
                 .roles

@@ -15,12 +15,20 @@ import {css} from "@emotion/react";
 import {RoleDropDown} from "../lib/control";
 import {useRole} from "../employer/useRole";
 import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
+import {formatCurrency} from "../lib/util/currency";
 
 export const RateListHits: React.FC<{ hits }> = ({hits}) => {
     const routes = useRouter();
-    return hits.map((item) => {
+    return hits.map((item: Rate) => {
         return <List.Item
             key={item.id}
+            css={
+                theme => css`
+                    li {
+                        margin: 0;
+                    }
+                `
+            }
             onClick={() => routes["rate/view"].push({
                 query: {
                     id: item.id
@@ -36,11 +44,14 @@ export const RateListHits: React.FC<{ hits }> = ({hits}) => {
                     new Timestamp(item.date, 0).toDate().toLocaleString()
                 }
                 description={
-                    <Highlight css={theme => css`
-                        .ais-Highlight-highlighted {
-                            background-color: ${theme.colors.grayLight};
-                        }
-                    `} attribute="result" hit={item}/>
+                    <ul>
+                        <li>{formatCurrency(item.value)}</li>
+                        <li><Highlight css={theme => css`
+                            .ais-Highlight-highlighted {
+                                background-color: ${theme.colors.grayLight};
+                            }
+                        `} attribute="result" hit={item}/></li>
+                    </ul>
                 }
             />
         </List.Item>
