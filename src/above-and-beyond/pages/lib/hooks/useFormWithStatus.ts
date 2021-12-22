@@ -30,6 +30,8 @@ export const useFormWithStatus = <T = any>({
         onSubmit: async (values, helpers) => {
             if (form.dirty) {
                 await onSubmit(values, helpers);
+            } else {
+                helpers.setStatus(PageStatus.VIEW);
             }
         },
         initialValues: values,

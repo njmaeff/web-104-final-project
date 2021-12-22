@@ -95,6 +95,10 @@ export const TextInput: React.FC<{
 
                     }
 
+                    p {
+                        overflow-wrap: anywhere;
+                    }
+
                 `
             }
             className={`input-text ${

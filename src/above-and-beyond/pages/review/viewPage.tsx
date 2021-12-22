@@ -4,7 +4,7 @@ import {useEmployer} from "../employer/useEmployer";
 import {useRole} from "../employer/useRole";
 import {useRouter} from "../routes";
 import {EmployerCollection} from "../lib/orm/docs";
-import {Rate, Review} from "../lib/orm/validate";
+import {Review} from "../lib/orm/validate";
 import {Loader} from "../lib/loader";
 
 export default () => {
@@ -14,7 +14,12 @@ export default () => {
             const {currentEmployerID} = useEmployer()
             const {currentRoleID} = useRole()
 
-            const {id} = useRouter()["rate/view"].query();
+            const router = useRouter()
+            const {id} = router["review/view"].query();
+            if (!id) {
+                router.review.push()
+            }
+            
             const {result} = EmployerCollection
                 .fromID(currentEmployerID)
                 .roles
@@ -22,13 +27,8 @@ export default () => {
                 .fromSubCollection<Review>('review')
                 .useRead(id)
 
-            return (
-                <>
-                    {
-                        !result ? <Loader/> :
-                            <ReviewForm data={result}/>
-                    }
-                </>
+            return (!result ? <Loader/> :
+                    <ReviewForm data={result}/>
             )
         }}
     />;

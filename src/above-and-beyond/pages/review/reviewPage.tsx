@@ -23,11 +23,10 @@ export const ReviewForm: React.FC<{ data?: Review }> = ({data}) => {
     const [, {
         fieldProps,
         isEdit,
-        isSubmitting,
         setEdit,
         onClickSave,
-        useSubmitSuccess,
         setSubmitted,
+        useSubmitSuccess,
     }] = useFormWithStatus<Partial<Review>>({
         initialValues: data,
         initialStatus: data ? PageStatus.VIEW : PageStatus.EDIT,

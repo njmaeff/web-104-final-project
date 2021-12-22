@@ -27,21 +27,35 @@ export const RateIssuePage: React.FC<{ data?: RateIssue }> = ({data}) => {
         isEdit,
         onClickSave,
         setEdit,
-        setView,
+        setSubmitted,
+        useSubmitSuccess
     }] = useFormWithStatus<Partial<RateIssue>>({
         initialValues: data,
         initialStatus: data ? PageStatus.VIEW : PageStatus.EDIT,
         validationSchema: rateIssueSchema,
-        onSubmit: async (values) => {
-            await EmployerCollection.fromID(currentEmployerID)
-                .roles.withID(currentRoleID)
-                .fromSubCollection("rate")
+        onSubmit: async (values, helpers) => {
+            const ref = await EmployerCollection
+                .fromID(currentEmployerID)
+                .roles
+                .withID(currentRoleID)
+                .fromSubCollection<RateIssue>("rate")
                 .write({
                     ...values,
                     type: "issue",
                 });
+
+            helpers.setValues({...values, id: ref.id})
         },
     });
+
+    useSubmitSuccess((values) => {
+        return router["rate/view"].push({
+            query: {
+                id: values.id,
+            }
+        })
+    })
+
 
     return (
         <>
@@ -66,10 +80,8 @@ export const RateIssuePage: React.FC<{ data?: RateIssue }> = ({data}) => {
                 icon={isEdit ? <SaveOutlined/> : <EditOutlined/>}
                 onClick={async () => {
                     if (isEdit) {
-                        await save(() => onClickSave(), {
-                            onComplete: () => router["rate"].push()
-                        });
-
+                        await save(() => onClickSave());
+                        setSubmitted();
                     } else {
                         setEdit()
                     }

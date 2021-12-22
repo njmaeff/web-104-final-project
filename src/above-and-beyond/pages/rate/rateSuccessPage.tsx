@@ -13,31 +13,46 @@ import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
 import {Button, Divider} from "antd";
 import {EditOutlined, SaveOutlined} from "@ant-design/icons";
 import {useRouter} from "../routes";
+import {useRole} from "../employer/useRole";
 
 export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
     const router = useRouter();
 
     const {currentEmployerID} = useEmployer();
+    const {currentRoleID} = useRole()
     const [, {
         fieldProps,
         setEdit,
-        setView,
         isEdit,
-        onClickSave
+        onClickSave,
+        useSubmitSuccess,
+        setSubmitted
     }] = useFormWithStatus<Partial<RateSuccess>>({
         initialValues: data,
         initialStatus: data ? PageStatus.VIEW : PageStatus.EDIT,
         validationSchema: rateSuccessSchema,
-        onSubmit: async (values) => {
-            await EmployerCollection.fromID(currentEmployerID)
-                .roles.withID(currentEmployerID)
-                .fromSubCollection("rate")
+        onSubmit: async (values, helpers) => {
+            const ref = await EmployerCollection
+                .fromID(currentEmployerID)
+                .roles
+                .withID(currentRoleID)
+                .fromSubCollection<RateSuccess>("rate")
                 .write({
                     ...values,
                     type: "success",
                 });
+            helpers.setValues({...values, id: ref.id})
         },
     });
+
+    useSubmitSuccess((values) => {
+        return router["rate/view"].push({
+            query: {
+                id: values.id,
+            }
+        })
+    })
+
     return (
         <>
             <FieldTable>
@@ -56,7 +71,7 @@ export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
                 onClick={async () => {
                     if (isEdit) {
                         await save(() => onClickSave());
-                        router["rate"].push()
+                        setSubmitted();
                     } else {
                         setEdit()
                     }
