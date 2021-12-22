@@ -41,7 +41,9 @@ export const ReviewListHits: React.FC<{ hits }> = ({hits}) => {
                 description={
                     <ul>
                         <li>{item.manager}</li>
-                        <li>{formatCurrency(item.adjustedSalary)}</li>
+                        <li css={theme => css`
+                            color: ${item.adjustedSalary >= 0 ? theme.colors.success : theme.colors.error}
+                        `}>{formatCurrency(item.adjustedSalary)}</li>
                         <li><Highlight css={theme => css`
                             .ais-Highlight-highlighted {
                                 background-color: ${theme.colors.grayLight};
@@ -67,6 +69,19 @@ export const ReviewList = () => {
         <>
             <SearchInterface indexName={'review'} HitsComponent={ReviewListHits}
                              filters={[`roleID:${currentRoleID}`]}
+                             sortByProps={{
+                                 items: [
+                                     {
+                                         value: 'review/sort/date:desc',
+                                         label: 'Date'
+                                     },
+                                     {
+                                         value: 'review/sort/adjustedSalary:desc',
+                                         label: 'Adjusted Salary'
+                                     },
+                                 ],
+                                 defaultRefinement: 'review/sort/date:desc'
+                             }}
             />
             <AbsoluteButton Control={() => <Button
                 type="primary"

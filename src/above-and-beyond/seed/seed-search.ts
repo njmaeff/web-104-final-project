@@ -16,7 +16,7 @@ export const makeCollections = () => {
                     {'name': 'roleID', 'type': 'string'},
                     {'name': 'value', 'type': 'int32'},
                     {'name': 'date', 'type': 'int32'},
-                    {'name': 'type', 'type': 'string'},
+                    {'name': 'type', 'type': 'string', facet: true},
                     {'name': 'result', 'type': 'string'},
                 ],
                 default_sorting_field: 'date'

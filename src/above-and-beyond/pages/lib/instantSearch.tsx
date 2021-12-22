@@ -4,7 +4,9 @@ import {
     connectPoweredBy,
     connectSearchBox,
     InstantSearch,
+    RefinementList,
     SortBy,
+    SortByProps,
 } from "react-instantsearch-dom"
 import TypesenseInstantSearchAdapter from "typesense-instantsearch-adapter"
 import {auth} from "./firebase/connect-api";
@@ -14,6 +16,7 @@ import {Input} from "antd";
 import React from "react";
 import {InfiniteHits} from "./search/infiniteHits";
 import {css} from "@emotion/react";
+import capitalize from "lodash/capitalize";
 
 const {Search} = Input
 
@@ -83,10 +86,14 @@ const Hits = connectInfiniteHits(InfiniteHits) as React.ComponentClass<{ HitsCom
 export const SearchInterface: React.FC<{
     indexName: string
     HitsComponent
+    sortByProps?: SortByProps
+    refinementProps?: { attribute: string }
     filters?: string[]
 }> = ({
           indexName,
           filters,
+          sortByProps,
+          refinementProps,
           HitsComponent
       }) => {
     const client = useSearchClient();
@@ -99,14 +106,20 @@ export const SearchInterface: React.FC<{
             <SearchBox>
                 <PoweredBy/>
             </SearchBox>
-            <SortBy
-                items={[
-                    {value: 'rate', label: 'Default'},
-                    {value: 'rate/sort/date:desc', label: 'Date'},
-                    {value: 'rate/sort/value:desc', label: 'Value'},
-                ]}
-                defaultRefinement={'rate'}
-            />
+            {sortByProps && <SortBy
+                {...sortByProps}
+
+            />}
+            {refinementProps && <RefinementList
+                transformItems={(items) => {
+                    return items.map(item => ({
+                        ...item,
+                        label: capitalize(item.label)
+                    }))
+                }
+                }
+                {...refinementProps}
+            />}
             <Hits HitsComponent={HitsComponent}/>
         </InstantSearch>
     ) : <Loader/>

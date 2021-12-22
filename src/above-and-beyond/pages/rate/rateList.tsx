@@ -45,7 +45,11 @@ export const RateListHits: React.FC<{ hits }> = ({hits}) => {
                 }
                 description={
                     <ul>
-                        <li>{formatCurrency(item.value)}</li>
+                        <li css={
+                            theme => css`
+                                color: ${item.type === 'success' ? theme.colors.success : theme.colors.error}
+                            `
+                        }>{formatCurrency(item.value)}</li>
                         <li><Highlight css={theme => css`
                             .ais-Highlight-highlighted {
                                 background-color: ${theme.colors.grayLight};
@@ -67,6 +71,22 @@ export const RateList = () => {
         <>
             <SearchInterface indexName={'rate'} HitsComponent={RateListHits}
                              filters={[`roleID:${currentRoleID}`]}
+                             sortByProps={{
+                                 items: [
+                                     {
+                                         value: 'rate/sort/date:desc',
+                                         label: 'Date'
+                                     },
+                                     {
+                                         value: 'rate/sort/value:desc',
+                                         label: 'Value'
+                                     },
+                                 ],
+                                 defaultRefinement: 'rate/sort/date:desc'
+                             }}
+                             refinementProps={{
+                                 attribute: "type"
+                             }}
             />
             <AbsoluteButton Control={() => <Button
                 type="primary"

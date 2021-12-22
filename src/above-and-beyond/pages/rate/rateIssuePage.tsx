@@ -15,6 +15,7 @@ import {Button, Divider} from "antd";
 import {EditOutlined, SaveOutlined} from "@ant-design/icons";
 import {css} from "@emotion/react";
 import {useRouter} from "../routes";
+import {HorizontalRule} from "../lib/layout/divider";
 
 export const RateIssuePage: React.FC<{ data?: RateIssue }> = ({data}) => {
 
@@ -64,11 +65,10 @@ export const RateIssuePage: React.FC<{ data?: RateIssue }> = ({data}) => {
                     label={"Date"} {...fieldProps.date} />
                 <FieldInputRow
                     label={"Estimated Value"}
+                    monetary
                     {...fieldProps.value}
                 />
-                <Divider css={theme => css`
-                    background-color: ${theme.colors.grayLight};
-                `}/>
+                <HorizontalRule/>
                 <TextInput label={"Situation"} {...fieldProps.situation} />
                 <TextInput label={"Result"} {...fieldProps.result} />
                 <TextInput

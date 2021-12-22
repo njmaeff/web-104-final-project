@@ -10,10 +10,11 @@ import {
     TextInput
 } from "../lib/input";
 import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
-import {Button, Divider} from "antd";
+import {Button} from "antd";
 import {EditOutlined, SaveOutlined} from "@ant-design/icons";
 import {useRouter} from "../routes";
 import {useRole} from "../employer/useRole";
+import {HorizontalRule} from "../lib/layout/divider";
 
 export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
     const router = useRouter();
@@ -59,9 +60,10 @@ export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
                 <FieldDateTimePickerRow label={"Date"} {...fieldProps.date} />
                 <FieldInputRow
                     label={"Estimated Value"}
+                    monetary
                     {...fieldProps.value}
                 />
-                <Divider/>
+                <HorizontalRule/>
                 <TextInput label={"Situation"} {...fieldProps.situation} />
                 <TextInput label={"Result"} {...fieldProps.result} />
             </FieldTable>

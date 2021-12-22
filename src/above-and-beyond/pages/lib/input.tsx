@@ -4,9 +4,11 @@ import {Form, Input} from "antd";
 import {css} from "@emotion/react";
 import {ScrollBar} from "./styles/mixins";
 import {ParagraphSize, SectionSize, SubTitleSize} from "./styles/size";
+import {formatCurrency} from "./util/currency";
 
 interface FieldProps<Value = any> {
     label: string;
+    monetary?: boolean;
     name?: string;
     onChange?;
     onBlur?
@@ -199,12 +201,13 @@ export const FieldInputRow: React.FC<FieldProps> = ({
                                                         touched,
                                                         name,
                                                         error,
+                                                        monetary,
                                                     }) => {
     return (
         <FieldRowWrapper label={label} error={error} readonly={readonly}
                          touched={touched}>
             {readonly ? (
-                <p>{value}</p>
+                <p>{monetary ? formatCurrency(value) : value}</p>
             ) : (
                 <FormInput name={name} onChange={onChange} value={value}
                            error={error} onBlur={onBlur}/>

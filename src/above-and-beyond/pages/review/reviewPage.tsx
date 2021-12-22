@@ -12,9 +12,10 @@ import {MenuTemplate} from "../lib/menuTemplate";
 import {useRole} from "../employer/useRole";
 import {useEmployer} from "../employer/useEmployer";
 import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
-import {Button, Divider} from "antd";
+import {Button} from "antd";
 import {EditOutlined, SaveOutlined} from "@ant-design/icons";
 import {useRouter} from "../routes";
+import {HorizontalRule} from "../lib/layout/divider";
 
 export const ReviewForm: React.FC<{ data?: Review }> = ({data}) => {
     const router = useRouter();
@@ -55,9 +56,10 @@ export const ReviewForm: React.FC<{ data?: Review }> = ({data}) => {
             <FieldInputRow label={"Manager"} {...fieldProps.manager} />
             <FieldInputRow
                 label={"Adjusted Salary"}
+                monetary
                 {...fieldProps.adjustedSalary}
             />
-            <Divider/>
+            <HorizontalRule/>
             <TextInput label={"Outcome"} {...fieldProps.outcome} />
         </FieldTable>
         <AbsoluteButton Control={({save}) => <Button
