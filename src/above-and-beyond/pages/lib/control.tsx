@@ -25,7 +25,7 @@ export const DropDownMenu: React.FC<{ value }> = ({children, value}) => {
             css`
                 display: block;
                 border: 2px solid ${theme.colors.grayLight};
-
+                padding-left: 0.5rem;
                 div {
                     width: 100%;
                     display: flex;
@@ -34,13 +34,12 @@ export const DropDownMenu: React.FC<{ value }> = ({children, value}) => {
                     text-align: center;
                     max-width: 100%;
                     margin: 0;
-                    overflow: hidden;
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
 
                     p {
-                        margin: 0;
-                        margin-right: 0.5rem;
+                        margin: 0 0.5rem 0 0;
+                        overflow: hidden;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
                     }
                 }
             `
