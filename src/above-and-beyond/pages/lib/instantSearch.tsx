@@ -4,6 +4,7 @@ import {
     connectPoweredBy,
     connectSearchBox,
     InstantSearch,
+    SortBy,
 } from "react-instantsearch-dom"
 import TypesenseInstantSearchAdapter from "typesense-instantsearch-adapter"
 import {auth} from "./firebase/connect-api";
@@ -98,7 +99,14 @@ export const SearchInterface: React.FC<{
             <SearchBox>
                 <PoweredBy/>
             </SearchBox>
-
+            <SortBy
+                items={[
+                    {value: 'rate', label: 'Default'},
+                    {value: 'rate/sort/date:desc', label: 'Date'},
+                    {value: 'rate/sort/value:desc', label: 'Value'},
+                ]}
+                defaultRefinement={'rate'}
+            />
             <Hits HitsComponent={HitsComponent}/>
         </InstantSearch>
     ) : <Loader/>
