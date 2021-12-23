@@ -6,7 +6,7 @@ import {EmployerCollection} from "../lib/orm/docs";
 import {
     FieldDateTimePickerRow,
     FieldInputRow,
-    FieldTable,
+    FormTable,
     TextInput
 } from "../lib/input";
 import {useRole} from "../employer/useRole";
@@ -60,7 +60,7 @@ export const RateIssuePage: React.FC<{ data?: RateIssue }> = ({data}) => {
 
     return (
         <>
-            <FieldTable>
+            <FormTable>
                 <FieldDateTimePickerRow
                     label={"Date"} {...fieldProps.date} />
                 <FieldInputRow
@@ -73,7 +73,7 @@ export const RateIssuePage: React.FC<{ data?: RateIssue }> = ({data}) => {
                 <TextInput label={"Result"} {...fieldProps.result} />
                 <TextInput
                     label={"Correction"} {...fieldProps.correction} />
-            </FieldTable>
+            </FormTable>
 
             <AbsoluteButton Control={({save}) => <Button
                 type="primary"

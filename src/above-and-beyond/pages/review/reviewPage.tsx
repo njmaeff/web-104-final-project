@@ -2,7 +2,7 @@ import React from "react";
 import {
     FieldDateTimePickerRow,
     FieldInputRow,
-    FieldTable,
+    FormTable,
     TextInput,
 } from "../lib/input";
 import {PageStatus, useFormWithStatus} from "../lib/hooks/useFormWithStatus";
@@ -51,7 +51,7 @@ export const ReviewForm: React.FC<{ data?: Review }> = ({data}) => {
     })
 
     return <>
-        <FieldTable>
+        <FormTable>
             <FieldDateTimePickerRow label={"Date"} {...fieldProps.date} />
             <FieldInputRow label={"Manager"} {...fieldProps.manager} />
             <FieldInputRow
@@ -61,7 +61,7 @@ export const ReviewForm: React.FC<{ data?: Review }> = ({data}) => {
             />
             <HorizontalRule/>
             <TextInput label={"Outcome"} {...fieldProps.outcome} />
-        </FieldTable>
+        </FormTable>
         <AbsoluteButton Control={({save}) => <Button
             type="primary"
             icon={isEdit ? <SaveOutlined/> : <EditOutlined/>}

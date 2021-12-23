@@ -314,7 +314,7 @@ export const FieldDropDownInput: React.FC<FieldProps & { DropDown }> = ({
     );
 };
 
-export const FieldTable: React.FC<{
+export const FormTable: React.FC<{
     heading?: string;
 }> = ({heading, children}) => {
 

@@ -14,8 +14,6 @@ export enum UploadStates {
     FIREBASE_UPLOAD_END
 }
 
-export const PriviewImageFileTypes = [/image\/.*/]
-
 export const firebaseUploadAction = ({
                                          onSuccess,
                                          onProgress,
@@ -95,7 +93,7 @@ export const getBase64 = (file: Blob) => {
     });
 }
 
-export const Uploads: React.FC<{ baseRef: Reference }> = ({baseRef}) => {
+export const Uploads: React.FC<{ storageRef: Reference }> = ({storageRef}) => {
 
     const [{
         PreviewComponent,
@@ -139,7 +137,7 @@ export const Uploads: React.FC<{ baseRef: Reference }> = ({baseRef}) => {
     };
 
     useAsync(async () => {
-            const files = await baseRef.listAll()
+            const files = await storageRef.listAll()
 
             const items = []
             for (const file of files.items) {
@@ -176,13 +174,16 @@ export const Uploads: React.FC<{ baseRef: Reference }> = ({baseRef}) => {
                 listType="picture"
                 customRequest={(request) => firebaseUploadAction({
                     ...request,
-                    baseRef
+                    baseRef: storageRef
                 })(dispatch)}
+                beforeUpload={(file, FileList) => {
+
+                }}
                 fileList={state.fileList}
                 onPreview={handlePreview}
                 onChange={handleChange}
                 onRemove={async (file) => {
-                    return baseRef.child(file.name).delete()
+                    return storageRef.child(file.name).delete()
                 }}
             >
                 <p className="ant-upload-drag-icon">
@@ -192,13 +193,6 @@ export const Uploads: React.FC<{ baseRef: Reference }> = ({baseRef}) => {
                     to upload</p>
             </Upload.Dragger>
             <Modal
-                // css={
-                //     css`
-                //         .ant-modal-body {
-                //             height: 60vh;
-                //         }
-                //     `
-                // }
                 visible={state.previewVisible}
                 title={state.previewTitle}
                 footer={null}

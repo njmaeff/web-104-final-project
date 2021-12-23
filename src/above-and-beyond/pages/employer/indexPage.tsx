@@ -6,7 +6,7 @@ import {
     FieldDatePickerRow,
     FieldDropDownInput,
     FieldInputRow,
-    FieldTable,
+    FormTable,
     TextInput
 } from "../lib/input";
 import {EmployerDropDown, RoleDropDown} from "../lib/control";
@@ -70,7 +70,7 @@ export const MainPageForm = () => {
     })
 
     return <>
-        <FieldTable>
+        <FormTable>
             <FieldInputRow
                 label={"Organization Name"}
                 {...employerForm.fieldProps.name}
@@ -79,8 +79,8 @@ export const MainPageForm = () => {
                 label={"Location"}
                 {...employerForm.fieldProps.location}
             />
-        </FieldTable>
-        <FieldTable>
+        </FormTable>
+        <FormTable>
             <FieldDropDownInput
                 label={"Role"}
                 DropDown={RoleDropDown}
@@ -99,7 +99,7 @@ export const MainPageForm = () => {
                 label={"Target Salary"}
                 {...roleForm.fieldProps.salaryTarget}
             />
-        </FieldTable>
+        </FormTable>
 
         <TextInput
             {...roleForm.fieldProps.skillTarget}

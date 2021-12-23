@@ -5,7 +5,7 @@ import {
     FieldDatePickerRow,
     FieldDateTimePickerRow,
     FieldInputRow,
-    FieldTable as Field,
+    FormTable as Field,
     TextInput as Text,
 } from "./input";
 import { useFormWithStatus } from "./hooks/useFormWithStatus";

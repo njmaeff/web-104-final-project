@@ -1,6 +1,6 @@
 import {User, userSchema} from "../lib/orm/validate";
 import {PageStatus, useFormWithStatus} from "../lib/hooks/useFormWithStatus";
-import {FieldInputRow, FieldTable} from "../lib/input";
+import {FieldInputRow, FormTable} from "../lib/input";
 import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
 import React from "react";
 import {auth} from "../lib/firebase/connect-api";
@@ -41,7 +41,7 @@ export const ProfileForm = () => {
     );
 
     return <>
-        <FieldTable>
+        <FormTable>
             <FieldInputRow
                 label={"Name"}
                 {...mainProps.fieldProps.displayName}
@@ -50,7 +50,7 @@ export const ProfileForm = () => {
                 label={"Email"}
                 {...mainProps.fieldProps.email}
             />
-        </FieldTable>
+        </FormTable>
         <PrimaryButton
             onClick={async () => {
                 await auth.signOut()

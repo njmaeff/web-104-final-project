@@ -6,7 +6,7 @@ import {EmployerCollection} from "../lib/orm/docs";
 import {
     FieldDateTimePickerRow,
     FieldInputRow,
-    FieldTable,
+    FormTable,
     TextInput
 } from "../lib/input";
 import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
@@ -23,7 +23,6 @@ export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
 
     const {currentEmployerID} = useEmployer();
     const {currentRoleID} = useRole()
-    const storageRef = useFileUpload('rate', data.id)
 
     const [, {
         fieldProps,
@@ -31,7 +30,7 @@ export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
         isEdit,
         onClickSave,
         useSubmitSuccess,
-        setSubmitted
+        setSubmitted,
     }] = useFormWithStatus<Partial<RateSuccess>>({
         initialValues: data,
         initialStatus: data ? PageStatus.VIEW : PageStatus.EDIT,
@@ -50,6 +49,8 @@ export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
         },
     });
 
+    const storageRef = useFileUpload('rate', fieldProps.id.value)
+
     useSubmitSuccess((values) => {
         return router["rate/view"].push({
             query: {
@@ -60,7 +61,7 @@ export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
 
     return (
         <>
-            <FieldTable>
+            <FormTable>
                 <FieldDateTimePickerRow label={"Date"} {...fieldProps.date} />
                 <FieldInputRow
                     label={"Estimated Value"}
@@ -70,9 +71,10 @@ export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
                 <HorizontalRule/>
                 <TextInput label={"Situation"} {...fieldProps.situation} />
                 <TextInput label={"Result"} {...fieldProps.result} />
-            </FieldTable>
+            </FormTable>
             <h3>Uploads</h3>
-            <Uploads baseRef={storageRef}/>
+            <Uploads storageRef={storageRef}/>
+
 
             <AbsoluteButton Control={({save}) => <Button
                 type="primary"
