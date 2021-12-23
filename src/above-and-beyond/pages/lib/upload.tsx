@@ -14,6 +14,8 @@ export enum UploadStates {
     FIREBASE_UPLOAD_END
 }
 
+export const PriviewImageFileTypes = [/image\/.*/]
+
 export const firebaseUploadAction = ({
                                          onSuccess,
                                          onProgress,
@@ -95,9 +97,12 @@ export const getBase64 = (file: Blob) => {
 
 export const Uploads: React.FC<{ baseRef: Reference }> = ({baseRef}) => {
 
-    const [state, dispatch] = useReducer(firebaseUploadReducer, {
+    const [{
+        PreviewComponent,
+        ...state
+    }, dispatch] = useReducer(firebaseUploadReducer, {
         previewVisible: false,
-        previewImage: '',
+        PreviewComponent: <></>,
         previewTitle: '',
         fileList: [],
     })
@@ -111,16 +116,25 @@ export const Uploads: React.FC<{ baseRef: Reference }> = ({baseRef}) => {
             file.preview = await getBase64(file.originFileObj);
         }
 
+        const url = file.url || file.preview
+        let PreviewComponent;
+        if (/image\/.*/.test(file.type)) {
+            PreviewComponent =
+                <img css={{width: '100%'}} alt={'preview image'} src={url}/>;
+        } else {
+            PreviewComponent = <a href={url} target="_blank">{file.name}</a>
+        }
+
         dispatch({
-            previewImage: file.url || file.preview,
+            PreviewComponent,
             previewVisible: true,
             previewTitle: file.name || file.url.substring(file.url.lastIndexOf('/') + 1),
         });
     };
 
-    const handleChange = ({fileList}: UploadChangeParam<UploadFile>) => {
+    const handleChange = (info: UploadChangeParam<UploadFile>) => {
         dispatch({
-            fileList,
+            fileList: info.fileList,
         })
     };
 
@@ -129,11 +143,14 @@ export const Uploads: React.FC<{ baseRef: Reference }> = ({baseRef}) => {
 
             const items = []
             for (const file of files.items) {
+                const meta = await file.getMetadata()
                 items.push({
                     url: await file.getDownloadURL(),
                     name: file.name,
                     status: 'done',
                     uid: file.fullPath,
+                    size: meta.size,
+                    type: meta.contentType
                 })
 
             }
@@ -173,9 +190,6 @@ export const Uploads: React.FC<{ baseRef: Reference }> = ({baseRef}) => {
                 </p>
                 <p className="ant-upload-text">Click or drag file to this area
                     to upload</p>
-                {/*<div>*/}
-                {/*    <PlusOutlined/>*/}
-                {/*</div>*/}
             </Upload.Dragger>
             <Modal
                 // css={
@@ -190,9 +204,7 @@ export const Uploads: React.FC<{ baseRef: Reference }> = ({baseRef}) => {
                 footer={null}
                 onCancel={handleCancel}
             >
-                {/*<iframe src={state.previewImage} width={'100%'} height={'100%'}/>*/}
-                <img alt="example" style={{width: '100%'}}
-                     src={state.previewImage}/>
+                {PreviewComponent}
             </Modal>
         </div>
     );
