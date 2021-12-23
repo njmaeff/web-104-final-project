@@ -1,5 +1,6 @@
 import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
+import {connectApp} from "./connect-app-compat";
 
 export const connectFirestore = ({
                                      apiKey = process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -7,13 +8,7 @@ export const connectFirestore = ({
                                      authDomain = process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
                                      emulatorHost = process.env.NEXT_PUBLIC_FIRESTORE_EMULATOR_HOST,
                                  } = {}) => {
-    if (!firebase.apps.length) {
-        firebase.initializeApp({
-            apiKey,
-            authDomain,
-            projectId,
-        });
-    }
+    connectApp({apiKey, projectId, authDomain});
 
     const firestore = firebase.firestore();
     if (!!emulatorHost) {

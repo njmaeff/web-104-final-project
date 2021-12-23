@@ -69,7 +69,7 @@ export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
                 <TextInput label={"Result"} {...fieldProps.result} />
             </FieldTable>
             <h3>Uploads</h3>
-            <Uploads/>
+            <Uploads paths={['rate', data.id]}/>
 
             <AbsoluteButton Control={({save}) => <Button
                 type="primary"
