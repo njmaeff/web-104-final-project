@@ -1,12 +1,12 @@
 import {Modal, Upload} from 'antd';
-import {PlusOutlined} from '@ant-design/icons';
+import {InboxOutlined} from '@ant-design/icons';
 import React, {useReducer} from "react";
 import {useAsync} from "./hooks/useAsync";
 import {UploadRequestOption} from "rc-upload/lib/interface";
 import type {Reference} from "@firebase/storage-types";
-import {useFileUpload} from "./storage/file";
 import {UploadChangeParam} from "antd/lib/upload";
 import {UploadFile} from 'antd/lib/upload/interface';
+import {css} from "@emotion/react";
 
 export enum UploadStates {
     FIREBASE_UPLOAD_PROGRESS,
@@ -84,7 +84,7 @@ export const firebaseUploadReducer = (state, action) => {
     }
 };
 
-function getBase64(file) {
+export const getBase64 = (file: Blob) => {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
@@ -93,9 +93,7 @@ function getBase64(file) {
     });
 }
 
-export const Uploads: React.FC<{ paths: string[] }> = ({paths}) => {
-
-    const baseRef = useFileUpload(...paths)
+export const Uploads: React.FC<{ baseRef: Reference }> = ({baseRef}) => {
 
     const [state, dispatch] = useReducer(firebaseUploadReducer, {
         previewVisible: false,
@@ -131,7 +129,6 @@ export const Uploads: React.FC<{ paths: string[] }> = ({paths}) => {
 
             const items = []
             for (const file of files.items) {
-
                 items.push({
                     url: await file.getDownloadURL(),
                     name: file.name,
@@ -145,23 +142,41 @@ export const Uploads: React.FC<{ paths: string[] }> = ({paths}) => {
     );
 
     return (
-        <>
-            <Upload
+        <div css={
+            theme => css`
+                .ant-upload-list-item {
+                    background-color: ${theme.colors.light} !important;
+                }
+            `
+        }>
+            <Upload.Dragger
+                css={
+                    theme => css`
+                        height: 8rem !important;
+                        background-color: ${theme.colors.light} !important;
+                    `
+                }
                 listType="picture"
-                customRequest={(e) => firebaseUploadAction({
-                    ...e,
+                customRequest={(request) => firebaseUploadAction({
+                    ...request,
                     baseRef
                 })(dispatch)}
                 fileList={state.fileList}
-                onPreview={(...args) => {
-                    handlePreview(...args)
-                }}
+                onPreview={handlePreview}
                 onChange={handleChange}
+                onRemove={async (file) => {
+                    return baseRef.child(file.name).delete()
+                }}
             >
-                <div>
-                    <PlusOutlined/>
-                </div>
-            </Upload>
+                <p className="ant-upload-drag-icon">
+                    <InboxOutlined/>
+                </p>
+                <p className="ant-upload-text">Click or drag file to this area
+                    to upload</p>
+                {/*<div>*/}
+                {/*    <PlusOutlined/>*/}
+                {/*</div>*/}
+            </Upload.Dragger>
             <Modal
                 // css={
                 //     css`
@@ -179,6 +194,6 @@ export const Uploads: React.FC<{ paths: string[] }> = ({paths}) => {
                 <img alt="example" style={{width: '100%'}}
                      src={state.previewImage}/>
             </Modal>
-        </>
+        </div>
     );
 }

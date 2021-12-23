@@ -16,12 +16,15 @@ import {useRouter} from "../routes";
 import {useRole} from "../employer/useRole";
 import {HorizontalRule} from "../lib/layout/divider";
 import {Uploads} from "../lib/upload";
+import {useFileUpload} from "../lib/storage/file";
 
 export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
     const router = useRouter();
 
     const {currentEmployerID} = useEmployer();
     const {currentRoleID} = useRole()
+    const storageRef = useFileUpload('rate', data.id)
+
     const [, {
         fieldProps,
         setEdit,
@@ -69,7 +72,7 @@ export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
                 <TextInput label={"Result"} {...fieldProps.result} />
             </FieldTable>
             <h3>Uploads</h3>
-            <Uploads paths={['rate', data.id]}/>
+            <Uploads baseRef={storageRef}/>
 
             <AbsoluteButton Control={({save}) => <Button
                 type="primary"
