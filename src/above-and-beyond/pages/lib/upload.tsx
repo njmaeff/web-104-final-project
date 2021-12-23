@@ -7,11 +7,22 @@ import type {Reference} from "@firebase/storage-types";
 import {UploadChangeParam} from "antd/lib/upload";
 import {UploadFile} from 'antd/lib/upload/interface';
 import {css} from "@emotion/react";
+import firebase from "firebase/compat/app";
+import TaskEvent = firebase.storage.TaskEvent;
 
 export enum UploadStates {
     FIREBASE_UPLOAD_PROGRESS,
     FIREBASE_UPLOAD_ERROR,
     FIREBASE_UPLOAD_END
+}
+
+export const getBase64 = (file: Blob) => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    });
 }
 
 export const firebaseUploadAction = ({
@@ -24,39 +35,71 @@ export const firebaseUploadAction = ({
 
     const storageRef = baseRef.child(file.name);
     const task = storageRef.put(file);
+    return new Promise((resolve, reject) => {
+        task.on(
+            TaskEvent.STATE_CHANGED,
+            {
+                // progress(snapshot) {
+                //     dispatch({type: UploadStates.FIREBASE_UPLOAD_PROGRESS});
+                //     onProgress({
+                //         percent: Math.floor(snapshot.bytesTransferred /
+                // snapshot.totalBytes) * 100 }, file); },
+                next(snapshot) {
+                    dispatch({type: UploadStates.FIREBASE_UPLOAD_PROGRESS});
+                    onProgress({
+                        percent: Math.floor(snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                    }, file);
+                },
+                error(err) {
+                    dispatch({
+                        type: UploadStates.FIREBASE_UPLOAD_ERROR,
+                        payload: err
+                    });
+                    onError(err, file);
+                },
 
-    task.on(
-        "state_changed",
+                complete() {
+                    const fileRef = task.snapshot.ref
 
-        function progress(snapshot) {
-            dispatch({type: UploadStates.FIREBASE_UPLOAD_PROGRESS});
-            onProgress({
-                percent: Math.floor(snapshot.bytesTransferred / snapshot.totalBytes) * 100
-            }, file);
-        },
+                    fileRef.getDownloadURL()
+                        .then(fileUrl => {
+                            dispatch({
+                                type: UploadStates.FIREBASE_UPLOAD_END,
+                                payload: {
+                                    fileUrl,
+                                    name: fileRef.name
+                                }
+                            })
+                            return onSuccess(fileUrl, file)
+                        }).then(resolve);
+                }
+            }
+        )
 
-        function error(err) {
-            dispatch({type: UploadStates.FIREBASE_UPLOAD_ERROR, payload: err});
-            onError(err, file);
-        },
-
-        function complete() {
-            const fileRef = task.snapshot.ref
-            fileRef.getDownloadURL().then(fileUrl => {
-                dispatch({
-                    type: UploadStates.FIREBASE_UPLOAD_END,
-                    payload: {
-                        fileUrl,
-                        name: fileRef.name
-                    }
-                })
-                onSuccess(fileUrl, file);
-            });
-        }
-    )
+    });
 };
 
-export const firebaseUploadReducer = (state, action) => {
+export interface FileType {
+    url?: string;
+    name: string;
+    status: string;
+    uid: string;
+    size: number;
+    type: string;
+    originFileObj?: File
+}
+
+export interface UploadState {
+    fileList: FileType[]
+    onProgress?: boolean
+    onComplete?: boolean
+    upLoadError?: Error
+    previewVisible: boolean
+    PreviewComponent: React.ComponentType
+    previewTitle: string
+}
+
+export const firebaseUploadReducer: React.Reducer<UploadState, any> = (state, action) => {
 
     switch (action.type) {
         case UploadStates.FIREBASE_UPLOAD_PROGRESS:
@@ -84,16 +127,11 @@ export const firebaseUploadReducer = (state, action) => {
     }
 };
 
-export const getBase64 = (file: Blob) => {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
-    });
-}
 
-export const Uploads: React.FC<{ storageRef: Reference }> = ({storageRef}) => {
+export const useUpload = ({
+                              storageRef,
+                              isManualSubmit
+                          }: { storageRef: Reference, isManualSubmit?: boolean }) => {
 
     const [{
         PreviewComponent,
@@ -103,7 +141,7 @@ export const Uploads: React.FC<{ storageRef: Reference }> = ({storageRef}) => {
         PreviewComponent: <></>,
         previewTitle: '',
         fileList: [],
-    })
+    } as any)
 
     const handleCancel = () => dispatch({
         previewVisible: false
@@ -136,6 +174,23 @@ export const Uploads: React.FC<{ storageRef: Reference }> = ({storageRef}) => {
         })
     };
 
+    const manualSubmit = async () => {
+        const noop = () => ({})
+        await Promise.all(
+            state.fileList
+                .filter((file) => {
+                    return !file.status
+                })
+                .map((file) => firebaseUploadAction({
+                    file: file.originFileObj ?? file,
+                    baseRef: storageRef,
+                    onError: noop,
+                    onProgress: noop,
+                    onSuccess: noop,
+                })(dispatch))
+        );
+    }
+
     useAsync(async () => {
             const files = await storageRef.listAll()
 
@@ -149,14 +204,14 @@ export const Uploads: React.FC<{ storageRef: Reference }> = ({storageRef}) => {
                     uid: file.fullPath,
                     size: meta.size,
                     type: meta.contentType
-                })
+                } as FileType)
 
             }
             dispatch({fileList: items})
         }, []
     );
 
-    return (
+    return [(
         <div css={
             theme => css`
                 .ant-upload-list-item {
@@ -176,9 +231,9 @@ export const Uploads: React.FC<{ storageRef: Reference }> = ({storageRef}) => {
                     ...request,
                     baseRef: storageRef
                 })(dispatch)}
-                beforeUpload={(file, FileList) => {
-
-                }}
+                beforeUpload={isManualSubmit ? (file, FileList) => {
+                    return false
+                } : null}
                 fileList={state.fileList}
                 onPreview={handlePreview}
                 onChange={handleChange}
@@ -201,5 +256,5 @@ export const Uploads: React.FC<{ storageRef: Reference }> = ({storageRef}) => {
                 {PreviewComponent}
             </Modal>
         </div>
-    );
+    ), {manualSubmit}] as const;
 }

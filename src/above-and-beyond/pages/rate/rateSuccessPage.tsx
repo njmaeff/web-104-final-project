@@ -15,7 +15,7 @@ import {EditOutlined, SaveOutlined} from "@ant-design/icons";
 import {useRouter} from "../routes";
 import {useRole} from "../employer/useRole";
 import {HorizontalRule} from "../lib/layout/divider";
-import {Uploads} from "../lib/upload";
+import {useUpload} from "../lib/upload";
 import {useFileUpload} from "../lib/storage/file";
 
 export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
@@ -50,6 +50,7 @@ export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
     });
 
     const storageRef = useFileUpload('rate', fieldProps.id.value)
+    const [Upload, uploadHook] = useUpload({storageRef, isManualSubmit: isEdit})
 
     useSubmitSuccess((values) => {
         return router["rate/view"].push({
@@ -73,15 +74,16 @@ export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
                 <TextInput label={"Result"} {...fieldProps.result} />
             </FormTable>
             <h3>Uploads</h3>
-            <Uploads storageRef={storageRef}/>
-
-
+            {Upload}
             <AbsoluteButton Control={({save}) => <Button
                 type="primary"
                 icon={isEdit ? <SaveOutlined/> : <EditOutlined/>}
                 onClick={async () => {
                     if (isEdit) {
-                        await save(() => onClickSave());
+                        await save(async () => {
+                            await onClickSave()
+                            await uploadHook.manualSubmit()
+                        });
                         setSubmitted();
                     } else {
                         setEdit()
