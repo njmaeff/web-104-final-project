@@ -11,12 +11,6 @@ import firebase from "firebase/compat/app";
 import {useFileUpload} from "./storage/file";
 import TaskEvent = firebase.storage.TaskEvent;
 
-export enum UploadStates {
-    FIREBASE_UPLOAD_PROGRESS,
-    FIREBASE_UPLOAD_ERROR,
-    FIREBASE_UPLOAD_END
-}
-
 export const getBase64 = (file: Blob) => {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -82,16 +76,20 @@ export interface UploadState {
     previewTitle: string
 }
 
-export const useStorageClient = (...paths) => {
+export class StorageClient {
+    static use(...paths) {
+        const storageRef = useFileUpload(...paths)
+        const [fileList, setFileList] = useState([])
 
-    const storageRef = useFileUpload(...paths)
-    const [fileList, setFileList] = useState([])
 
-    const manualSubmit = async (path = '') => {
+        return new StorageClient(storageRef, fileList, setFileList)
+    }
+
+    async manualSubmit(path = '') {
         const noop = () => ({})
-        const baseRef = storageRef.child(path)
+        const baseRef = this.storageRef.child(path)
         await Promise.all(
-            fileList
+            this.fileList
                 .filter((file) => {
                     return !file.status
                 })
@@ -105,13 +103,15 @@ export const useStorageClient = (...paths) => {
         );
     }
 
-    return {storageRef, fileList, manualSubmit, setFileList}
+    constructor(private storageRef, private fileList, private setFileList) {
+    }
 
-};
+}
+
 export const UploadContainer = ({
                                     isManualSubmit,
                                     storageClient,
-                                }: { isManualSubmit?: boolean, storageClient: ReturnType<typeof useStorageClient> }) => {
+                                }: { isManualSubmit?: boolean, storageClient: StorageClient }) => {
     const [{
         PreviewComponent,
         ...state

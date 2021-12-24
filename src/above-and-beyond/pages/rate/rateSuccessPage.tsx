@@ -15,7 +15,7 @@ import {EditOutlined, SaveOutlined} from "@ant-design/icons";
 import {useRouter} from "../routes";
 import {useRole} from "../employer/useRole";
 import {HorizontalRule} from "../lib/layout/divider";
-import {UploadContainer, useStorageClient} from "../lib/upload";
+import {StorageClient, UploadContainer} from "../lib/upload";
 
 export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
     const router = useRouter();
@@ -23,7 +23,7 @@ export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
     const {currentEmployerID} = useEmployer();
     const {currentRoleID} = useRole()
 
-    const storageClient = useStorageClient('rate', data?.id ?? "");
+    const storageClient = StorageClient.use('rate', data?.id ?? "");
 
     const [, {
         fieldProps,
