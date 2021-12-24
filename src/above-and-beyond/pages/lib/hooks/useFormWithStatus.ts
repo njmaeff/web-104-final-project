@@ -67,9 +67,9 @@ export const useFormWithStatus = <T = any>({
     for (const [key, value] of Object.entries(values)) {
         const props = form.getFieldProps(key);
         const meta = form.getFieldMeta(key);
-        if (isDateLike(value)) {
-            props.onChange = (date) => {
-                form.setFieldValue(key, date);
+        if (isDateLike(value) || Array.isArray(value)) {
+            props.onChange = (value) => {
+                form.setFieldValue(key, value);
             };
         }
 

@@ -1,10 +1,13 @@
-import React from "react";
+import React, {useState} from "react";
 import DatePicker from "react-datepicker"
-import {Form, Input} from "antd";
+import {Form, Input, Modal, Upload} from "antd";
 import {css} from "@emotion/react";
 import {ScrollBar} from "./styles/mixins";
 import {ParagraphSize, SectionSize, SubTitleSize} from "./styles/size";
 import {formatCurrency} from "./util/currency";
+import {getBase64, uploadFile, UploadState} from "./upload";
+import {InboxOutlined} from "@ant-design/icons";
+import {Reference} from "@firebase/storage-types";
 
 interface FieldProps<Value = any> {
     label: string;
@@ -191,6 +194,107 @@ export const FormInput: React.FC<{ name: string, onChange: any, value: any, erro
         value={value}
     />
 }
+
+export const FormUpload: React.FC<FieldProps & { storageRef: Reference, isManualSubmit }> = ({
+                                                                                                 label,
+                                                                                                 storageRef,
+                                                                                                 isManualSubmit,
+                                                                                                 readonly,
+                                                                                                 onChange,
+                                                                                                 onBlur,
+                                                                                                 value,
+                                                                                                 touched,
+                                                                                                 name,
+                                                                                                 error,
+                                                                                             }) => {
+    const [{
+        PreviewComponent,
+        ...state
+    }, updateState] = useState<UploadState>({
+        previewVisible: false,
+        PreviewComponent: <></>,
+        previewTitle: '',
+    } as any)
+
+    const mergeState = (values: Partial<UploadState>) => updateState((prev) => ({...prev, ...values}))
+
+    const handleCancel = () => mergeState({
+        previewVisible: false
+    });
+
+    const handlePreview = async file => {
+        if (!file.url && !file.preview) {
+            file.preview = await getBase64(file.originFileObj);
+        }
+
+        const url = file.url || file.preview
+        let PreviewComponent;
+        if (/image\/.*/.test(file.type)) {
+            PreviewComponent =
+                <img css={{width: '100%'}} alt={'preview image'}
+                     src={url}/>;
+        } else {
+            PreviewComponent = <a href={url} target="_blank">{file.name}</a>
+        }
+
+        mergeState({
+            PreviewComponent,
+            previewVisible: true,
+            previewTitle: file.name || file.url.substring(file.url.lastIndexOf('/') + 1),
+        });
+    };
+
+
+    return <FieldRowWrapper label={label}>
+        <div css={
+            theme => css`
+                .ant-upload-list-item {
+                    background-color: ${theme.colors.light} !important;
+                }
+            `
+        }>
+            <Upload.Dragger
+                css={
+                    theme => css`
+                        height: 8rem !important;
+                        background-color: ${theme.colors.light} !important;
+                    `
+                }
+                listType="picture"
+                customRequest={(request) => uploadFile({
+                    ...request,
+                    baseRef: storageRef
+                })}
+                beforeUpload={isManualSubmit ? (file, FileList) => {
+                    return false
+                } : null}
+                fileList={value}
+                onPreview={handlePreview}
+                onChange={({fileList}) => onChange(fileList)}
+                onRemove={async (file) => {
+                    return storageRef.child(file.name).delete()
+                }}
+            >
+                <p className="ant-upload-drag-icon">
+                    <InboxOutlined/>
+                </p>
+                <p className="ant-upload-text">Click or drag file to this
+                    area
+                    to upload</p>
+            </Upload.Dragger>
+            <Modal
+                visible={state.previewVisible}
+                title={state.previewTitle}
+                footer={null}
+                onCancel={handleCancel}
+            >
+                {PreviewComponent}
+            </Modal>
+        </div>
+
+    </FieldRowWrapper>
+};
+
 
 export const FieldInputRow: React.FC<FieldProps> = ({
                                                         label,

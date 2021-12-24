@@ -7,6 +7,7 @@ import {
     FieldDateTimePickerRow,
     FieldInputRow,
     FormTable,
+    FormUpload,
     TextInput
 } from "../lib/input";
 import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
@@ -15,7 +16,8 @@ import {EditOutlined, SaveOutlined} from "@ant-design/icons";
 import {useRouter} from "../routes";
 import {useRole} from "../employer/useRole";
 import {HorizontalRule} from "../lib/layout/divider";
-import {StorageClient, UploadContainer} from "../lib/upload";
+import {uploadFileList} from "../lib/upload";
+import {useFileUpload} from "../lib/storage/file";
 
 export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
     const router = useRouter();
@@ -23,20 +25,20 @@ export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
     const {currentEmployerID} = useEmployer();
     const {currentRoleID} = useRole()
 
-    const storageClient = StorageClient.use('rate', data?.id ?? "");
+    const storageRef = useFileUpload('rate')
 
-    const [, {
+    const [formik, {
         fieldProps,
         setEdit,
         isEdit,
         onClickSave,
         useSubmitSuccess,
         setSubmitted,
-    }] = useFormWithStatus<Partial<RateSuccess>>({
+    }] = useFormWithStatus<Partial<RateSuccess & { uploads }>>({
         initialValues: data,
         initialStatus: data ? PageStatus.VIEW : PageStatus.EDIT,
         validationSchema: rateSuccessSchema,
-        onSubmit: async (values, helpers) => {
+        onSubmit: async ({uploads, ...values}, helpers) => {
             const ref = await EmployerCollection
                 .fromID(currentEmployerID)
                 .roles
@@ -46,8 +48,9 @@ export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
                     ...values,
                     type: "success",
                 });
-            await storageClient.manualSubmit(
-                ref.id,
+            await uploadFileList(
+                storageRef.child(ref.id),
+                uploads,
             )
             helpers.setValues({...values, id: ref.id})
         },
@@ -73,10 +76,11 @@ export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
                 <HorizontalRule/>
                 <TextInput label={"Situation"} {...fieldProps.situation} />
                 <TextInput label={"Result"} {...fieldProps.result} />
+                <FormUpload label={"Uploads"}
+                            storageRef={storageRef.child(fieldProps.id?.value ?? "")}
+                            isManualSubmit={!data || isEdit}
+                            {...fieldProps.uploads}  />
             </FormTable>
-            <h3>Uploads</h3>
-            <UploadContainer isManualSubmit={!data || isEdit}
-                             storageClient={storageClient}/>
 
             <AbsoluteButton Control={({save}) => <Button
                 type="primary"

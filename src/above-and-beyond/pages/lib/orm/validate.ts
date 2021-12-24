@@ -61,6 +61,10 @@ export interface Review extends Doc {
 
 export type Rate = RateIssue | RateSuccess;
 
+export type Uploads = {
+    uploads?: any[]
+}
+
 const dateValidator = yup.mixed().transform((current) => ensureDate(current)).required()
 
 export const userSchema = makeSchema<User>({
@@ -103,18 +107,20 @@ export const reviewSchema = makeSchema<Review>({
     outcome: ""
 })
 
-export const rateSuccessSchema = makeSchema<Omit<RateSuccess, "type">>({
+export const rateSuccessSchema = makeSchema<Omit<RateSuccess, "type"> & Uploads>({
     date: dateValidator,
     result: yup.string().required(),
     situation: yup.string().required(),
     value: yup.number().required(),
+    uploads: yup.array().optional(),
 }, {
     date: new Date(),
     result: "",
     value: 0,
-    situation: ""
+    situation: "",
+    uploads: []
 })
-export const rateIssueSchema = makeSchema<Omit<RateIssue, "type">>({
+export const rateIssueSchema = makeSchema<Omit<RateIssue, "type"> & Uploads>({
     date: dateValidator,
     result: yup.string().required(),
     situation: yup.string().required(),

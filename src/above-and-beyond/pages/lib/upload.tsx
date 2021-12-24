@@ -1,14 +1,7 @@
-import {Modal, Upload} from 'antd';
-import {InboxOutlined} from '@ant-design/icons';
-import React, {useState} from "react";
-import {useAsync} from "./hooks/useAsync";
+import React from "react";
 import {UploadRequestOption} from "rc-upload/lib/interface";
 import type {Reference} from "@firebase/storage-types";
-import {UploadChangeParam} from "antd/lib/upload";
-import {UploadFile} from 'antd/lib/upload/interface';
-import {css} from "@emotion/react";
 import firebase from "firebase/compat/app";
-import {useFileUpload} from "./storage/file";
 import TaskEvent = firebase.storage.TaskEvent;
 
 export const getBase64 = (file: Blob) => {
@@ -76,149 +69,20 @@ export interface UploadState {
     previewTitle: string
 }
 
-export class StorageClient {
-    static use(...paths) {
-        const storageRef = useFileUpload(...paths)
-        const [fileList, setFileList] = useState([])
-
-
-        return new StorageClient(storageRef, fileList, setFileList)
-    }
-
-    async manualSubmit(path = '') {
-        const noop = () => ({})
-        const baseRef = this.storageRef.child(path)
-        await Promise.all(
-            this.fileList
-                .filter((file) => {
-                    return !file.status
-                })
-                .map((file) => uploadFile({
-                    file: file.originFileObj ?? file,
-                    baseRef,
-                    onError: noop,
-                    onProgress: noop,
-                    onSuccess: noop,
-                }))
-        );
-    }
-
-    constructor(private storageRef, private fileList, private setFileList) {
-    }
-
-}
-
-export const UploadContainer = ({
-                                    isManualSubmit,
-                                    storageClient,
-                                }: { isManualSubmit?: boolean, storageClient: StorageClient }) => {
-    const [{
-        PreviewComponent,
-        ...state
-    }, updateState] = useState<UploadState>({
-        previewVisible: false,
-        PreviewComponent: <></>,
-        previewTitle: '',
-    } as any)
-
-    const mergeState = (values: Partial<UploadState>) => updateState((prev) => ({...prev, ...values}))
-
-    const handleCancel = () => mergeState({
-        previewVisible: false
-    });
-
-    const handlePreview = async file => {
-        if (!file.url && !file.preview) {
-            file.preview = await getBase64(file.originFileObj);
-        }
-
-        const url = file.url || file.preview
-        let PreviewComponent;
-        if (/image\/.*/.test(file.type)) {
-            PreviewComponent =
-                <img css={{width: '100%'}} alt={'preview image'}
-                     src={url}/>;
-        } else {
-            PreviewComponent = <a href={url} target="_blank">{file.name}</a>
-        }
-
-        mergeState({
-            PreviewComponent,
-            previewVisible: true,
-            previewTitle: file.name || file.url.substring(file.url.lastIndexOf('/') + 1),
-        });
-    };
-
-    const handleChange = (info: UploadChangeParam<UploadFile>) => {
-        storageClient.setFileList(info.fileList)
-    };
-
-    useAsync(async () => {
-            const files = await storageClient.storageRef.listAll()
-
-            const items = []
-            for (const file of files.items) {
-                const meta = await file.getMetadata()
-                items.push({
-                    url: await file.getDownloadURL(),
-                    name: file.name,
-                    status: 'done',
-                    uid: file.fullPath,
-                    size: meta.size,
-                    type: meta.contentType
-                } as FileType)
-
-            }
-            storageClient.setFileList(items)
-        }, []
+export const uploadFileList = (storageRef, fileList) => {
+    const noop = () => ({})
+    return Promise.all(
+        fileList
+            .filter((file) => {
+                return !file.status
+            })
+            .map((file) => uploadFile({
+                file: file.originFileObj ?? file,
+                baseRef: storageRef,
+                onError: noop,
+                onProgress: noop,
+                onSuccess: noop,
+            }))
     );
+};
 
-
-    return (
-        <div css={
-            theme => css`
-                .ant-upload-list-item {
-                    background-color: ${theme.colors.light} !important;
-                }
-            `
-        }>
-            <Upload.Dragger
-                css={
-                    theme => css`
-                        height: 8rem !important;
-                        background-color: ${theme.colors.light} !important;
-                    `
-                }
-                listType="picture"
-                customRequest={(request) => uploadFile({
-                    ...request,
-                    baseRef: storageClient.storageRef
-                })}
-                beforeUpload={isManualSubmit ? (file, FileList) => {
-                    return false
-                } : null}
-                fileList={storageClient.fileList}
-                onPreview={handlePreview}
-                onChange={handleChange}
-                onRemove={async (file) => {
-                    return storageClient.storageRef.child(file.name).delete()
-                }}
-            >
-                <p className="ant-upload-drag-icon">
-                    <InboxOutlined/>
-                </p>
-                <p className="ant-upload-text">Click or drag file to this
-                    area
-                    to upload</p>
-            </Upload.Dragger>
-            <Modal
-                visible={state.previewVisible}
-                title={state.previewTitle}
-                footer={null}
-                onCancel={handleCancel}
-            >
-                {PreviewComponent}
-            </Modal>
-        </div>
-    )
-}
