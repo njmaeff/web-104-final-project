@@ -39,11 +39,6 @@ export const firebaseUploadAction = ({
         task.on(
             TaskEvent.STATE_CHANGED,
             {
-                // progress(snapshot) {
-                //     dispatch({type: UploadStates.FIREBASE_UPLOAD_PROGRESS});
-                //     onProgress({
-                //         percent: Math.floor(snapshot.bytesTransferred /
-                // snapshot.totalBytes) * 100 }, file); },
                 next(snapshot) {
                     dispatch({type: UploadStates.FIREBASE_UPLOAD_PROGRESS});
                     onProgress({
@@ -127,134 +122,156 @@ export const firebaseUploadReducer: React.Reducer<UploadState, any> = (state, ac
     }
 };
 
+export const useUpload = ({storageRef}: { storageRef: Reference }) => {
 
-export const useUpload = ({
-                              storageRef,
-                              isManualSubmit
-                          }: { storageRef: Reference, isManualSubmit?: boolean }) => {
-
-    const [{
-        PreviewComponent,
-        ...state
-    }, dispatch] = useReducer(firebaseUploadReducer, {
-        previewVisible: false,
-        PreviewComponent: <></>,
-        previewTitle: '',
-        fileList: [],
-    } as any)
-
-    const handleCancel = () => dispatch({
-        previewVisible: false
-    });
-
-    const handlePreview = async file => {
-        if (!file.url && !file.preview) {
-            file.preview = await getBase64(file.originFileObj);
-        }
-
-        const url = file.url || file.preview
-        let PreviewComponent;
-        if (/image\/.*/.test(file.type)) {
-            PreviewComponent =
-                <img css={{width: '100%'}} alt={'preview image'} src={url}/>;
-        } else {
-            PreviewComponent = <a href={url} target="_blank">{file.name}</a>
-        }
-
-        dispatch({
+        const [{
             PreviewComponent,
-            previewVisible: true,
-            previewTitle: file.name || file.url.substring(file.url.lastIndexOf('/') + 1),
+            ...state
+        }, dispatch] = useReducer(firebaseUploadReducer, {
+            previewVisible: false,
+            PreviewComponent: <></>,
+            previewTitle: '',
+            fileList: [],
+        } as any)
+
+        const handleCancel = () => dispatch({
+            previewVisible: false
         });
-    };
 
-    const handleChange = (info: UploadChangeParam<UploadFile>) => {
-        dispatch({
-            fileList: info.fileList,
-        })
-    };
-
-    const manualSubmit = async () => {
-        const noop = () => ({})
-        await Promise.all(
-            state.fileList
-                .filter((file) => {
-                    return !file.status
-                })
-                .map((file) => firebaseUploadAction({
-                    file: file.originFileObj ?? file,
-                    baseRef: storageRef,
-                    onError: noop,
-                    onProgress: noop,
-                    onSuccess: noop,
-                })(dispatch))
-        );
-    }
-
-    useAsync(async () => {
-            const files = await storageRef.listAll()
-
-            const items = []
-            for (const file of files.items) {
-                const meta = await file.getMetadata()
-                items.push({
-                    url: await file.getDownloadURL(),
-                    name: file.name,
-                    status: 'done',
-                    uid: file.fullPath,
-                    size: meta.size,
-                    type: meta.contentType
-                } as FileType)
-
+        const handlePreview = async file => {
+            if (!file.url && !file.preview) {
+                file.preview = await getBase64(file.originFileObj);
             }
-            dispatch({fileList: items})
-        }, []
-    );
 
-    return [(
-        <div css={
-            theme => css`
-                .ant-upload-list-item {
+            const url = file.url || file.preview
+            let PreviewComponent;
+            if (/image\/.*/.test(file.type)) {
+                PreviewComponent =
+                    <img css={{width: '100%'}} alt={'preview image'}
+                         src={url}/>;
+            } else {
+                PreviewComponent = <a href={url} target="_blank">{file.name}</a>
+            }
+
+            dispatch({
+                PreviewComponent,
+                previewVisible: true,
+                previewTitle: file.name || file.url.substring(file.url.lastIndexOf('/') + 1),
+            });
+        };
+
+        const handleChange = (info: UploadChangeParam<UploadFile>) => {
+            dispatch({
+                fileList: info.fileList,
+            })
+        };
+
+        const manualSubmit = async (path = '') => {
+            const noop = () => ({})
+            const baseRef = storageRef.child(path)
+            await Promise.all(
+                state.fileList
+                    .filter((file) => {
+                        return !file.status
+                    })
+                    .map((file) => firebaseUploadAction({
+                        file: file.originFileObj ?? file,
+                        baseRef,
+                        onError: noop,
+                        onProgress: noop,
+                        onSuccess: noop,
+                    })(dispatch))
+            );
+        }
+
+        useAsync(async () => {
+                const files = await storageRef.listAll()
+
+                const items = []
+                for (const file of files.items) {
+                    const meta = await file.getMetadata()
+                    items.push({
+                        url: await file.getDownloadURL(),
+                        name: file.name,
+                        status: 'done',
+                        uid: file.fullPath,
+                        size: meta.size,
+                        type: meta.contentType
+                    } as FileType)
+
+                }
+                dispatch({fileList: items})
+            }, []
+        );
+
+        return {
+            manualSubmit,
+            handleChange,
+            handlePreview,
+            handleCancel,
+            PreviewComponent,
+            storageRef,
+            dispatch,
+            ...state,
+        } as const;
+    }
+;
+
+export const UploadContainer = ({
+                                    isManualSubmit,
+                                    handleChange,
+                                    handlePreview,
+                                    storageRef,
+                                    dispatch,
+                                    handleCancel,
+                                    previewVisible,
+                                    previewTitle,
+                                    fileList,
+                                    PreviewComponent
+                                }) => (
+    <div css={
+        theme => css`
+            .ant-upload-list-item {
+                background-color: ${theme.colors.light} !important;
+            }
+        `
+    }>
+        <Upload.Dragger
+            css={
+                theme => css`
+                    height: 8rem !important;
                     background-color: ${theme.colors.light} !important;
-                }
-            `
-        }>
-            <Upload.Dragger
-                css={
-                    theme => css`
-                        height: 8rem !important;
-                        background-color: ${theme.colors.light} !important;
-                    `
-                }
-                listType="picture"
-                customRequest={(request) => firebaseUploadAction({
-                    ...request,
-                    baseRef: storageRef
-                })(dispatch)}
-                beforeUpload={isManualSubmit ? (file, FileList) => {
-                    return false
-                } : null}
-                fileList={state.fileList}
-                onPreview={handlePreview}
-                onChange={handleChange}
-                onRemove={async (file) => {
-                    return storageRef.child(file.name).delete()
-                }}
-            >
-                <p className="ant-upload-drag-icon">
-                    <InboxOutlined/>
-                </p>
-                <p className="ant-upload-text">Click or drag file to this area
-                    to upload</p>
-            </Upload.Dragger>
-            <Modal
-                visible={state.previewVisible}
-                title={state.previewTitle}
-                footer={null}
-                onCancel={handleCancel}
-            >
-                {PreviewComponent}
-            </Modal>
-        </div>
-    ), {manualSubmit}] as const;
-}
+                `
+            }
+            listType="picture"
+            customRequest={(request) => firebaseUploadAction({
+                ...request,
+                baseRef: storageRef
+            })(dispatch)}
+            beforeUpload={isManualSubmit ? (file, FileList) => {
+                return false
+            } : null}
+            fileList={fileList}
+            onPreview={handlePreview}
+            onChange={handleChange}
+            onRemove={async (file) => {
+                return storageRef.child(file.name).delete()
+            }}
+        >
+            <p className="ant-upload-drag-icon">
+                <InboxOutlined/>
+            </p>
+            <p className="ant-upload-text">Click or drag file to this
+                area
+                to upload</p>
+        </Upload.Dragger>
+        <Modal
+            visible={previewVisible}
+            title={previewTitle}
+            footer={null}
+            onCancel={handleCancel}
+        >
+            {PreviewComponent}
+        </Modal>
+    </div>
+)

@@ -15,7 +15,7 @@ import {EditOutlined, SaveOutlined} from "@ant-design/icons";
 import {useRouter} from "../routes";
 import {useRole} from "../employer/useRole";
 import {HorizontalRule} from "../lib/layout/divider";
-import {useUpload} from "../lib/upload";
+import {UploadContainer, useUpload} from "../lib/upload";
 import {useFileUpload} from "../lib/storage/file";
 
 export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
@@ -23,6 +23,10 @@ export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
 
     const {currentEmployerID} = useEmployer();
     const {currentRoleID} = useRole()
+
+    const upload = useUpload({
+        storageRef: useFileUpload('rate', data?.id ?? "")
+    })
 
     const [, {
         fieldProps,
@@ -45,12 +49,12 @@ export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
                     ...values,
                     type: "success",
                 });
+            await upload.manualSubmit(
+                ref.id,
+            )
             helpers.setValues({...values, id: ref.id})
         },
     });
-
-    const storageRef = useFileUpload('rate', fieldProps.id.value)
-    const [Upload, uploadHook] = useUpload({storageRef, isManualSubmit: isEdit})
 
     useSubmitSuccess((values) => {
         return router["rate/view"].push({
@@ -58,7 +62,7 @@ export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
                 id: values.id,
             }
         })
-    })
+    });
 
     return (
         <>
@@ -74,7 +78,8 @@ export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
                 <TextInput label={"Result"} {...fieldProps.result} />
             </FormTable>
             <h3>Uploads</h3>
-            {Upload}
+            <UploadContainer isManualSubmit={!data || isEdit} {...upload} />
+
             <AbsoluteButton Control={({save}) => <Button
                 type="primary"
                 icon={isEdit ? <SaveOutlined/> : <EditOutlined/>}
@@ -82,7 +87,7 @@ export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
                     if (isEdit) {
                         await save(async () => {
                             await onClickSave()
-                            await uploadHook.manualSubmit()
+
                         });
                         setSubmitted();
                     } else {
