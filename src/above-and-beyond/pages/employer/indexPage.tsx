@@ -34,7 +34,7 @@ export const MainPageForm: React.FC = () => {
 
     const employerAPI = getEmployer();
 
-    const [mainProps, [employerFormik, employerForm], [roleFormik, roleForm]] =
+    const [mainProps, [, employerForm], [roleFormik, roleForm]] =
         mergeForms(
             useFormWithStatus<Partial<Employer>>({
                 initialValues: currentEmployer.result,
@@ -63,10 +63,6 @@ export const MainPageForm: React.FC = () => {
 
     currentRole.onSuccess((result) => {
         roleFormik.resetForm({values: result});
-    })
-
-    currentEmployer.onSuccess((result) => {
-        employerFormik.resetForm({values: result})
     })
 
     return <>

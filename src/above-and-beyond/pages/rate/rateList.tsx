@@ -23,8 +23,8 @@ export const RateListHits: React.FC<{ hits }> = ({hits}) => {
         return <List.Item
             key={item.id}
             css={
-                theme => css`
-                    li {
+                css`
+                    li, p {
                         margin: 0;
                     }
                 `
@@ -41,7 +41,7 @@ export const RateListHits: React.FC<{ hits }> = ({hits}) => {
                         <ExclamationCircleOutlined/>
                 }
                 title={
-                    new Timestamp(item.date, 0).toDate().toLocaleString()
+                    <p>{new Timestamp(item.date, 0).toDate().toLocaleString()}</p>
                 }
                 description={
                     <ul>
