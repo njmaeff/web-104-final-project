@@ -6,10 +6,13 @@ import {useRouter} from "../routes";
 import {EmployerCollection} from "../lib/orm/docs";
 import {Review} from "../lib/orm/validate";
 import {Loader} from "../lib/loader";
+import {useFileUpload} from "../lib/storage/file";
+import {useAsync} from "../lib/hooks/useAsync";
+import {FileType} from "../lib/upload";
 
 export default () => {
     return <MenuTemplate
-        heading={'View Rating'}
+        heading={'Review'}
         Main={() => {
             const {currentEmployerID} = useEmployer()
             const {currentRoleID} = useRole()
@@ -20,12 +23,38 @@ export default () => {
                 router.review.push()
             }
 
-            const {result} = EmployerCollection
-                .fromID(currentEmployerID)
-                .roles
-                .withID(currentRoleID)
-                .fromSubCollection<Review>('review')
-                .useRead(id)
+            const storageRef = useFileUpload('review', id)
+
+            const {result} = useAsync(async () => {
+                    const files = await storageRef.listAll();
+                    const items = []
+                    for (const file of files.items) {
+                        const meta = await file.getMetadata()
+                        items.push({
+                            url: await file.getDownloadURL(),
+                            name: file.name,
+                            status: 'done',
+                            uid: file.fullPath,
+                            size: meta.size,
+                            type: meta.contentType
+                        } as FileType)
+                    }
+
+                    const record = await EmployerCollection
+                        .fromID(currentEmployerID)
+                        .roles
+                        .withID(currentRoleID)
+                        .fromSubCollection<Review>('review')
+                        .read(id)
+
+                    return {
+                        ...record,
+                        uploads: items
+                    }
+                }, []
+            );
+
+
 
             return (!result ? <Loader/> :
                     <ReviewForm data={result}/>

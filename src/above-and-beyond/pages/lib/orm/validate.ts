@@ -95,16 +95,18 @@ export const roleSchema = makeSchema<Role>({
     startDate: new Date()
 })
 
-export const reviewSchema = makeSchema<Review>({
+export const reviewSchema = makeSchema<Review & Uploads>({
     date: dateValidator,
     adjustedSalary: yup.number().required(),
     manager: yup.string().required(),
     outcome: yup.string().required(),
+    uploads: yup.array().optional(),
 }, {
     date: new Date(),
     adjustedSalary: 0,
     manager: "",
-    outcome: ""
+    outcome: "",
+    uploads: [],
 })
 
 export const rateSuccessSchema = makeSchema<Omit<RateSuccess, "type"> & Uploads>({
@@ -126,10 +128,12 @@ export const rateIssueSchema = makeSchema<Omit<RateIssue, "type"> & Uploads>({
     situation: yup.string().required(),
     correction: yup.string().required(),
     value: yup.number().required(),
+    uploads: yup.array().optional(),
 }, {
     date: new Date(),
     result: "",
     value: 0,
     correction: "",
-    situation: ""
+    situation: "",
+    uploads: []
 })

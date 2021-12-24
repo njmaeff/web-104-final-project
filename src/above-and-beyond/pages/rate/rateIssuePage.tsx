@@ -1,27 +1,31 @@
 import React from "react";
 import {useEmployer} from "../employer/useEmployer";
 import {PageStatus, useFormWithStatus} from "../lib/hooks/useFormWithStatus";
-import {RateIssue, rateIssueSchema} from "../lib/orm/validate";
+import {RateIssue, rateIssueSchema, Uploads} from "../lib/orm/validate";
 import {EmployerCollection} from "../lib/orm/docs";
 import {
     FieldDateTimePickerRow,
     FieldInputRow,
     FormTable,
+    FormUpload,
     TextInput
 } from "../lib/input";
 import {useRole} from "../employer/useRole";
 import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
-import {Button, Divider} from "antd";
+import {Button} from "antd";
 import {EditOutlined, SaveOutlined} from "@ant-design/icons";
-import {css} from "@emotion/react";
 import {useRouter} from "../routes";
 import {HorizontalRule} from "../lib/layout/divider";
+import {useFileUpload} from "../lib/storage/file";
+import {uploadFileList} from "../lib/upload";
 
 export const RateIssuePage: React.FC<{ data?: RateIssue }> = ({data}) => {
 
     const router = useRouter();
     const {currentEmployerID} = useEmployer();
     const {currentRoleID} = useRole()
+
+    const storageRef = useFileUpload('rate')
 
     const [, {
         fieldProps,
@@ -30,11 +34,11 @@ export const RateIssuePage: React.FC<{ data?: RateIssue }> = ({data}) => {
         setEdit,
         setSubmitted,
         useSubmitSuccess
-    }] = useFormWithStatus<Partial<RateIssue>>({
+    }] = useFormWithStatus<Partial<RateIssue & Uploads>>({
         initialValues: data,
         initialStatus: data ? PageStatus.VIEW : PageStatus.EDIT,
         validationSchema: rateIssueSchema,
-        onSubmit: async (values, helpers) => {
+        onSubmit: async ({uploads, ...values}, helpers) => {
             const ref = await EmployerCollection
                 .fromID(currentEmployerID)
                 .roles
@@ -45,6 +49,10 @@ export const RateIssuePage: React.FC<{ data?: RateIssue }> = ({data}) => {
                     type: "issue",
                 });
 
+            await uploadFileList(
+                storageRef.child(ref.id),
+                uploads,
+            )
             helpers.setValues({...values, id: ref.id})
         },
     });
@@ -73,6 +81,10 @@ export const RateIssuePage: React.FC<{ data?: RateIssue }> = ({data}) => {
                 <TextInput label={"Result"} {...fieldProps.result} />
                 <TextInput
                     label={"Correction"} {...fieldProps.correction} />
+                <FormUpload label={"Uploads"}
+                            storageRef={storageRef.child(fieldProps.id?.value ?? "")}
+                            isManualSubmit={!data || isEdit}
+                            {...fieldProps.uploads}  />
             </FormTable>
 
             <AbsoluteButton Control={({save}) => <Button

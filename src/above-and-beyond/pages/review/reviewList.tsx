@@ -18,9 +18,9 @@ export const ReviewListHits: React.FC<{ hits }> = ({hits}) => {
     return hits.map((item: Review) => {
         return <List.Item
             key={item.id}
-            css={theme =>
+            css={
                 css`
-                    li {
+                    li, p {
                         margin: 0
                     }
                 `
@@ -36,7 +36,7 @@ export const ReviewListHits: React.FC<{ hits }> = ({hits}) => {
                     <StarOutlined/>
                 }
                 title={
-                    new Timestamp(item.date, 0).toDate().toLocaleString()
+                    <p>{new Timestamp(item.date, 0).toDate().toLocaleString()}</p>
                 }
                 description={
                     <ul>

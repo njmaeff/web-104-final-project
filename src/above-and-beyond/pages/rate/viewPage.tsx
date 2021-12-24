@@ -10,10 +10,13 @@ import {Rate} from "../lib/orm/validate";
 import {useAsync} from "../lib/hooks/useAsync";
 import {FileType} from "../lib/upload";
 import {useFileUpload} from "../lib/storage/file";
+import capitalize from "lodash/capitalize";
+import {css} from "@emotion/react";
+import {SectionSize} from "../lib/styles/size";
 
 export const NewPage = () => {
     return <MenuTemplate
-        heading={'View Rating'}
+        heading={'Rating'}
         Main={() => {
             const {currentEmployerID} = useEmployer()
             const {currentRoleID} = useRole()
@@ -56,9 +59,20 @@ export const NewPage = () => {
             );
 
             return (!result ? <Loader/> :
-                    result.type === 'issue' ?
-                        <RateIssuePage data={result}/> :
-                        <RateSuccessPage data={result}/>
+                    <>
+                        <h2 css={
+                            theme => css`
+                                ${SectionSize};
+                                margin-top: 0;
+                                color: ${theme.colors.gray};
+                            `
+                        }>{capitalize(result.type)}</h2>
+                        {
+                            result.type === 'issue' ?
+                                <RateIssuePage data={result}/> :
+                                <RateSuccessPage data={result}/>
+                        }
+                    </>
             )
 
         }}

@@ -372,7 +372,6 @@ export const FieldDateTimePickerRow: React.FC<FieldProps<Date>> = ({
                 <p>{value.toLocaleString()}</p>
             ) : (
                 <DatePicker
-                    className={error ? "border-highlight__primary" : ""}
                     name={name}
                     readOnly={readonly}
                     selected={value}

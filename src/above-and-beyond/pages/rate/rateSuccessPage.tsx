@@ -1,7 +1,7 @@
 import React from "react";
 import {useEmployer} from "../employer/useEmployer";
 import {PageStatus, useFormWithStatus} from "../lib/hooks/useFormWithStatus";
-import {RateSuccess, rateSuccessSchema} from "../lib/orm/validate";
+import {RateSuccess, rateSuccessSchema, Uploads} from "../lib/orm/validate";
 import {EmployerCollection} from "../lib/orm/docs";
 import {
     FieldDateTimePickerRow,
@@ -27,14 +27,14 @@ export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
 
     const storageRef = useFileUpload('rate')
 
-    const [formik, {
+    const [, {
         fieldProps,
         setEdit,
         isEdit,
         onClickSave,
         useSubmitSuccess,
         setSubmitted,
-    }] = useFormWithStatus<Partial<RateSuccess & { uploads }>>({
+    }] = useFormWithStatus<Partial<RateSuccess & Uploads>>({
         initialValues: data,
         initialStatus: data ? PageStatus.VIEW : PageStatus.EDIT,
         validationSchema: rateSuccessSchema,

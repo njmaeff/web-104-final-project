@@ -18,7 +18,7 @@ import {MenuTemplate} from "../lib/menuTemplate";
 import {Button} from "antd";
 import {EditOutlined, SaveOutlined} from "@ant-design/icons";
 
-export const MainPageForm = () => {
+export const MainPageForm: React.FC = () => {
     const {
         currentEmployerID,
         updateEmployer,
@@ -115,15 +115,14 @@ export const MainPageForm = () => {
         <AbsoluteButton Control={({save}) => <Button
             type="primary"
             icon={mainProps.isEdit ? <SaveOutlined/> : <EditOutlined/>}
-            // loading={loadings[2]}
             onClick={async (e) => {
-                if (!mainProps.isEdit) {
-                    mainProps.setEdit()
-                } else if (mainProps.isEdit && mainProps.isValid) {
+                if (mainProps.isEdit) {
                     await save(() => {
                         return mainProps.onClickSave(e)
                     })
                     mainProps.setView();
+                } else {
+                    mainProps.setEdit()
                 }
 
             }}
@@ -138,8 +137,16 @@ export const MainPage = () => {
     return (
         <MenuTemplate
             heading={"Employer"}
-            HeaderDropDown={EmployerDropDown}
-            Main={MainPageForm}
+            HeaderDropDown={() => {
+                const {isLoading} = useEmployer()
+                return !isLoading && <EmployerDropDown/>
+            }}
+            Main={() => {
+                const {isLoading} = useEmployer()
+
+                return !isLoading &&
+                    <MainPageForm/>
+            }}
         />
     );
 };

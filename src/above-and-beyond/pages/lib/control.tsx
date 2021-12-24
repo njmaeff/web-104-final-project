@@ -26,6 +26,7 @@ export const DropDownMenu: React.FC<{ value }> = ({children, value}) => {
                 display: block;
                 border: 2px solid ${theme.colors.grayLight};
                 padding-left: 0.5rem;
+                color: ${theme.colors.dark};
                 div {
                     width: 100%;
                     display: flex;

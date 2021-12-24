@@ -16,6 +16,7 @@ export type EmployerContext = {
     isUnsetEmployer: boolean;
     currentEmployer: UseAsyncReturn<Employer>
     allEmployers: UseAsyncReturn<Employer[]>
+    isLoading: boolean
 } & EmployerLocalState
 
 export const DEFAULT_LOCAL: EmployerLocalState = {
@@ -74,6 +75,7 @@ export const EmployerProvider: React.FC = ({children}) => {
     }, [currentEmployerID])
 
     const isUnsetEmployer = !!providerState.currentEmployerID
+    const isLoading = currentEmployer.isInProgress || allEmployers.isInProgress
 
     return <EmployerContext.Provider
         value={{
@@ -82,7 +84,8 @@ export const EmployerProvider: React.FC = ({children}) => {
             newEmployer,
             allEmployers,
             currentEmployer,
-            isUnsetEmployer
+            isUnsetEmployer,
+            isLoading
         }}>{children}
     </EmployerContext.Provider>
 };
