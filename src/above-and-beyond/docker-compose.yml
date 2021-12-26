@@ -1,6 +1,27 @@
 version: "3.7"
 
 services:
+
+#  gateway:
+#    image: nginx
+#    volumes:
+#      - ./.docker/config/gateway.conf:/etc/nginx/conf.d/default.conf
+#    depends_on:
+#      - ui
+#      - search-engine
+#      - firebase
+
+  ui:
+    image: node:16
+    command: yarn dev --hostname=0.0.0.0
+    user: node
+    working_dir: /workspace
+    ports:
+      - "9229:9229"
+    volumes:
+      - ./:/workspace
+      - ./.env.remote:/workspace/.env
+
   firebase:
     build:
       dockerfile: .docker/firebase.Dockerfile
