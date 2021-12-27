@@ -1,4 +1,4 @@
-import {MenuTemplate} from "../lib/menuTemplate";
+import {MenuLayout} from "../lib/layout/menuLayout";
 import {RateSuccessPage} from "./rateSuccessPage";
 import {RateIssuePage} from "./rateIssuePage";
 import {useRouter} from "../routes";
@@ -15,7 +15,7 @@ import {css} from "@emotion/react";
 import {SectionSize} from "../lib/styles/size";
 
 export const NewPage = () => {
-    return <MenuTemplate
+    return <MenuLayout
         heading={'Rating'}
         Main={() => {
             const {currentEmployerID} = useEmployer()

@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from "react";
+import React, {useContext} from "react";
 import {auth} from "../lib/firebase/connect-api";
 import {useLocalStorage} from "./useLocalStorage";
 import {getEmployer} from "../lib/orm/docs";
@@ -45,14 +45,14 @@ export const EmployerProvider: React.FC = ({children}) => {
 
     const currentEmployer = useAsync(async () => {
         if (currentEmployerID) {
-            return await getEmployer().read(currentEmployerID);
+            return getEmployer().read(currentEmployerID);
+        } else {
+            const result = await getEmployer().readFromCollection()
+            if (result.length > 0) {
+                updateEmployer(result[0].id)
+            }
         }
-    }, [currentEmployerID], {
-        initialState: {
-            name: "",
-            location: ""
-        }
-    });
+    }, [currentEmployerID],);
 
     const allEmployers = useAsync(
         () => {
@@ -61,18 +61,6 @@ export const EmployerProvider: React.FC = ({children}) => {
             initialState: []
         }
     )
-
-    useEffect(() => {
-        if (!currentEmployerID) {
-            (async () => {
-                const result = await getEmployer().readFromCollection()
-                if (result.length > 0) {
-                    updateEmployer(result[0].id)
-                }
-
-            })();
-        }
-    }, [currentEmployerID])
 
     const isUnsetEmployer = !!providerState.currentEmployerID
     const isLoading = currentEmployer.isInProgress || allEmployers.isInProgress

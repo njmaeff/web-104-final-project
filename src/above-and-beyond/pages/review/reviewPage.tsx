@@ -9,7 +9,7 @@ import {
 import {PageStatus, useFormWithStatus} from "../lib/hooks/useFormWithStatus";
 import {EmployerCollection} from "../lib/orm/docs";
 import {Review, reviewSchema, Uploads} from "../lib/orm/validate";
-import {MenuTemplate} from "../lib/menuTemplate";
+import {MenuLayout} from "../lib/layout/menuLayout";
 import {useRole} from "../employer/useRole";
 import {useEmployer} from "../employer/useEmployer";
 import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
@@ -98,7 +98,7 @@ export const ReviewForm: React.FC<{ data?: Review }> = ({data}) => {
 export const ReviewPage: React.FC = () => {
 
     return (
-        <MenuTemplate
+        <MenuLayout
             heading={"Review"}
             Main={ReviewForm}
         />

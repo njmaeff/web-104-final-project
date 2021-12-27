@@ -1,10 +1,9 @@
 import {EmployerCollection, getEmployer} from "../lib/orm/docs";
-import {mergeForms, useFormWithStatus} from "../lib/hooks/useFormWithStatus";
+import {useFormWithStatus} from "../lib/hooks/useFormWithStatus";
 import {Employer, employerSchema, Role, roleSchema} from "../lib/orm/validate";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {
     FieldDatePickerRow,
-    FieldDropDownInput,
     FieldInputRow,
     FormTable,
     TextInput
@@ -12,139 +11,194 @@ import {
 import {EmployerDropDown, RoleDropDown} from "../lib/control";
 import {useEmployer} from "./useEmployer";
 import {useRole} from "./useRole";
-import {useAsync} from "../lib/hooks/useAsync";
 import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
-import {MenuTemplate} from "../lib/menuTemplate";
-import {Button} from "antd";
+import {MenuLayout} from "../lib/layout/menuLayout";
+import {Button, Tabs} from "antd";
 import {EditOutlined, SaveOutlined} from "@ant-design/icons";
+import {TabPane} from "rc-tabs";
+import {WithEnvironment} from "../lib/withEnvironment";
+import {Loader} from "../lib/loader";
+import {css} from "@emotion/react";
+import {ScrollBar} from "../lib/styles/mixins";
+import {useRouter} from "../routes";
 
-export const MainPageForm: React.FC = () => {
-    const {
-        currentEmployerID,
-        updateEmployer,
-        currentEmployer
-    } = useEmployer()
-    const {currentRoleID, updateRole} = useRole();
 
-    const currentRole = useAsync<Role>(async () => {
-        if (currentEmployerID) {
-            return await EmployerCollection.fromID(currentEmployerID).roles.read(currentRoleID);
-        }
-    }, [currentRoleID]);
+export const EmployerForm = () => {
 
+    const {currentEmployer, updateEmployer,} = useEmployer();
     const employerAPI = getEmployer();
 
-    const [mainProps, [, employerForm], [roleFormik, roleForm]] =
-        mergeForms(
-            useFormWithStatus<Partial<Employer>>({
-                initialValues: currentEmployer.result,
-                validationSchema: employerSchema,
-                onSubmit: async (values, helpers) => {
-                    employerForm.setView();
-                    helpers.setValues(values)
-                    const ref = await employerAPI.write(values);
-                    updateEmployer(ref.id)
-                },
-            }),
-            useFormWithStatus<Partial<Role>>({
-                initialValues: currentRole.result,
-                validationSchema: roleSchema,
-                onSubmit: async (values, helpers) => {
-                    roleForm.setView();
-                    helpers.setValues(values)
-                    const ref = await EmployerCollection.fromID(
-                        currentEmployerID
-                    ).roles.write(values);
-                    updateRole(ref.id)
-
-                },
-            })
-        );
-
-    currentRole.onSuccess((result) => {
-        roleFormik.resetForm({values: result});
+    const [, form] = useFormWithStatus<Partial<Employer>>({
+        initialValues: currentEmployer.result,
+        validationSchema: employerSchema,
+        onSubmit: async (values, helpers) => {
+            form.setView();
+            helpers.setValues(values)
+            const ref = await employerAPI.write(values);
+            updateEmployer(ref.id)
+        },
     })
 
     return <>
         <FormTable>
             <FieldInputRow
-                label={"Organization Name"}
-                {...employerForm.fieldProps.name}
+                label={"Name"}
+                {...form.fieldProps.name}
             />
             <FieldInputRow
                 label={"Location"}
-                {...employerForm.fieldProps.location}
+                {...form.fieldProps.location}
             />
         </FormTable>
-        <FormTable>
-            <FieldDropDownInput
-                label={"Role"}
-                DropDown={RoleDropDown}
-                {...roleForm.fieldProps.name}
-            />
-
-            <FieldDatePickerRow
-                label={"Start Date"}
-                {...roleForm.fieldProps.startDate}
-            />
-            <FieldInputRow
-                label={"Current Salary"}
-                {...roleForm.fieldProps.salary}
-            />
-            <FieldInputRow
-                label={"Target Salary"}
-                {...roleForm.fieldProps.salaryTarget}
-            />
-        </FormTable>
-
-        <TextInput
-            {...roleForm.fieldProps.skillTarget}
-            height={"auto"}
-            label={"Skills"}
-        />
-
-        <TextInput
-            {...roleForm.fieldProps.responsibilities}
-            height={"auto"}
-            label={"Responsibilities"}
-        />
         <AbsoluteButton Control={({save}) => <Button
             type="primary"
-            icon={mainProps.isEdit ? <SaveOutlined/> : <EditOutlined/>}
-            onClick={async (e) => {
-                if (mainProps.isEdit) {
+            icon={form.isEdit ? <SaveOutlined/> : <EditOutlined/>}
+            onClick={async () => {
+                if (form.isEdit) {
                     await save(() => {
-                        return mainProps.onClickSave(e)
+                        return form.onClickSave()
                     })
-                    mainProps.setView();
+                    form.setView();
                 } else {
-                    mainProps.setEdit()
+                    form.setEdit()
                 }
 
             }}
         />}
         />
-    </>;
+    </>
+};
 
+export const RoleForm = () => {
+    const router = useRouter()
+
+    const {
+        currentEmployerID,
+    } = useEmployer()
+    const {currentRole, updateRole} = useRole();
+
+    const [, form] = useFormWithStatus<Partial<Role>>({
+        initialValues: currentRole.result,
+        validationSchema: roleSchema,
+        onSubmit: async (values, helpers) => {
+            await EmployerCollection.fromID(
+                currentEmployerID
+            ).roles.write(values);
+            form.setView();
+            helpers.setValues(values)
+
+        },
+    })
+
+    form.useSubmitSuccess(() => router.employer.push())
+
+    return <>
+        <FormTable>
+            <FieldInputRow
+                label={"Name"}
+                {...form.fieldProps.name}
+            />
+            <FieldDatePickerRow
+                label={"Start Date"}
+                {...form.fieldProps.startDate}
+            />
+            <FieldInputRow
+                label={"Current Salary"}
+                {...form.fieldProps.salary}
+            />
+            <FieldInputRow
+                label={"Target Salary"}
+                {...form.fieldProps.salaryTarget}
+            />
+            <TextInput
+                {...form.fieldProps.skillTarget}
+                height={"auto"}
+                label={"Skills"}
+            />
+
+            <TextInput
+                {...form.fieldProps.responsibilities}
+                height={"auto"}
+                label={"Responsibilities"}
+            />
+            <AbsoluteButton Control={({save}) => <Button
+                type="primary"
+                icon={form.isEdit ? <SaveOutlined/> : <EditOutlined/>}
+                onClick={async () => {
+                    if (form.isEdit) {
+                        await save(() => {
+                            return form.onClickSave()
+                        })
+                        form.setView();
+                    } else {
+                        form.setEdit()
+                    }
+
+                }}
+            />}
+            />
+
+        </FormTable></>
 };
 
 export const MainPage = () => {
+    const [menu, setMenu] = useState<{ activeKey?: string, heading?: string, disableRole?: boolean }>({})
 
+    const {isLoading: isLoadingEmployer, currentEmployerID} = useEmployer();
+    const {isLoading: isLoadingRole, currentRoleID} = useRole();
+
+    useEffect(() => {
+        if (!(isLoadingRole && isLoadingEmployer)) {
+
+            if (!(currentEmployerID && currentRoleID)) {
+                setMenu({
+                    activeKey: "employer",
+                    disableRole: true,
+                    heading: "New Employer",
+                })
+            } else if (currentEmployerID && !currentRoleID) {
+                setMenu({
+                    activeKey: "role",
+                    heading: "New Role"
+                });
+            } else if (currentEmployerID && currentRoleID) {
+                setMenu({
+                    activeKey: "role",
+                    heading: "Above and Beyond"
+                });
+            }
+        }
+    }, [isLoadingRole, isLoadingEmployer]);
+
+    const isLoading = isLoadingRole || isLoadingEmployer
     return (
-        <MenuTemplate
-            heading={"Employer"}
-            HeaderDropDown={() => {
-                const {isLoading} = useEmployer()
-                return !isLoading && <EmployerDropDown/>
-            }}
+        isLoading ? <Loader/> : <MenuLayout
+            heading={menu.heading}
+            HeaderDropDown={menu.activeKey === 'role' ? RoleDropDown : EmployerDropDown}
             Main={() => {
-                const {isLoading} = useEmployer()
 
-                return !isLoading &&
-                    <MainPageForm/>
+                return <Tabs css={
+                    theme => css`
+                        overflow-y: scroll;
+                        padding: 0 0.5rem;
+                        ${ScrollBar(theme)};
+                    `
+                } defaultActiveKey={menu.activeKey}
+                             onChange={(key) => setMenu(prev => ({
+                                 ...prev,
+                                 activeKey: key,
+                                 heading: key === 'role' ? "Role" : "Employer"
+                             }))}>
+                    <TabPane tab="Employer" key="employer">
+                        <EmployerForm/>
+                    </TabPane>
+                    <TabPane tab="Role" key="role" disabled={menu.disableRole}>
+                        <RoleForm/>
+                    </TabPane>
+                </Tabs>
             }}
         />
     );
 };
 
-export default MainPage
+export default () => WithEnvironment(MainPage)

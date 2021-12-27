@@ -9,6 +9,7 @@ export interface Routes {
             action: 'new'
         }
     }
+    'employer/role'
     profile
     rate
     'rate/new': {
@@ -52,6 +53,7 @@ export type UseRouterPush<Routes> = {
 
 export const routes: RouteOptions<Routes> = {
     employer: makeRouteUrlObject('employer'),
+    "employer/role": makeRouteUrlObject("employer/role"),
     profile: makeRouteUrlObject('profile'),
     'rate/new': makeRouteUrlObject('rate/new'),
     'rate/view': makeRouteUrlObject('rate/view'),

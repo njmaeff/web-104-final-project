@@ -3,11 +3,7 @@ import Link from "next/link";
 import React, {ReactEventHandler} from "react";
 import {css} from "@emotion/react";
 import {DownOutlined} from "@ant-design/icons";
-import {Loader} from "./loader";
-import {Role} from "./orm/validate";
-import {EmployerCollection} from "./orm/docs";
 import {useEmployer} from "../employer/useEmployer";
-import {useAsync} from "./hooks/useAsync";
 import {useRouter} from "next/router";
 import {routes} from "../routes";
 import {useRole} from "../employer/useRole";
@@ -27,6 +23,7 @@ export const DropDownMenu: React.FC<{ value }> = ({children, value}) => {
                 border: 2px solid ${theme.colors.grayLight};
                 padding-left: 0.5rem;
                 color: ${theme.colors.dark};
+
                 div {
                     width: 100%;
                     display: flex;
@@ -119,30 +116,14 @@ export const RoleDropDown: React.FC<{
           disableNew
       }) => {
     const {
-        currentEmployerID: employerID,
-    } = useEmployer();
-    const {
-        currentRoleID: roleID,
+        currentRole,
+        allRoles,
         updateRole,
         newRole
     } = useRole()
 
-    const {
-        result: {role: currentRole, allRoles},
-        isInProgress,
-    } = useAsync<{ role: Role, allRoles: Role[] }>(async () => {
-        const role = EmployerCollection.fromID(employerID).roles;
-        const allRolesForEmployer = await role.readFromCollection();
-        const currentRole = await role.read(roleID);
-        return {
-            role: currentRole,
-            allRoles: allRolesForEmployer,
-        };
-
-    }, [employerID, roleID], {initialState: {}});
-
-    return isInProgress ? <Loader/> : <DropDownMenu
-        value={currentRole.name}
+    return <DropDownMenu
+        value={currentRole.result?.name}
     >
         {!disableNew && <DropDownElement
             key={'new'}
@@ -150,10 +131,10 @@ export const RoleDropDown: React.FC<{
         >
             Create New
         </DropDownElement>}
-        {allRoles
+        {allRoles.result
             .filter(
                 (role) =>
-                    role.id !== currentRole.id
+                    role.id !== currentRole.result?.id
             )
             .map((role) => (
                 <DropDownElement

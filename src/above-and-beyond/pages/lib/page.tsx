@@ -53,8 +53,7 @@ export const Page = styled.div`
         flex-direction: column;
         position: relative;
         height: 100%;
-        padding: 1rem;
-
+        padding: 0 1rem 1rem;
         overflow-y: scroll;
 
         .field-input, .field-display {

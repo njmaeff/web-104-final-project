@@ -1,4 +1,4 @@
-import {MenuTemplate} from "../lib/menuTemplate";
+import {MenuLayout} from "../lib/layout/menuLayout";
 import React from 'react';
 import {Rate} from "../lib/orm/validate";
 import {SearchInterface} from "../lib/instantSearch";
@@ -99,10 +99,10 @@ export const RateList = () => {
 
 export default () => {
 
-    return <MenuTemplate
+    return <MenuLayout
         heading={'Rate'}
         HeaderDropDown={() => <RoleDropDown disableNew/>}
         Main={RateList}
     >
-    </MenuTemplate>
+    </MenuLayout>
 };

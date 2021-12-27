@@ -2,25 +2,40 @@ version: "3.7"
 
 services:
 
-#  gateway:
-#    image: nginx
-#    volumes:
-#      - ./.docker/config/gateway.conf:/etc/nginx/conf.d/default.conf
-#    depends_on:
-#      - ui
-#      - search-engine
-#      - firebase
+  #  gateway:
+  #    image: nginx
+  #    volumes:
+  #      - ./.docker/config/gateway.conf:/etc/nginx/conf.d/default.conf
+  #    depends_on:
+  #      - ui
+  #      - search-engine
+  #      - firebase
+
+  proxy:
+    image: snowdreamtech/frpc
+    environment:
+      - FRP_SERVER_ADDR=${FRP_SERVER_ADDR}
+      - FRP_TOKEN=${FRP_TOKEN}
+    volumes:
+      - ./.docker/frp/frpc.ini:/etc/frp/frpc.ini
+
+    depends_on:
+      - ui
 
   ui:
-    image: node:16
-    command: yarn dev --hostname=0.0.0.0
+    image: node:14
+    command: yarn workspace @njmaeff/above-and-beyond run dev --hostname=0.0.0.0
     user: node
     working_dir: /workspace
     ports:
       - "9229:9229"
     volumes:
-      - ./:/workspace
-      - ./.env.remote:/workspace/.env
+      - ../../:/workspace
+      - ./.env.remote:/workspace/src/above-and-beyond/.env
+
+    depends_on:
+      - firebase
+      - search-engine
 
   firebase:
     build:

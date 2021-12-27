@@ -1,8 +1,8 @@
-import {MenuTemplate} from "../lib/menuTemplate";
+import {MenuLayout} from "../lib/layout/menuLayout";
 import {ReviewForm} from "./reviewPage";
 
 export default () => {
-    return <MenuTemplate
+    return <MenuLayout
         heading={'New Review'}
         Main={() => <ReviewForm/>}
     />;

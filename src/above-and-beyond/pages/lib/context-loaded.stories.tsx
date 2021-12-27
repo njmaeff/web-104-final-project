@@ -7,7 +7,7 @@ import {ProfilePage} from "./profilePage";
 import {EditPage} from "./editPage";
 import {Meta} from "@storybook/react";
 import {MainPage} from "../employer/mainPage";
-import {MenuTemplate} from "./menuTemplate";
+import {MenuLayout} from "./layout/menuLayout";
 import {RateIssuePage} from "../rate/rateIssuePage";
 import {RateSuccessPage} from "../rate/rateSuccessPage";
 
@@ -34,7 +34,7 @@ export const Review = () => {
 export const MenuLayout = () => {
     const ctx = usePageCtx();
     return (
-        <MenuTemplate
+        <MenuLayout
             currentEmployer={ctx.currentEmployer}
             allEmployers={[
                 {

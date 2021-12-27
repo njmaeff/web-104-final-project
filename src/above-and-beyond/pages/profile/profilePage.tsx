@@ -9,7 +9,7 @@ import {routes, useRouter} from "../routes";
 import {NextPageWithLayout} from "../lib/types";
 import {PrimaryLink} from "../lib/link/primaryLink";
 import {PrimaryButton} from "../lib/button/primaryButton";
-import {MenuTemplate} from "../lib/menuTemplate";
+import {MenuLayout} from "../lib/layout/menuLayout";
 import {Button} from "antd";
 import {EditOutlined, SaveOutlined} from "@ant-design/icons";
 
@@ -84,7 +84,7 @@ export const ProfileForm = () => {
 export const ProfilePage: NextPageWithLayout = () => {
 
     return (
-        <MenuTemplate heading={"Profile"} Main={ProfileForm}/>
+        <MenuLayout heading={"Profile"} Main={ProfileForm}/>
     );
 };
 export default ProfilePage;

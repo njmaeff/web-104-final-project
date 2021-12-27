@@ -1,15 +1,13 @@
 import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
 
-export class FirestoreProvider<
-    Doc extends firebase.firestore.DocumentData,
-    QueryTypes = string
-> {
+export class FirestoreProvider<Doc extends firebase.firestore.DocumentData,
+    QueryTypes = string> {
     async write(
         document: Partial<Doc>
     ): Promise<firebase.firestore.DocumentReference<Doc>> {
         const docRef = this.collection.doc(this.id?.() ?? document.id);
-        await docRef.set(document, { merge: true });
+        await docRef.set(document, {merge: true});
         return docRef as firebase.firestore.DocumentReference<Doc>;
     }
 
@@ -51,14 +49,16 @@ export class FirestoreProvider<
      * @private
      */
     private process(doc: firebase.firestore.DocumentSnapshot<Doc>): any {
-        return { ...doc.data(), id: doc.id };
+        const data = doc.data();
+        return data ? {...data, id: doc.id} : null
     }
 
     constructor(
         protected db: firebase.firestore.Firestore,
         protected paths?: () => string[],
         protected id?: () => string
-    ) {}
+    ) {
+    }
 
     get collection(): firebase.firestore.CollectionReference<Doc> {
         return this.db.collection(

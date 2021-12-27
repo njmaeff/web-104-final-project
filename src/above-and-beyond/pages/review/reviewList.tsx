@@ -1,5 +1,5 @@
 import {SearchInterface} from "../lib/instantSearch";
-import {MenuTemplate} from "../lib/menuTemplate";
+import {MenuLayout} from "../lib/layout/menuLayout";
 import React from "react";
 import {Button, List} from "antd";
 import {PlusCircleOutlined, StarOutlined} from "@ant-design/icons";
@@ -95,10 +95,10 @@ export const ReviewList = () => {
 
 export default () => {
 
-    return <MenuTemplate
+    return <MenuLayout
         heading={'Review'}
         HeaderDropDown={() => <RoleDropDown disableNew/>}
         Main={ReviewList}
     >
-    </MenuTemplate>
+    </MenuLayout>
 };

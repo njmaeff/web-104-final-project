@@ -1,8 +1,7 @@
 import React from "react";
-import FullScreen from "./FullScreen";
-import {EmployerProvider} from "../employer/useEmployer";
+import FullScreen from "../FullScreen";
 import Link from "next/link";
-import {routes} from "../routes";
+import {routes} from "../../routes";
 import {
     HomeOutlined,
     LikeOutlined,
@@ -10,10 +9,9 @@ import {
     SettingOutlined,
     StarOutlined
 } from "@ant-design/icons";
-import {RoleProvider} from "../employer/useRole";
-import {FooterControl, HeaderControl, Page} from "./page";
+import {FooterControl, HeaderControl, Page} from "../page";
 
-export const MenuTemplate: React.FC<{
+export const MenuLayout: React.FC<{
     heading?: string;
     HeaderDropDown?: React.ElementType
     Main?: React.ElementType
@@ -28,28 +26,24 @@ export const MenuTemplate: React.FC<{
     return (
         <FullScreen>
             <Page>
-                <EmployerProvider>
-                    <RoleProvider>
-                        <header>
-                            <nav>
-                                <HeaderControl>
-                                    <h2>{heading}</h2>
-                                    {HeaderDropDown && <HeaderDropDown/>}
-                                </HeaderControl>
-                                <Link href={routes.profile()}>
-                                    <a css={
-                                        {
-                                            fontSize: '2.5rem'
-                                        }
-                                    }><SettingOutlined/></a>
-                                </Link>
-                            </nav>
-                        </header>
-                        <main>
-                            <Main/>
-                        </main>
-                    </RoleProvider>
-                </EmployerProvider>
+                <header>
+                    <nav>
+                        <HeaderControl>
+                            <h2>{heading}</h2>
+                            {HeaderDropDown && <HeaderDropDown/>}
+                        </HeaderControl>
+                        <Link href={routes.profile()}>
+                            <a css={
+                                {
+                                    fontSize: '2.5rem'
+                                }
+                            }><SettingOutlined/></a>
+                        </Link>
+                    </nav>
+                </header>
+                <main>
+                    <Main/>
+                </main>
                 <footer>
                     <nav>
                         <FooterControl position={'right'}>

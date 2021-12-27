@@ -1,4 +1,4 @@
-import {MenuTemplate} from "../lib/menuTemplate";
+import {MenuLayout} from "../lib/layout/menuLayout";
 import {ReviewForm} from "./reviewPage";
 import {useEmployer} from "../employer/useEmployer";
 import {useRole} from "../employer/useRole";
@@ -11,7 +11,7 @@ import {useAsync} from "../lib/hooks/useAsync";
 import {FileType} from "../lib/upload";
 
 export default () => {
-    return <MenuTemplate
+    return <MenuLayout
         heading={'Review'}
         Main={() => {
             const {currentEmployerID} = useEmployer()
