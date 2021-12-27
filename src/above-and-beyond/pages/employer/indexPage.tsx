@@ -4,6 +4,7 @@ import {Employer, employerSchema, Role, roleSchema} from "../lib/orm/validate";
 import React, {useEffect, useState} from "react";
 import {
     FieldDatePickerRow,
+    FieldDropDownInput,
     FieldInputRow,
     FormTable,
     TextInput
@@ -20,29 +21,29 @@ import {WithEnvironment} from "../lib/withEnvironment";
 import {Loader} from "../lib/loader";
 import {css} from "@emotion/react";
 import {ScrollBar} from "../lib/styles/mixins";
-import {useRouter} from "../routes";
 
 
 export const EmployerForm = () => {
 
-    const {currentEmployer, updateEmployer,} = useEmployer();
+    const {currentEmployer, updateEmployer, allEmployers} = useEmployer();
     const employerAPI = getEmployer();
 
-    const [, form] = useFormWithStatus<Partial<Employer>>({
+    const [formik, form] = useFormWithStatus<Employer>({
         initialValues: currentEmployer.result,
         validationSchema: employerSchema,
         onSubmit: async (values, helpers) => {
-            form.setView();
+            await employerAPI.write(values);
             helpers.setValues(values)
-            const ref = await employerAPI.write(values);
-            updateEmployer(ref.id)
         },
     })
 
     return <>
         <FormTable>
-            <FieldInputRow
-                label={"Name"}
+            <FieldDropDownInput
+                label={"Employer"}
+                DropDown={() => <EmployerDropDown
+                    currentEmployer={formik.values}
+                    allEmployers={allEmployers.result}/>}
                 {...form.fieldProps.name}
             />
             <FieldInputRow
@@ -70,31 +71,27 @@ export const EmployerForm = () => {
 };
 
 export const RoleForm = () => {
-    const router = useRouter()
-
     const {
         currentEmployerID,
     } = useEmployer()
-    const {currentRole, updateRole} = useRole();
+    const {currentRole, allRoles} = useRole();
 
-    const [, form] = useFormWithStatus<Partial<Role>>({
+    const [formik, form] = useFormWithStatus<Role>({
         initialValues: currentRole.result,
         validationSchema: roleSchema,
         onSubmit: async (values, helpers) => {
             await EmployerCollection.fromID(
                 currentEmployerID
             ).roles.write(values);
-            form.setView();
             helpers.setValues(values)
-
         },
     })
 
-    form.useSubmitSuccess(() => router.employer.push())
-
     return <>
         <FormTable>
-            <FieldInputRow
+            <FieldDropDownInput
+                DropDown={() => <RoleDropDown currentRole={formik.values}
+                                              allRoles={allRoles.result}/>}
                 label={"Name"}
                 {...form.fieldProps.name}
             />
@@ -174,7 +171,7 @@ export const MainPage = () => {
     return (
         isLoading ? <Loader/> : <MenuLayout
             heading={menu.heading}
-            HeaderDropDown={menu.activeKey === 'role' ? RoleDropDown : EmployerDropDown}
+            HeaderDropDown={menu.activeKey === 'role' ? EmployerDropDown : null}
             Main={() => {
 
                 return <Tabs css={
@@ -187,7 +184,6 @@ export const MainPage = () => {
                              onChange={(key) => setMenu(prev => ({
                                  ...prev,
                                  activeKey: key,
-                                 heading: key === 'role' ? "Role" : "Employer"
                              }))}>
                     <TabPane tab="Employer" key="employer">
                         <EmployerForm/>

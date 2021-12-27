@@ -7,6 +7,7 @@ import {useEmployer} from "../employer/useEmployer";
 import {useRouter} from "next/router";
 import {routes} from "../routes";
 import {useRole} from "../employer/useRole";
+import {Employer, Role} from "./orm/validate";
 
 export const DropDownMenu: React.FC<{ value }> = ({children, value}) => {
 
@@ -66,17 +67,20 @@ export const DropDownElement: React.FC<{
 };
 
 
-export const EmployerDropDown: React.FC<{}> = () => {
+export const EmployerDropDown: React.FC<{
+    currentEmployer: Employer
+    allEmployers: Employer[]
+}> = ({
+          currentEmployer, allEmployers
+      }) => {
 
     const {
-        currentEmployer,
-        allEmployers,
         updateEmployer,
         newEmployer
     } = useEmployer();
     const router = useRouter();
     return <DropDownMenu
-        value={currentEmployer.result?.name ?? "New Employer"}
+        value={currentEmployer?.name ?? "New Employer"}
     >
         <DropDownElement
             key={'new'}
@@ -91,9 +95,9 @@ export const EmployerDropDown: React.FC<{}> = () => {
         >
             Create New
         </DropDownElement>
-        {allEmployers.result?.filter(
+        {allEmployers?.filter(
             (employer) =>
-                employer.id !== currentEmployer.result?.id
+                employer.id !== currentEmployer?.id
         )
             .map((employer) => (
                 <DropDownElement
@@ -112,18 +116,20 @@ export const EmployerDropDown: React.FC<{}> = () => {
 
 export const RoleDropDown: React.FC<{
     disableNew?: boolean
+    currentRole?: Role
+    allRoles?: Role[]
 }> = ({
-          disableNew
+          disableNew,
+          currentRole,
+          allRoles,
       }) => {
     const {
-        currentRole,
-        allRoles,
         updateRole,
         newRole
     } = useRole()
 
     return <DropDownMenu
-        value={currentRole.result?.name}
+        value={currentRole?.name}
     >
         {!disableNew && <DropDownElement
             key={'new'}
@@ -131,11 +137,10 @@ export const RoleDropDown: React.FC<{
         >
             Create New
         </DropDownElement>}
-        {allRoles.result
-            .filter(
-                (role) =>
-                    role.id !== currentRole.result?.id
-            )
+        {allRoles?.filter(
+            (role) =>
+                role.id !== currentRole?.id
+        )
             .map((role) => (
                 <DropDownElement
                     key={role.id}
