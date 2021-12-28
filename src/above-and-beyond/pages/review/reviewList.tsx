@@ -12,6 +12,8 @@ import {useRole} from "../home/useRole";
 import {AbsoluteButton} from "../lib/button/absoluteFeature";
 import {Review} from "../lib/orm/validate";
 import {formatCurrency} from "../lib/util/currency";
+import {WithEnvironment} from "../lib/withEnvironment";
+import {Loader} from "../lib/loader";
 
 export const ReviewListHits: React.FC<{ hits }> = ({hits}) => {
     const routes = useRouter();
@@ -93,12 +95,16 @@ export const ReviewList = () => {
     );
 };
 
-export default () => {
+export default () => WithEnvironment(() => {
 
     return <MenuLayout
-        heading={'Review'}
-        HeaderDropDown={() => <RoleDropDown disableNew/>}
+        heading={'Role - Review'}
+        HeaderDropDown={() => {
+            const data = useRole().useCurrent()
+            return data.isInProgress ? <Loader/> :
+                <RoleDropDown {...data.result}/>
+        }}
         Main={ReviewList}
     >
     </MenuLayout>
-};
+});

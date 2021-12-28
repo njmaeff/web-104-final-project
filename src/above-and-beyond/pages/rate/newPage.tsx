@@ -4,6 +4,7 @@ import {RateIssuePage} from "./rateIssuePage";
 import {Radio, RadioGroupProps} from "antd"
 import React, {useState} from "react";
 import {css} from "@emotion/react";
+import {WithEnvironment} from "../lib/withEnvironment";
 
 export const RadioGroup: React.FC<RadioGroupProps & { heading: string }> = ({
                                                                                 heading,
@@ -64,4 +65,4 @@ export const NewPage = () => {
     />;
 };
 
-export default NewPage
+export default () => WithEnvironment(NewPage)

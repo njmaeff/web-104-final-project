@@ -62,7 +62,7 @@ export const EmployerForm: React.FC<{ currentEmployer?: Employer, allEmployers?:
     return <>
         <FormTable>
             <FieldDropDownInput
-                label={"Name"}
+                label={"Current Employer"}
                 DropDown={() => <EmployerDropDown
                     currentEmployer={formik.values}
                     allEmployers={allEmployers}/>}
@@ -130,7 +130,7 @@ export const RoleForm: React.FC<{ currentRole?: Role, allRoles?: Role[], onSubmi
             <FieldDropDownInput
                 DropDown={() => <RoleDropDown currentRole={formik.values}
                                               allRoles={allRoles}/>}
-                label={"Name"}
+                label={"Current Role"}
                 {...form.fieldProps.name}
             />
             <FieldDatePickerRow
@@ -193,7 +193,7 @@ export const MainPage = () => {
     return (
         employerData.isInProgress || roleData.isInProgress ? <Loader/> :
             <MenuLayout
-                heading={'Home'}
+                heading={'Above and Beyond'}
                 Main={() => {
 
                     return <Tabs css={

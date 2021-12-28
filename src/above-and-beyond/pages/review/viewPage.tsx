@@ -9,8 +9,9 @@ import {Loader} from "../lib/loader";
 import {useRoleFileUpload} from "../lib/storage/file";
 import {useAsync} from "../lib/hooks/useAsync";
 import {FileType} from "../lib/upload";
+import {WithEnvironment} from "../lib/withEnvironment";
 
-export default () => {
+export default () => WithEnvironment(() => {
     return <MenuLayout
         heading={'Review'}
         Main={() => {
@@ -55,10 +56,9 @@ export default () => {
             );
 
 
-
             return (!result ? <Loader/> :
                     <ReviewForm data={result}/>
             )
         }}
     />;
-};
+});

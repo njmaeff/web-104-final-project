@@ -76,22 +76,9 @@ export const EmployerDropDown: React.FC<{
     const {
         updateEmployer,
     } = useEmployer();
-    const router = useRouter();
     return <DropDownMenu
         value={currentEmployer?.name ?? "New Employer"}
     >
-        <DropDownElement
-            key={'new'}
-            onClick={() => {
-                router["home/new"].push({
-                    query: {
-                        menu: 'employer'
-                    }
-                })
-            }}
-        >
-            Create New
-        </DropDownElement>
         {allEmployers?.filter(
             (employer) =>
                 employer.id !== currentEmployer?.id
@@ -116,31 +103,15 @@ export const RoleDropDown: React.FC<{
     currentRole?: Role
     allRoles?: Role[]
 }> = ({
-          disableNew,
           currentRole,
           allRoles,
       }) => {
     const {
         updateRole,
     } = useRole()
-    const router = useRouter();
     return <DropDownMenu
         value={currentRole?.name}
     >
-        {!disableNew && <DropDownElement
-            key={'new'}
-            onClick={
-                () => {
-                    router["home/new"].push({
-                        query: {
-                            menu: 'role'
-                        }
-                    })
-                }
-            }
-        >
-            Create New
-        </DropDownElement>}
         {allRoles?.filter(
             (role) =>
                 role.id !== currentRole?.id

@@ -16,6 +16,8 @@ import {RoleDropDown} from "../lib/control";
 import {useRole} from "../home/useRole";
 import {AbsoluteButton} from "../lib/button/absoluteFeature";
 import {formatCurrency} from "../lib/util/currency";
+import {WithEnvironment} from "../lib/withEnvironment";
+import {Loader} from "../lib/loader";
 
 export const RateListHits: React.FC<{ hits }> = ({hits}) => {
     const routes = useRouter();
@@ -97,12 +99,16 @@ export const RateList = () => {
     );
 };
 
-export default () => {
+export default () => WithEnvironment(() => {
 
     return <MenuLayout
-        heading={'Rate'}
-        HeaderDropDown={() => <RoleDropDown disableNew/>}
+        heading={'Role - Rate'}
+        HeaderDropDown={() => {
+            const data = useRole().useCurrent()
+            return data.isInProgress ? <Loader/> :
+                <RoleDropDown {...data.result}/>
+        }}
         Main={RateList}
     >
     </MenuLayout>
-};
+});

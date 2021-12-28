@@ -10,63 +10,54 @@ import {Rate} from "../lib/orm/validate";
 import {useAsync} from "../lib/hooks/useAsync";
 import {FileType} from "../lib/upload";
 import {useRoleFileUpload} from "../lib/storage/file";
-import capitalize from "lodash/capitalize";
-import {css} from "@emotion/react";
-import {SectionSize} from "../lib/styles/size";
+import {WithEnvironment} from "../lib/withEnvironment";
 
-export const NewPage = () => {
-    return <MenuLayout
-        heading={'Rating'}
-        Main={() => {
-            const {currentEmployerID} = useEmployer()
-            const {currentRoleID} = useRole()
-            const router = useRouter();
-            const {id} = router["rate/view"].query();
+export const ViewPage = () => {
+    const {currentEmployerID} = useEmployer()
+    const {currentRoleID} = useRole()
+    const router = useRouter();
+    const {id} = router["rate/view"].query();
 
-            if (!id) {
-                router.rate.push()
+    if (!id) {
+        router.rate.push()
+    }
+
+    const storageRef = useRoleFileUpload('rate', id)
+
+    const {result} = useAsync(async () => {
+            const files = await storageRef.listAll();
+            const items = []
+            for (const file of files.items) {
+                const meta = await file.getMetadata()
+                items.push({
+                    url: await file.getDownloadURL(),
+                    name: file.name,
+                    status: 'done',
+                    uid: file.fullPath,
+                    size: meta.size,
+                    type: meta.contentType
+                } as FileType)
             }
 
-            const storageRef = useRoleFileUpload('rate', id)
+            const record = await EmployerCollection
+                .fromID(currentEmployerID)
+                .roles
+                .withID(currentRoleID)
+                .fromSubCollection<Rate>('rate')
+                .read(id)
 
-            const {result} = useAsync(async () => {
-                    const files = await storageRef.listAll();
-                    const items = []
-                    for (const file of files.items) {
-                        const meta = await file.getMetadata()
-                        items.push({
-                            url: await file.getDownloadURL(),
-                            name: file.name,
-                            status: 'done',
-                            uid: file.fullPath,
-                            size: meta.size,
-                            type: meta.contentType
-                        } as FileType)
-                    }
+            return {
+                ...record,
+                uploads: items
+            }
+        }, []
+    );
 
-                    const record = await EmployerCollection
-                        .fromID(currentEmployerID)
-                        .roles
-                        .withID(currentRoleID)
-                        .fromSubCollection<Rate>('rate')
-                        .read(id)
-
-                    return {
-                        ...record,
-                        uploads: items
-                    }
-                }, []
-            );
-
+    return <MenuLayout
+        heading={`Rating ${(result?.type === 'issue' ? ' - Issue' : result?.type === 'success' ? ' - Success' : '')}`}
+        Main={() => {
             return (!result ? <Loader/> :
                     <>
-                        <h2 css={
-                            theme => css`
-                                ${SectionSize};
-                                margin-top: 0;
-                                color: ${theme.colors.gray};
-                            `
-                        }>{capitalize(result.type)}</h2>
                         {
                             result.type === 'issue' ?
                                 <RateIssuePage data={result}/> :
@@ -79,4 +70,4 @@ export const NewPage = () => {
     />;
 };
 
-export default NewPage
+export default () => WithEnvironment(ViewPage)
