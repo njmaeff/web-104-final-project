@@ -2,6 +2,7 @@ import {
     Configure,
     connectInfiniteHits,
     connectPoweredBy,
+    connectRefinementList,
     connectSearchBox,
     connectSortBy,
     connectStateResults,
@@ -14,14 +15,17 @@ import TypesenseInstantSearchAdapter from "typesense-instantsearch-adapter"
 import {auth} from "./firebase/connect-api";
 import {AsyncHook} from "./hooks/useAsync";
 import {Loader} from "./loader";
-import {Input, Select} from "antd";
+import {Input, Radio, Select} from "antd";
 import React from "react";
 import {InfiniteHits} from "./search/infiniteHits";
 import {css} from "@emotion/react";
 import capitalize from "lodash/capitalize";
 import {ScrollBar} from "./styles/mixins";
 import {fetchCustomToken} from "./util/fetchCustomToken";
-import {StateResultsProvided} from "react-instantsearch-core";
+import {
+    RefinementListProvided,
+    StateResultsProvided
+} from "react-instantsearch-core";
 
 const {Search} = Input
 
@@ -101,13 +105,15 @@ const SearchBox = connectSearchBox(({
 
 const Hits = connectInfiniteHits(InfiniteHits) as React.ComponentClass<{ HitsComponent }, any>
 
-const CustomSortBy: React.FC<{ items: { value, label, isRefined }[] }> = ({
-                                                                              items,
-                                                                              currentRefinement,
-                                                                              refine,
-                                                                          }) => {
+const CustomSortBy: React.FC<{ items: { value, label, isRefined }[], currentRefinement, refine }> = ({
+                                                                                                         items,
+                                                                                                         currentRefinement,
+                                                                                                         refine,
+                                                                                                     }) => {
     return (
-        <Select defaultValue={currentRefinement}
+        <Select css={css`
+            min-width: 8rem;
+        `} defaultValue={currentRefinement}
                 onChange={item => {
                     refine(item);
                 }}>
@@ -124,6 +130,39 @@ const CustomSortBy: React.FC<{ items: { value, label, isRefined }[] }> = ({
 
 const SortBy = connectSortBy(CustomSortBy)
 
+const CustomRefinementList: React.FC<RefinementListProvided> = ({
+                                                                    items,
+                                                                    currentRefinement,
+                                                                    refine
+                                                                }) => {
+
+
+    return (
+        <ul css={
+            css`
+                display: flex;
+                flex-direction: column;
+
+                li {
+                    margin-top: 0;
+                }
+            `
+        }>
+            {items.map(item =>
+                (<li key={item.label}>
+                    <Radio
+                        checked={item.isRefined}
+                        value={item.value}
+                        onClick={_ => {
+                            refine(item.value);
+                        }}> {item.label}
+                    </Radio>
+                    <span>({item.count})</span>
+
+                </li>))}
+        </ul>);
+};
+const RefinementList = connectRefinementList(CustomRefinementList)
 
 const CustomErrorCatcher: React.FC<StateResultsProvided & { onError, error?: { httpStatus?: number } }> = ({
                                                                                                                error,
@@ -164,6 +203,7 @@ export const SearchInterface: React.FC<{
                 <div css={
                     theme => css`
                         background-color: ${theme.colors.light} !important;
+                        margin-bottom: 0.5rem;
                     `
                 }>
                     <SearchBox>
@@ -172,20 +212,27 @@ export const SearchInterface: React.FC<{
                     <div css={css`
                         display: flex;
                     `}>
-                        {sortByProps && <SortBy
-                            {...sortByProps}
-
-                        />}
-                        {refinementProps && <RefinementList
-                            transformItems={(items) => {
-                                return items.map(item => ({
-                                    ...item,
-                                    label: capitalize(item.label)
-                                }))
-                            }
-                            }
-                            {...refinementProps}
-                        />}
+                        {
+                            sortByProps &&
+                            <div><SortBy{...sortByProps}/></div>
+                        }
+                        {
+                            refinementProps &&
+                            <div>
+                                <RefinementList
+                                    transformItems={(items: any[]) => {
+                                        return items.map(item => ({
+                                            ...item,
+                                            label: capitalize(item.label)
+                                        })).sort((a, b) => {
+                                            return a.label > b.label ? -1 : 1
+                                        });
+                                    }
+                                    }
+                                    {...refinementProps}
+                                />
+                            </div>
+                        }
                     </div>
                 </div>
                 <div css={theme => css`

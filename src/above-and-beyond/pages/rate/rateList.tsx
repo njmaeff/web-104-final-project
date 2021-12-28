@@ -88,7 +88,7 @@ export const RateList = () => {
                                  defaultRefinement: 'rate/sort/date:desc'
                              }}
                              refinementProps={{
-                                 attribute: "type"
+                                 attribute: "type",
                              }}
             />
             <AbsoluteButton Control={() => <Button
