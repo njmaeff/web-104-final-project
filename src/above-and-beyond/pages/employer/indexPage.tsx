@@ -23,13 +23,15 @@ import {css} from "@emotion/react";
 import {ScrollBar} from "../lib/styles/mixins";
 
 
-export const EmployerForm = () => {
+export const EmployerForm: React.FC<{ currentEmployer?: Employer, allEmployers?: Employer[] }> = ({
+                                                                                                      currentEmployer,
+                                                                                                      allEmployers
+                                                                                                  }) => {
 
-    const {currentEmployer, updateEmployer, allEmployers} = useEmployer();
     const employerAPI = getEmployer();
 
     const [formik, form] = useFormWithStatus<Employer>({
-        initialValues: currentEmployer.result,
+        initialValues: currentEmployer,
         validationSchema: employerSchema,
         onSubmit: async (values, helpers) => {
             await employerAPI.write(values);
@@ -40,10 +42,10 @@ export const EmployerForm = () => {
     return <>
         <FormTable>
             <FieldDropDownInput
-                label={"Employer"}
+                label={"Name"}
                 DropDown={() => <EmployerDropDown
                     currentEmployer={formik.values}
-                    allEmployers={allEmployers.result}/>}
+                    allEmployers={allEmployers}/>}
                 {...form.fieldProps.name}
             />
             <FieldInputRow
@@ -70,14 +72,16 @@ export const EmployerForm = () => {
     </>
 };
 
-export const RoleForm = () => {
+export const RoleForm: React.FC<{ currentRole: Role, allRoles: Role[] }> = ({
+                                                                                currentRole,
+                                                                                allRoles
+                                                                            }) => {
     const {
         currentEmployerID,
     } = useEmployer()
-    const {currentRole, allRoles} = useRole();
 
     const [formik, form] = useFormWithStatus<Role>({
-        initialValues: currentRole.result,
+        initialValues: currentRole,
         validationSchema: roleSchema,
         onSubmit: async (values, helpers) => {
             await EmployerCollection.fromID(
@@ -91,7 +95,7 @@ export const RoleForm = () => {
         <FormTable>
             <FieldDropDownInput
                 DropDown={() => <RoleDropDown currentRole={formik.values}
-                                              allRoles={allRoles.result}/>}
+                                              allRoles={allRoles}/>}
                 label={"Name"}
                 {...form.fieldProps.name}
             />
@@ -101,10 +105,12 @@ export const RoleForm = () => {
             />
             <FieldInputRow
                 label={"Current Salary"}
+                monetary
                 {...form.fieldProps.salary}
             />
             <FieldInputRow
                 label={"Target Salary"}
+                monetary
                 {...form.fieldProps.salaryTarget}
             />
             <TextInput
@@ -141,8 +147,17 @@ export const RoleForm = () => {
 export const MainPage = () => {
     const [menu, setMenu] = useState<{ activeKey?: string, heading?: string, disableRole?: boolean }>({})
 
-    const {isLoading: isLoadingEmployer, currentEmployerID} = useEmployer();
-    const {isLoading: isLoadingRole, currentRoleID} = useRole();
+    const {
+        currentEmployerID,
+        useCurrents: useEmployerCurrents,
+    } = useEmployer();
+    const {currentRoleID, useCurrents: useRoleCurrents} = useRole();
+
+    const employerData = useEmployerCurrents()
+    const roleData = useRoleCurrents();
+
+    const isLoadingEmployer = employerData.isLoading
+    const isLoadingRole = roleData.isLoading
 
     useEffect(() => {
         if (!(isLoadingRole && isLoadingEmployer)) {
@@ -171,7 +186,8 @@ export const MainPage = () => {
     return (
         isLoading ? <Loader/> : <MenuLayout
             heading={menu.heading}
-            HeaderDropDown={menu.activeKey === 'role' ? EmployerDropDown : null}
+            HeaderDropDown={menu.activeKey === 'role' ? () =>
+                <EmployerDropDown {...employerData.result}/> : null}
             Main={() => {
 
                 return <Tabs css={
@@ -186,10 +202,10 @@ export const MainPage = () => {
                                  activeKey: key,
                              }))}>
                     <TabPane tab="Employer" key="employer">
-                        <EmployerForm/>
+                        <EmployerForm {...employerData.result}/>
                     </TabPane>
                     <TabPane tab="Role" key="role" disabled={menu.disableRole}>
-                        <RoleForm/>
+                        <RoleForm {...roleData.result}/>
                     </TabPane>
                 </Tabs>
             }}

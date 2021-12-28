@@ -68,8 +68,8 @@ export const DropDownElement: React.FC<{
 
 
 export const EmployerDropDown: React.FC<{
-    currentEmployer: Employer
-    allEmployers: Employer[]
+    currentEmployer?: Employer
+    allEmployers?: Employer[]
 }> = ({
           currentEmployer, allEmployers
       }) => {

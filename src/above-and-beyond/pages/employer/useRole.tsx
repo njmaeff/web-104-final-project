@@ -17,9 +17,7 @@ export const DEFAULT_LOCAL: RoleLocal = {
 export type RoleContext = {
     updateRole: (id: string) => void
     newRole: () => void
-    currentRole: UseAsyncReturn<Role>
-    allRoles: UseAsyncReturn<Role[]>
-    isLoading: boolean
+    useCurrents: () => UseAsyncReturn<{ currentRole: Role, allRoles: Role[] }>
 } & RoleLocal
 
 const RoleContext = React.createContext<RoleContext>(null);
@@ -41,39 +39,32 @@ export const RoleProvider: React.FC = ({children}) => {
     };
 
     // select a default role when none is set
-    const currentRole = useAsync(async () => {
+    const useCurrents = () => useAsync(async () => {
         if (currentEmployerID) {
-            const currentRole = await EmployerCollection.fromID(currentEmployerID).roles.read(currentRoleID);
+            let currentRole = await EmployerCollection.fromID(currentEmployerID).roles.read(currentRoleID);
+            const allRoles = await EmployerCollection.fromID(currentEmployerID).roles.readFromCollection()
+
             if (!currentRole) {
-                const result = await EmployerCollection.fromID(currentEmployerID).roles.readFromCollection();
-                if (result.length > 0) {
-                    const role = result[0];
+                if (allRoles.length > 0) {
+                    const role = allRoles[0];
                     updateRole(role.id)
-                    return role
+                    currentRole = role
                 }
-            } else {
-                return currentRole
+            }
+            return {
+                currentRole,
+                allRoles
             }
         }
-    }, [currentEmployerID, currentRoleID])
-
-    const allRoles = useAsync(
-        () => {
-            return EmployerCollection.fromID(currentEmployerID).roles.readFromCollection()
-        }, [currentEmployerID, currentRoleID], {
-            initialState: []
-        }
-    )
-
+    }, [currentEmployerID, currentRoleID], {initialState: {}})
 
     return <RoleContext.Provider value={{
         currentRoleID,
-        isLoading: currentRole.isInProgress,
-        currentRole,
-        allRoles,
+        useCurrents,
         newRole,
         updateRole,
     }}>
         {children}
     </RoleContext.Provider>
 };
+

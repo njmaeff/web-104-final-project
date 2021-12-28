@@ -13,10 +13,10 @@ export interface EmployerLocalState {
 export type EmployerContext = {
     updateEmployer: (id: string) => void;
     newEmployer: () => void;
-    isUnsetEmployer: boolean;
-    currentEmployer: UseAsyncReturn<Employer>
-    allEmployers: UseAsyncReturn<Employer[]>
-    isLoading: boolean
+    useCurrents: () => UseAsyncReturn<{
+        currentEmployer: Employer
+        allEmployers: Employer[]
+    }>
 } & EmployerLocalState
 
 export const DEFAULT_LOCAL: EmployerLocalState = {
@@ -31,9 +31,7 @@ export const useEmployer = () => useContext(EmployerContext)
 const EMPLOYER_KEY = [auth.currentUser.uid, 'employer'].join('/')
 
 export const EmployerProvider: React.FC = ({children}) => {
-    const [providerState, updateProviderState] = useLocalStorage(EMPLOYER_KEY, DEFAULT_LOCAL);
-
-    const {currentEmployerID} = providerState
+    const [{currentEmployerID}, updateProviderState] = useLocalStorage(EMPLOYER_KEY, DEFAULT_LOCAL);
 
     const updateEmployer = (id: string) => {
         updateProviderState({currentEmployerID: id})
@@ -43,37 +41,30 @@ export const EmployerProvider: React.FC = ({children}) => {
         updateProviderState(DEFAULT_LOCAL)
     };
 
-    const currentEmployer = useAsync(async () => {
+    const useCurrents = () => useAsync(async () => {
         if (currentEmployerID) {
-            return getEmployer().read(currentEmployerID);
-        } else {
-            const result = await getEmployer().readFromCollection()
-            if (result.length > 0) {
-                updateEmployer(result[0].id)
+            let currentEmployer = await getEmployer().read(currentEmployerID);
+            const allEmployers = await getEmployer().readFromCollection()
+            if (!currentEmployer) {
+                if (allEmployers.length > 0) {
+                    const currentEmployer = allEmployers[0]
+                    updateEmployer(currentEmployer.id)
+                }
+            }
+
+            return {
+                currentEmployer,
+                allEmployers,
             }
         }
-    }, [currentEmployerID],);
-
-    const allEmployers = useAsync(
-        () => {
-            return getEmployer().readFromCollection();
-        }, [currentEmployerID], {
-            initialState: []
-        }
-    )
-
-    const isUnsetEmployer = !!providerState.currentEmployerID
-    const isLoading = currentEmployer.isInProgress || allEmployers.isInProgress
+    }, [currentEmployerID], {initialState: {}});
 
     return <EmployerContext.Provider
         value={{
-            ...providerState,
+            currentEmployerID,
+            useCurrents,
             updateEmployer,
             newEmployer,
-            allEmployers,
-            currentEmployer,
-            isUnsetEmployer,
-            isLoading
         }}>{children}
     </EmployerContext.Provider>
 };
