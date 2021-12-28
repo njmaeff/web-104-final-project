@@ -3,8 +3,7 @@ import {useEmployer} from "./useEmployer";
 import {auth} from "../lib/firebase/connect-api";
 import {useLocalStorage} from "./useLocalStorage";
 import {EmployerCollection} from "../lib/orm/docs";
-import {useAsync, UseAsyncReturn} from "../lib/hooks/useAsync";
-import {Role} from "../lib/orm/validate";
+import {useAsync} from "../lib/hooks/useAsync";
 import {useRouter} from "../routes";
 
 export interface RoleLocal {
@@ -15,43 +14,31 @@ export const DEFAULT_LOCAL: RoleLocal = {
     currentRoleID: ""
 }
 
-export type RoleContext = {
-    updateRole: (id: string) => void
-    newRole: () => void
-    useCurrents: () => UseAsyncReturn<{ currentRole: Role, allRoles: Role[] }>
-} & RoleLocal
+export class RoleApi {
+    static use() {
+        const [{currentRoleID}, updateRoleState] = useLocalStorage(ROLE_KEY, DEFAULT_LOCAL);
+        const {currentEmployerID} = useEmployer()
+        const router = useRouter()
+        return new RoleApi(router, currentRoleID, currentEmployerID, updateRoleState)
+    }
 
-const RoleContext = React.createContext<RoleContext>(null);
-export const useRole = () => useContext(RoleContext)
-
-export const ROLE_KEY = [auth.currentUser.uid, 'ROLE'].join('/')
-
-export const RoleProvider: React.FC = ({children}) => {
-
-    const [{currentRoleID}, updateRoleState] = useLocalStorage(ROLE_KEY, DEFAULT_LOCAL);
-    const {currentEmployerID} = useEmployer()
-    const router = useRouter()
-    const updateRole = (id: string) => {
-        updateRoleState({currentRoleID: id});
-    };
-
-    const newRole = () => {
-        updateRoleState(DEFAULT_LOCAL)
+    updateRole = (id: string) => {
+        this.updateRoleState({currentRoleID: id});
     };
 
     // select a default role when none is set
-    const useCurrents = () => useAsync(async () => {
-        if (currentEmployerID) {
-            let currentRole = await EmployerCollection.fromID(currentEmployerID).roles.read(currentRoleID);
-            const allRoles = await EmployerCollection.fromID(currentEmployerID).roles.readFromCollection()
+    useCurrent = () => useAsync(async () => {
+        if (this.currentEmployerID) {
+            let currentRole = await EmployerCollection.fromID(this.currentEmployerID).roles.read(this.currentRoleID);
+            const allRoles = await EmployerCollection.fromID(this.currentEmployerID).roles.readFromCollection()
 
             if (!currentRole) {
                 if (allRoles.length > 0) {
                     const role = allRoles[0];
-                    updateRole(role.id);
+                    this.updateRole(role.id);
                     currentRole = role;
                 } else {
-                    await router["home/new"].push({
+                    await this.router["home/new"].push({
                         query: {
                             menu: "role"
                         }
@@ -63,14 +50,21 @@ export const RoleProvider: React.FC = ({children}) => {
                 allRoles
             }
         }
-    }, [currentEmployerID, currentRoleID], {initialState: {}})
+    }, [this.currentEmployerID, this.currentRoleID], {initialState: {}})
 
-    return <RoleContext.Provider value={{
-        currentRoleID,
-        useCurrents,
-        newRole,
-        updateRole,
-    }}>
+
+    constructor(private router, public currentRoleID: string, private currentEmployerID: string, private updateRoleState) {
+    }
+}
+
+const RoleContext = React.createContext<RoleApi>(null);
+export const useRole = () => useContext(RoleContext)
+
+export const ROLE_KEY = [auth.currentUser.uid, 'ROLE'].join('/')
+
+export const RoleProvider: React.FC = ({children}) => {
+
+    return <RoleContext.Provider value={RoleApi.use()}>
         {children}
     </RoleContext.Provider>
 };

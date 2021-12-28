@@ -178,14 +178,8 @@ export const RoleForm: React.FC<{ currentRole?: Role, allRoles?: Role[], onSubmi
 export const MainPage = () => {
     const router = useRouter();
 
-    const {
-        useCurrents: useEmployerCurrents,
-    } = useEmployer();
-
-    const {useCurrents: useRoleCurrents} = useRole();
-
-    const employerData = useEmployerCurrents()
-    const roleData = useRoleCurrents();
+    const employerData = useEmployer().useCurrent();
+    const roleData = useRole().useCurrent();
 
     return (
         employerData.isInProgress || roleData.isInProgress ? <Loader/> :
