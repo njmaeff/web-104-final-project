@@ -7,7 +7,7 @@ import {
     roleSchema,
     Uploads
 } from "../lib/orm/validate";
-import React, {useEffect, useState} from "react";
+import React from "react";
 import {
     FieldDatePickerRow,
     FieldDropDownInput,
@@ -176,71 +176,44 @@ export const RoleForm: React.FC<{ currentRole?: Role, allRoles?: Role[], onSubmi
 };
 
 export const MainPage = () => {
-    const [menu, setMenu] = useState<{ activeKey?: string, heading?: string, disableRole?: boolean }>({})
+    const router = useRouter();
 
     const {
         useCurrents: useEmployerCurrents,
     } = useEmployer();
 
-    const router = useRouter();
     const {useCurrents: useRoleCurrents} = useRole();
 
     const employerData = useEmployerCurrents()
     const roleData = useRoleCurrents();
 
-    const inProgressEmployer = employerData.isInProgress
-    const inProgressRole = roleData.isInProgress
-
-    useEffect(() => {
-        if (!(inProgressRole || inProgressEmployer)) {
-
-            if (!employerData.result.currentEmployer) {
-                router["home/new"].push({
-                    query: {
-                        menu: "employer"
-                    }
-                })
-            } else if (!roleData.result.currentRole) {
-                router["home/new"].push({
-                    query: {
-                        menu: "role"
-                    }
-                });
-            } else {
-                setMenu({
-                    activeKey: router.home.query().menu ?? 'role',
-                    heading: "Home",
-                });
-            }
-        }
-    }, [inProgressRole, inProgressEmployer]);
-
-    const isLoading = inProgressRole || inProgressEmployer
     return (
-        isLoading ? <Loader/> : <MenuLayout
-            heading={menu.heading}
-            Main={() => {
+        employerData.isInProgress || roleData.isInProgress ? <Loader/> :
+            <MenuLayout
+                heading={'Home'}
+                Main={() => {
 
-                return <Tabs css={
-                    theme => css`
-                        overflow-y: scroll;
-                        padding: 0 0.5rem;
-                        ${ScrollBar(theme)};
-                    `
-                } defaultActiveKey={menu.activeKey}
-                             onChange={(key) => setMenu(prev => ({
-                                 ...prev,
-                                 activeKey: key,
-                             }))}>
-                    <TabPane tab="Employers" key="employer">
-                        <EmployerForm {...employerData.result}/>
-                    </TabPane>
-                    <TabPane tab="Roles" key="role" disabled={menu.disableRole}>
-                        <RoleForm {...roleData.result}/>
-                    </TabPane>
-                </Tabs>
-            }}
-        />
+                    return <Tabs css={
+                        theme => css`
+                            overflow-y: scroll;
+                            padding: 0 0.5rem;
+                            ${ScrollBar(theme)};
+                        `
+                    } defaultActiveKey={router.home.query().menu ?? 'role'}
+                                 onChange={(key) => router.home.push({
+                                     query: {
+                                         menu: key,
+                                     }
+                                 })}>
+                        <TabPane tab="Employers" key="employer">
+                            <EmployerForm {...employerData.result}/>
+                        </TabPane>
+                        <TabPane tab="Roles" key="role">
+                            <RoleForm {...roleData.result}/>
+                        </TabPane>
+                    </Tabs>
+                }}
+            />
     );
 };
 

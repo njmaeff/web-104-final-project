@@ -4,6 +4,7 @@ import {useLocalStorage} from "./useLocalStorage";
 import {getEmployer} from "../lib/orm/docs";
 import {Employer} from "../lib/orm/validate";
 import {useAsync, UseAsyncReturn} from "../lib/hooks/useAsync";
+import {useRouter} from "../routes";
 
 
 export interface EmployerLocalState {
@@ -31,6 +32,8 @@ export const useEmployer = () => useContext(EmployerContext)
 const EMPLOYER_KEY = [auth.currentUser.uid, 'employer'].join('/')
 
 export const EmployerProvider: React.FC = ({children}) => {
+    const router = useRouter();
+
     const [{currentEmployerID}, updateProviderState] = useLocalStorage(EMPLOYER_KEY, DEFAULT_LOCAL);
 
     const updateEmployer = (id: string) => {
@@ -42,20 +45,24 @@ export const EmployerProvider: React.FC = ({children}) => {
     };
 
     const useCurrents = () => useAsync(async () => {
-        if (currentEmployerID) {
-            let currentEmployer = await getEmployer().read(currentEmployerID);
-            const allEmployers = await getEmployer().readFromCollection()
-            if (!currentEmployer) {
-                if (allEmployers.length > 0) {
-                    const currentEmployer = allEmployers[0]
-                    updateEmployer(currentEmployer.id)
-                }
+        let currentEmployer = await getEmployer().read(currentEmployerID);
+        const allEmployers = await getEmployer().readFromCollection()
+        if (!currentEmployer) {
+            if (allEmployers.length > 0) {
+                const currentEmployer = allEmployers[0];
+                updateEmployer(currentEmployer.id);
+            } else {
+                await router["home/new"].push({
+                    query: {
+                        menu: "employer"
+                    }
+                })
             }
+        }
 
-            return {
-                currentEmployer,
-                allEmployers,
-            }
+        return {
+            currentEmployer,
+            allEmployers,
         }
     }, [currentEmployerID], {initialState: {}});
 

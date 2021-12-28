@@ -5,6 +5,7 @@ import {useLocalStorage} from "./useLocalStorage";
 import {EmployerCollection} from "../lib/orm/docs";
 import {useAsync, UseAsyncReturn} from "../lib/hooks/useAsync";
 import {Role} from "../lib/orm/validate";
+import {useRouter} from "../routes";
 
 export interface RoleLocal {
     currentRoleID: string
@@ -29,7 +30,7 @@ export const RoleProvider: React.FC = ({children}) => {
 
     const [{currentRoleID}, updateRoleState] = useLocalStorage(ROLE_KEY, DEFAULT_LOCAL);
     const {currentEmployerID} = useEmployer()
-
+    const router = useRouter()
     const updateRole = (id: string) => {
         updateRoleState({currentRoleID: id});
     };
@@ -47,8 +48,14 @@ export const RoleProvider: React.FC = ({children}) => {
             if (!currentRole) {
                 if (allRoles.length > 0) {
                     const role = allRoles[0];
-                    updateRole(role.id)
-                    currentRole = role
+                    updateRole(role.id);
+                    currentRole = role;
+                } else {
+                    await router["home/new"].push({
+                        query: {
+                            menu: "role"
+                        }
+                    })
                 }
             }
             return {
