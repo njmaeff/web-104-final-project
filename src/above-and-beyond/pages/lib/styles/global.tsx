@@ -282,5 +282,9 @@ export const GlobalStyles = () => {
             background-color: ${theme.colors.light};
         }
 
+        div.ant-picker-panel-container {
+            background-color: ${theme.colors.light} !important;
+        }
+
     `}/>
 };

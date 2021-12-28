@@ -69,7 +69,7 @@ export interface UploadState {
     previewTitle: string
 }
 
-export const uploadFileList = (storageRef, fileList) => {
+export const uploadFileList = (storageRef, fileList = []) => {
     const noop = () => ({})
     return Promise.all(
         fileList
