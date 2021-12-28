@@ -5,15 +5,15 @@ import {MenuLayout} from "../lib/layout/menuLayout";
 import {EmployerForm, RoleForm} from "./indexPage";
 import {useEmployer} from "./useEmployer";
 import {useRole} from "./useRole";
+import capitalize from "lodash/capitalize";
 
-export default WithEnvironment(() => {
+export default () => WithEnvironment(() => {
 
     const router = useRouter()
     const query = router['home/new'].query();
     const {updateEmployer} = useEmployer();
     const {updateRole} = useRole();
-
-    let Component;
+    let Component = () => <div/>;
     switch (query.menu) {
         case "employer":
             Component = () => <EmployerForm onSubmit={(values) => {
@@ -39,7 +39,7 @@ export default WithEnvironment(() => {
 
     return (
         <MenuLayout
-            heading={query.menu}
+            heading={`New ${capitalize(query.menu)}`}
             Main={Component}
         />
     );

@@ -1,5 +1,5 @@
 import {EmployerCollection, getEmployer} from "../lib/orm/docs";
-import {useFormWithStatus} from "../lib/hooks/useFormWithStatus";
+import {PageStatus, useFormWithStatus} from "../lib/hooks/useFormWithStatus";
 import {
     Employer,
     employerSchema,
@@ -30,6 +30,7 @@ import {css} from "@emotion/react";
 import {ScrollBar} from "../lib/styles/mixins";
 import {useFileUpload} from "../lib/storage/file";
 import {DeleteButton} from "../lib/button/delete";
+import {useRouter} from "../routes";
 
 
 export const EmployerForm: React.FC<{ currentEmployer?: Employer, allEmployers?: Employer[], onSubmit? }> = ({
@@ -44,6 +45,7 @@ export const EmployerForm: React.FC<{ currentEmployer?: Employer, allEmployers?:
     const [formik, form] = useFormWithStatus<Employer & Uploads>({
         initialValues: currentEmployer,
         validationSchema: employerSchema,
+        initialStatus: currentEmployer ? PageStatus.VIEW : PageStatus.EDIT,
         onSubmit: async (values, helpers) => {
             await employerAPI.write(values);
             helpers.setValues(values)
@@ -69,7 +71,7 @@ export const EmployerForm: React.FC<{ currentEmployer?: Employer, allEmployers?:
                         storageRef={storageRef.child(form.fieldProps.id?.value ?? "")}
                         isManualSubmit={!currentEmployer || form.isEdit}
                         {...form.fieldProps.uploads}  />
-            {form.isEdit && <DeleteButton/>}
+            {form.isReadonly && <DeleteButton/>}
         </FormTable>
         <AbsoluteButton Control={({save}) => <Button
             type="primary"
@@ -103,6 +105,7 @@ export const RoleForm: React.FC<{ currentRole?: Role, allRoles?: Role[], onSubmi
     const [formik, form] = useFormWithStatus<Role & Uploads>({
         initialValues: currentRole,
         validationSchema: roleSchema,
+        initialStatus: currentRole ? PageStatus.VIEW : PageStatus.EDIT,
         onSubmit: async (values, helpers) => {
             await EmployerCollection.fromID(
                 currentEmployerID
@@ -151,7 +154,7 @@ export const RoleForm: React.FC<{ currentRole?: Role, allRoles?: Role[], onSubmi
                         isManualSubmit={!currentRole || form.isEdit}
                         {...form.fieldProps.uploads}  />
 
-            {form.isEdit && <DeleteButton/>}
+            {form.isReadonly && <DeleteButton/>}
         </FormTable>
         <AbsoluteButton Control={({save}) => <Button
             type="primary"
@@ -176,41 +179,43 @@ export const MainPage = () => {
     const [menu, setMenu] = useState<{ activeKey?: string, heading?: string, disableRole?: boolean }>({})
 
     const {
-        currentEmployerID,
         useCurrents: useEmployerCurrents,
     } = useEmployer();
-    const {currentRoleID, useCurrents: useRoleCurrents} = useRole();
+
+    const router = useRouter();
+    const {useCurrents: useRoleCurrents} = useRole();
 
     const employerData = useEmployerCurrents()
     const roleData = useRoleCurrents();
 
-    const isLoadingEmployer = employerData.isLoading
-    const isLoadingRole = roleData.isLoading
+    const inProgressEmployer = employerData.isInProgress
+    const inProgressRole = roleData.isInProgress
 
     useEffect(() => {
-        if (!(isLoadingRole && isLoadingEmployer)) {
+        if (!(inProgressRole || inProgressEmployer)) {
 
-            if (!(currentEmployerID && currentRoleID)) {
-                setMenu({
-                    activeKey: "employer",
-                    disableRole: true,
-                    heading: "New Employer",
+            if (!employerData.result.currentEmployer) {
+                router["home/new"].push({
+                    query: {
+                        menu: "employer"
+                    }
                 })
-            } else if (currentEmployerID && !currentRoleID) {
-                setMenu({
-                    activeKey: "role",
-                    heading: "New Role"
+            } else if (!roleData.result.currentRole) {
+                router["home/new"].push({
+                    query: {
+                        menu: "role"
+                    }
                 });
-            } else if (currentEmployerID && currentRoleID) {
+            } else {
                 setMenu({
-                    activeKey: "role",
-                    heading: "Home"
+                    activeKey: router.home.query().menu ?? 'role',
+                    heading: "Home",
                 });
             }
         }
-    }, [isLoadingRole, isLoadingEmployer]);
+    }, [inProgressRole, inProgressEmployer]);
 
-    const isLoading = isLoadingRole || isLoadingEmployer
+    const isLoading = inProgressRole || inProgressEmployer
     return (
         isLoading ? <Loader/> : <MenuLayout
             heading={menu.heading}
