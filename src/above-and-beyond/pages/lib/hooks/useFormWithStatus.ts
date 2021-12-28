@@ -6,7 +6,6 @@ import {useEffect} from "react";
 export enum PageStatus {
     EDIT,
     VIEW,
-    NEW,
     SUBMITTED,
 }
 
@@ -44,10 +43,9 @@ export const useFormWithStatus = <T = any>({
         reset({values: makeValues(values), ...props})
     }
 
-    const isReadonly = form.status === PageStatus.VIEW;
-    const isNew = form.status === PageStatus.NEW;
-    const isEdit = form.status === PageStatus.EDIT || isNew;
     const isSubmitted = form.status === PageStatus.SUBMITTED;
+    const isReadonly = form.status === PageStatus.VIEW || isSubmitted;
+    const isEdit = form.status === PageStatus.EDIT;
 
     const useSubmitSuccess = (fn: (values: T) => any | Promise<any>) => {
         useEffect(() => {
@@ -60,7 +58,6 @@ export const useFormWithStatus = <T = any>({
     const setEdit = () => form.setStatus(PageStatus.EDIT);
     const setView = () => form.setStatus(PageStatus.VIEW);
     const setSubmitted = () => form.setStatus(PageStatus.SUBMITTED);
-    const setNew = () => form.setStatus(PageStatus.NEW);
 
     const fieldProps: { [P in keyof T]: { value; name } } = {} as any;
 
@@ -85,12 +82,10 @@ export const useFormWithStatus = <T = any>({
         {
             isReadonly,
             isEdit,
-            isNew,
             isSubmitting: form.isSubmitting,
             isSubmitted,
             setEdit,
             setView,
-            setNew,
             setSubmitted,
             fieldProps,
             onClickEdit: setEdit,
@@ -106,7 +101,7 @@ export const mergeForms = <T extends ReturnType<typeof useFormWithStatus>[]>(
 ) => {
     const mainFormControls = forms.map(([_, form]) => form)
 
-    const isEdit = mainFormControls.some((form) => form.isEdit || form.isNew)
+    const isEdit = mainFormControls.some((form) => form.isEdit)
     const isValid = mainFormControls.every((form) => (form.isEdit ? form.isValid : true))
 
     const setEdit = () => mainFormControls.forEach(form => form.setEdit());

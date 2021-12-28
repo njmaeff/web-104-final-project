@@ -1,5 +1,4 @@
 import React, {useState} from "react";
-import DatePicker from "react-datepicker"
 import {Form, Input, Modal, Upload} from "antd";
 import {css} from "@emotion/react";
 import {ScrollBar} from "./styles/mixins";
@@ -8,6 +7,7 @@ import {formatCurrency} from "./util/currency";
 import {getBase64, uploadFile, UploadState} from "./upload";
 import {InboxOutlined} from "@ant-design/icons";
 import {Reference} from "@firebase/storage-types";
+import { DatePicker } from "./datePicker";
 
 interface FieldProps<Value = any> {
     label: string;
@@ -343,10 +343,9 @@ export const FieldDatePickerRow: React.FC<FieldProps<Date>> = ({
                 </p>
             ) : (
                 <DatePicker
-                    className={error ? "border-highlight__primary" : ""}
                     name={name}
-                    readOnly={readonly}
-                    selected={value}
+                    disabled={readonly}
+                    value={value}
                     onChange={onChange}
                     onBlur={onBlur}
                 />
