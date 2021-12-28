@@ -48,7 +48,7 @@ export const MenuLayout: React.FC<{
                     <nav>
                         <FooterControl position={'right'}>
                             <Link
-                                href={routes.employer()}
+                                href={routes.home()}
                             ><a><HomeOutlined/></a></Link>
                             <Link
                                 href={routes.report()}

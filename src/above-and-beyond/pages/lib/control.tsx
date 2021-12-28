@@ -3,10 +3,9 @@ import Link from "next/link";
 import React, {ReactEventHandler} from "react";
 import {css} from "@emotion/react";
 import {DownOutlined} from "@ant-design/icons";
-import {useEmployer} from "../employer/useEmployer";
-import {useRouter} from "next/router";
-import {routes} from "../routes";
-import {useRole} from "../employer/useRole";
+import {useEmployer} from "../home/useEmployer";
+import {useRouter} from "../routes";
+import {useRole} from "../home/useRole";
 import {Employer, Role} from "./orm/validate";
 
 export const DropDownMenu: React.FC<{ value }> = ({children, value}) => {
@@ -76,7 +75,6 @@ export const EmployerDropDown: React.FC<{
 
     const {
         updateEmployer,
-        newEmployer
     } = useEmployer();
     const router = useRouter();
     return <DropDownMenu
@@ -85,12 +83,11 @@ export const EmployerDropDown: React.FC<{
         <DropDownElement
             key={'new'}
             onClick={() => {
-                newEmployer()
-                router.push(routes.employer({
+                router["home/new"].push({
                     query: {
-                        action: 'new'
+                        menu: 'employer'
                     }
-                }))
+                })
             }}
         >
             Create New
@@ -125,15 +122,22 @@ export const RoleDropDown: React.FC<{
       }) => {
     const {
         updateRole,
-        newRole
     } = useRole()
-
+    const router = useRouter();
     return <DropDownMenu
         value={currentRole?.name}
     >
         {!disableNew && <DropDownElement
             key={'new'}
-            onClick={() => newRole()}
+            onClick={
+                () => {
+                    router["home/new"].push({
+                        query: {
+                            menu: 'role'
+                        }
+                    })
+                }
+            }
         >
             Create New
         </DropDownElement>}

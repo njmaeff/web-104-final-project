@@ -2,16 +2,17 @@ import {UrlObject} from "url";
 import {NextRouter, useRouter as useNextRouter} from "next/router"
 
 export const makeAbsolutePath = (...paths) => `/` + paths.filter((p) => !!p).join(`/`)
+export type HomeMenus = 'employer' | 'role';
 
 export interface Routes {
-    employer: {
+    home: {
         query: {
-            action: 'new'
+            menu: HomeMenus
         }
     }
-    'employer/new': {
+    'home/new': {
         query: {
-            action: 'role' | 'employer'
+            menu: HomeMenus
         }
     }
     profile
@@ -56,8 +57,8 @@ export type UseRouterPush<Routes> = {
 }
 
 export const routes: RouteOptions<Routes> = {
-    employer: makeRouteUrlObject('employer'),
-    "employer/role": makeRouteUrlObject("employer/role"),
+    home: makeRouteUrlObject('home'),
+    "home/new": makeRouteUrlObject("home/new"),
     profile: makeRouteUrlObject('profile'),
     'rate/new': makeRouteUrlObject('rate/new'),
     'rate/view': makeRouteUrlObject('rate/view'),

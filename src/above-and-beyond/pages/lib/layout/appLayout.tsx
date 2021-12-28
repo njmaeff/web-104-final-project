@@ -4,8 +4,8 @@ import {useRouter} from "next/router";
 import {checkAuthUI} from "../hooks/checkAuthUI";
 import {NextPageWithLayout} from "../types";
 import {WithoutSSR} from "../util/next";
-import {EmployerProvider} from "../../employer/useEmployer";
-import {RoleProvider} from "../../employer/useRole";
+import {EmployerProvider} from "../../home/useEmployer";
+import {RoleProvider} from "../../home/useRole";
 
 export const Anchor: React.FC<JSX.IntrinsicElements["a"]> = ({
                                                                  children,

@@ -19,7 +19,7 @@ import {
 import {EmployerDropDown, RoleDropDown} from "../lib/control";
 import {useEmployer} from "./useEmployer";
 import {useRole} from "./useRole";
-import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
+import {AbsoluteButton} from "../lib/button/absoluteFeature";
 import {MenuLayout} from "../lib/layout/menuLayout";
 import {Button, Tabs} from "antd";
 import {EditOutlined, SaveOutlined} from "@ant-design/icons";
@@ -29,12 +29,14 @@ import {Loader} from "../lib/loader";
 import {css} from "@emotion/react";
 import {ScrollBar} from "../lib/styles/mixins";
 import {useFileUpload} from "../lib/storage/file";
+import {DeleteButton} from "../lib/button/delete";
 
 
-export const EmployerForm: React.FC<{ currentEmployer?: Employer, allEmployers?: Employer[] }> = ({
-                                                                                                      currentEmployer,
-                                                                                                      allEmployers
-                                                                                                  }) => {
+export const EmployerForm: React.FC<{ currentEmployer?: Employer, allEmployers?: Employer[], onSubmit? }> = ({
+                                                                                                                 currentEmployer,
+                                                                                                                 allEmployers,
+                                                                                                                 onSubmit,
+                                                                                                             }) => {
 
     const employerAPI = getEmployer();
     const storageRef = useFileUpload('employer')
@@ -47,6 +49,8 @@ export const EmployerForm: React.FC<{ currentEmployer?: Employer, allEmployers?:
             helpers.setValues(values)
         },
     })
+
+    form.useSubmitSuccess((values) => onSubmit?.(values))
 
     return <>
         <FormTable>
@@ -65,6 +69,7 @@ export const EmployerForm: React.FC<{ currentEmployer?: Employer, allEmployers?:
                         storageRef={storageRef.child(form.fieldProps.id?.value ?? "")}
                         isManualSubmit={!currentEmployer || form.isEdit}
                         {...form.fieldProps.uploads}  />
+            {form.isEdit && <DeleteButton/>}
         </FormTable>
         <AbsoluteButton Control={({save}) => <Button
             type="primary"
@@ -85,10 +90,11 @@ export const EmployerForm: React.FC<{ currentEmployer?: Employer, allEmployers?:
     </>
 };
 
-export const RoleForm: React.FC<{ currentRole: Role, allRoles: Role[] }> = ({
-                                                                                currentRole,
-                                                                                allRoles
-                                                                            }) => {
+export const RoleForm: React.FC<{ currentRole?: Role, allRoles?: Role[], onSubmit? }> = ({
+                                                                                             currentRole,
+                                                                                             allRoles,
+                                                                                             onSubmit,
+                                                                                         }) => {
     const {
         currentEmployerID,
     } = useEmployer()
@@ -104,6 +110,8 @@ export const RoleForm: React.FC<{ currentRole: Role, allRoles: Role[] }> = ({
             helpers.setValues(values)
         },
     })
+
+    form.useSubmitSuccess((values) => onSubmit?.(values))
 
     return <>
         <FormTable>
@@ -143,6 +151,7 @@ export const RoleForm: React.FC<{ currentRole: Role, allRoles: Role[] }> = ({
                         isManualSubmit={!currentRole || form.isEdit}
                         {...form.fieldProps.uploads}  />
 
+            {form.isEdit && <DeleteButton/>}
         </FormTable>
         <AbsoluteButton Control={({save}) => <Button
             type="primary"

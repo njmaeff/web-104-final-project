@@ -25,7 +25,7 @@ export const useFirebaseUI = () => {
                         ) {
                             router.gettingStarted.push();
                         } else if (authResult.user) {
-                            router.employer.push()
+                            router.home.push()
                         }
 
                         return false;

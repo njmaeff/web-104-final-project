@@ -1,14 +1,14 @@
 import {User, userSchema} from "../lib/orm/validate";
 import {PageStatus, useFormWithStatus} from "../lib/hooks/useFormWithStatus";
 import {FieldInputRow, FormTable} from "../lib/input";
-import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
+import {AbsoluteButton} from "../lib/button/absoluteFeature";
 import React from "react";
 import {auth} from "../lib/firebase/connect-api";
 import Link from "next/link";
 import {routes, useRouter} from "../routes";
 import {NextPageWithLayout} from "../lib/types";
 import {PrimaryLink} from "../lib/link/primaryLink";
-import {PrimaryButton} from "../lib/button/primaryButton";
+import {PrimaryButton} from "../lib/button/primary";
 import {MenuLayout} from "../lib/layout/menuLayout";
 import {Button} from "antd";
 import {EditOutlined, SaveOutlined} from "@ant-design/icons";

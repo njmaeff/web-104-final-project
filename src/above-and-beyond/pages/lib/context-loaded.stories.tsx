@@ -6,7 +6,7 @@ import {ReviewPage} from "../review/reviewPage";
 import {ProfilePage} from "./profilePage";
 import {EditPage} from "./editPage";
 import {Meta} from "@storybook/react";
-import {MainPage} from "../employer/mainPage";
+import {MainPage} from "../home/mainPage";
 import {MenuLayout} from "./layout/menuLayout";
 import {RateIssuePage} from "../rate/rateIssuePage";
 import {RateSuccessPage} from "../rate/rateSuccessPage";

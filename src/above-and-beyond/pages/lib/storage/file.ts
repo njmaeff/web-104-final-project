@@ -1,6 +1,6 @@
-import {useEmployer} from "../../employer/useEmployer";
+import {useEmployer} from "../../home/useEmployer";
 import {auth, storage} from "../firebase/connect-api";
-import {useRole} from "../../employer/useRole";
+import {useRole} from "../../home/useRole";
 import path from "path";
 
 export const useFileUpload = (...paths) => {

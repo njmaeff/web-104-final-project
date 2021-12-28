@@ -1,5 +1,5 @@
 import React from "react";
-import {useEmployer} from "../employer/useEmployer";
+import {useEmployer} from "../home/useEmployer";
 import {PageStatus, useFormWithStatus} from "../lib/hooks/useFormWithStatus";
 import {RateSuccess, rateSuccessSchema, Uploads} from "../lib/orm/validate";
 import {EmployerCollection} from "../lib/orm/docs";
@@ -10,11 +10,11 @@ import {
     FormUpload,
     TextInput
 } from "../lib/input";
-import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
+import {AbsoluteButton} from "../lib/button/absoluteFeature";
 import {Button} from "antd";
 import {EditOutlined, SaveOutlined} from "@ant-design/icons";
 import {useRouter} from "../routes";
-import {useRole} from "../employer/useRole";
+import {useRole} from "../home/useRole";
 import {HorizontalRule} from "../lib/layout/divider";
 import {uploadFileList} from "../lib/upload";
 import {useFileUpload} from "../lib/storage/file";

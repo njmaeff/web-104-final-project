@@ -8,8 +8,8 @@ import {Timestamp} from "../lib/orm/docs";
 import {Highlight} from "react-instantsearch-dom";
 import {css} from "@emotion/react";
 import {RoleDropDown} from "../lib/control";
-import {useRole} from "../employer/useRole";
-import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
+import {useRole} from "../home/useRole";
+import {AbsoluteButton} from "../lib/button/absoluteFeature";
 import {Review} from "../lib/orm/validate";
 import {formatCurrency} from "../lib/util/currency";
 
