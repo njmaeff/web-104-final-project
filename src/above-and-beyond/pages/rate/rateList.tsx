@@ -1,5 +1,5 @@
 import {MenuLayout} from "../lib/layout/menuLayout";
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Rate} from "../lib/orm/validate";
 import {SearchInterface} from "../lib/instantSearch";
 import {Button, List} from "antd";
@@ -18,6 +18,8 @@ import {AbsoluteButton} from "../lib/button/absoluteFeature";
 import {formatCurrency} from "../lib/util/currency";
 import {WithEnvironment} from "../lib/withEnvironment";
 import {Loader} from "../lib/loader";
+import {ErrorBoundary} from "react-error-boundary";
+import {fetchCustomToken} from "../lib/util/fetchCustomToken";
 
 export const RateListHits: React.FC<{ hits }> = ({hits}) => {
     const routes = useRouter();
@@ -28,6 +30,7 @@ export const RateListHits: React.FC<{ hits }> = ({hits}) => {
                 css`
                     li, p {
                         margin: 0;
+                        background-color: transparent;
                     }
                 `
             }
@@ -71,25 +74,34 @@ export const RateList = () => {
 
     return (
         <>
-            <SearchInterface indexName={'rate'} HitsComponent={RateListHits}
-                             filters={[`roleID:${currentRoleID}`]}
-                             sortByProps={{
-                                 items: [
-                                     {
-                                         value: 'rate/sort/date:desc',
-                                         label: 'Date'
-                                     },
-                                     {
-                                         value: 'rate/sort/value:desc',
-                                         label: 'Value'
-                                     },
-                                 ],
-                                 defaultRefinement: 'rate/sort/date:desc'
-                             }}
-                             refinementProps={{
-                                 attribute: "type"
-                             }}
-            />
+            <ErrorBoundary FallbackComponent={({error, resetErrorBoundary}) => {
+                debugger
+                useEffect(() => {
+                    fetchCustomToken()
+                        .then(() => resetErrorBoundary())
+                }, []);
+                return <Loader/>
+            }}>
+                <SearchInterface indexName={'rate'} HitsComponent={RateListHits}
+                                 filters={[`roleID:${currentRoleID}`]}
+                                 sortByProps={{
+                                     items: [
+                                         {
+                                             value: 'rate/sort/date:desc',
+                                             label: 'Date'
+                                         },
+                                         {
+                                             value: 'rate/sort/value:desc',
+                                             label: 'Value'
+                                         },
+                                     ],
+                                     defaultRefinement: 'rate/sort/date:desc'
+                                 }}
+                                 refinementProps={{
+                                     attribute: "type"
+                                 }}
+                />
+            </ErrorBoundary>
             <AbsoluteButton Control={() => <Button
                 type="primary"
                 icon={<PlusCircleOutlined/>}

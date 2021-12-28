@@ -24,6 +24,75 @@ export type AsyncState<Result = any, Error = any> = {
     onSuccess?: (cb: (result: Result) => void) => void
 };
 
+export class AsyncHook<Result = any, Error = any> {
+
+    refresh = () => {
+        this.action()
+    };
+
+    constructor(
+        fn: () => Promise<Result>,
+        params?: any[],
+        {initialState = null} = {}) {
+
+        const [state, updateState] = useState<AsyncState<Result, Error>>({
+            result: initialState,
+            status: AsyncStates.Init
+        });
+
+        const action = () => fn()
+            .then((result) => updateState(state => ({
+                ...state,
+                result,
+                status: AsyncStates.Success
+            })))
+            .catch((error) => updateState(state => ({
+                ...state,
+                error,
+                status: AsyncStates.Error
+            })))
+
+
+        useEffect(() => {
+            updateState(state => ({...state, status: AsyncStates.Loading}))
+            action()
+        }, params)
+
+        this.action = action
+        this.error = state.error
+        this.result = state.result
+        this.status = state.status
+
+    }
+
+    get isInit() {
+        return this.status === AsyncStates.Init
+    }
+
+    get isLoading() {
+        return this.status === AsyncStates.Loading
+    }
+
+    get isInProgress() {
+        return this.isInit || this.isLoading;
+    }
+
+    get isSuccess() {
+        return this.status === AsyncStates.Success
+    }
+
+    get isError() {
+        return this.status === AsyncStates.Error
+    }
+
+    result: Result
+    error?: Error
+    status: AsyncStates
+    private readonly action: () => Promise<void>
+
+
+}
+
 export type UseAsyncReturn<Result = any, Error = any> =
     AsyncState<Result, Error>
     & AsyncHelpers
@@ -38,19 +107,20 @@ export const useAsync = <Result = any, Error = any>(
         status: AsyncStates.Init
     });
 
-    useEffect(() => {
-        fn()
-            .then((result) => updateState(state => ({
-                ...state,
-                result,
-                status: AsyncStates.Success
-            })))
-            .catch((error) => updateState(state => ({
-                ...state,
-                error,
-                status: AsyncStates.Error
-            })))
+    const action = () => fn()
+        .then((result) => updateState(state => ({
+            ...state,
+            result,
+            status: AsyncStates.Success
+        })))
+        .catch((error) => updateState(state => ({
+            ...state,
+            error,
+            status: AsyncStates.Error
+        })))
 
+    useEffect(() => {
+        action()
         updateState(state => ({...state, status: AsyncStates.Loading}))
     }, params)
 
@@ -59,6 +129,10 @@ export const useAsync = <Result = any, Error = any>(
     const isInProgress = isInit || isLoading;
     const isSuccess = state.status === AsyncStates.Success
     const isError = state.status === AsyncStates.Error
+
+    const refresh = () => {
+        action()
+    };
 
     const onSuccess = (cb: (result: Result) => void) => {
         useEffect(() => {
@@ -77,6 +151,7 @@ export const useAsync = <Result = any, Error = any>(
         isError,
         isInProgress,
         onSuccess,
+        refresh,
     }
 };
 
