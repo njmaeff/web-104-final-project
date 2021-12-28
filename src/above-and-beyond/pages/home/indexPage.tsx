@@ -28,9 +28,10 @@ import {WithEnvironment} from "../lib/withEnvironment";
 import {Loader} from "../lib/loader";
 import {css} from "@emotion/react";
 import {ScrollBar} from "../lib/styles/mixins";
-import {useFileUpload} from "../lib/storage/file";
+import {useBaseFileUpload} from "../lib/storage/file";
 import {DeleteButton} from "../lib/button/delete";
 import {useRouter} from "../routes";
+import {uploadFileList} from "../lib/upload";
 
 
 export const EmployerForm: React.FC<{ currentEmployer?: Employer, allEmployers?: Employer[], onSubmit? }> = ({
@@ -40,15 +41,19 @@ export const EmployerForm: React.FC<{ currentEmployer?: Employer, allEmployers?:
                                                                                                              }) => {
 
     const employerAPI = getEmployer();
-    const storageRef = useFileUpload('employer')
+    const storageRef = useBaseFileUpload('employer')
 
     const [formik, form] = useFormWithStatus<Employer & Uploads>({
         initialValues: currentEmployer,
         validationSchema: employerSchema,
         initialStatus: currentEmployer ? PageStatus.VIEW : PageStatus.EDIT,
-        onSubmit: async (values, helpers) => {
-            await employerAPI.write(values);
-            helpers.setValues(values)
+        onSubmit: async ({uploads, ...values}, helpers) => {
+            const ref = await employerAPI.write(values);
+            await uploadFileList(
+                storageRef.child(ref.id),
+                uploads,
+            )
+            helpers.setValues({...values, id: ref.id})
         },
     })
 
@@ -100,17 +105,21 @@ export const RoleForm: React.FC<{ currentRole?: Role, allRoles?: Role[], onSubmi
     const {
         currentEmployerID,
     } = useEmployer()
-    const storageRef = useFileUpload('role')
+    const storageRef = useBaseFileUpload('role')
 
     const [formik, form] = useFormWithStatus<Role & Uploads>({
         initialValues: currentRole,
         validationSchema: roleSchema,
         initialStatus: currentRole ? PageStatus.VIEW : PageStatus.EDIT,
-        onSubmit: async (values, helpers) => {
-            await EmployerCollection.fromID(
+        onSubmit: async ({uploads, ...values}, helpers) => {
+            const ref = await EmployerCollection.fromID(
                 currentEmployerID
             ).roles.write(values);
-            helpers.setValues(values)
+            await uploadFileList(
+                storageRef.child(ref.id),
+                uploads,
+            )
+            helpers.setValues({...values, id: ref.id})
         },
     })
 

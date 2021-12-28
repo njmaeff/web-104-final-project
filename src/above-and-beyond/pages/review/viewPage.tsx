@@ -6,7 +6,7 @@ import {useRouter} from "../routes";
 import {EmployerCollection} from "../lib/orm/docs";
 import {Review} from "../lib/orm/validate";
 import {Loader} from "../lib/loader";
-import {useFileUpload} from "../lib/storage/file";
+import {useRoleFileUpload} from "../lib/storage/file";
 import {useAsync} from "../lib/hooks/useAsync";
 import {FileType} from "../lib/upload";
 
@@ -23,7 +23,7 @@ export default () => {
                 router.review.push()
             }
 
-            const storageRef = useFileUpload('review', id)
+            const storageRef = useRoleFileUpload('review', id)
 
             const {result} = useAsync(async () => {
                     const files = await storageRef.listAll();

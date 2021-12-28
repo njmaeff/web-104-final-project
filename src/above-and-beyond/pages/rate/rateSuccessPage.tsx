@@ -17,7 +17,7 @@ import {useRouter} from "../routes";
 import {useRole} from "../home/useRole";
 import {HorizontalRule} from "../lib/layout/divider";
 import {uploadFileList} from "../lib/upload";
-import {useFileUpload} from "../lib/storage/file";
+import {useRoleFileUpload} from "../lib/storage/file";
 
 export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
     const router = useRouter();
@@ -25,7 +25,7 @@ export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
     const {currentEmployerID} = useEmployer();
     const {currentRoleID} = useRole()
 
-    const storageRef = useFileUpload('rate')
+    const storageRef = useRoleFileUpload('rate')
 
     const [, {
         fieldProps,

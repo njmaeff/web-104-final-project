@@ -16,7 +16,7 @@ import {Button} from "antd";
 import {EditOutlined, SaveOutlined} from "@ant-design/icons";
 import {useRouter} from "../routes";
 import {HorizontalRule} from "../lib/layout/divider";
-import {useFileUpload} from "../lib/storage/file";
+import {useRoleFileUpload} from "../lib/storage/file";
 import {uploadFileList} from "../lib/upload";
 
 export const RateIssuePage: React.FC<{ data?: RateIssue }> = ({data}) => {
@@ -25,7 +25,7 @@ export const RateIssuePage: React.FC<{ data?: RateIssue }> = ({data}) => {
     const {currentEmployerID} = useEmployer();
     const {currentRoleID} = useRole()
 
-    const storageRef = useFileUpload('rate')
+    const storageRef = useRoleFileUpload('rate')
 
     const [, {
         fieldProps,

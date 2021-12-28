@@ -9,7 +9,7 @@ import {Loader} from "../lib/loader";
 import {Rate} from "../lib/orm/validate";
 import {useAsync} from "../lib/hooks/useAsync";
 import {FileType} from "../lib/upload";
-import {useFileUpload} from "../lib/storage/file";
+import {useRoleFileUpload} from "../lib/storage/file";
 import capitalize from "lodash/capitalize";
 import {css} from "@emotion/react";
 import {SectionSize} from "../lib/styles/size";
@@ -27,7 +27,7 @@ export const NewPage = () => {
                 router.rate.push()
             }
 
-            const storageRef = useFileUpload('rate', id)
+            const storageRef = useRoleFileUpload('rate', id)
 
             const {result} = useAsync(async () => {
                     const files = await storageRef.listAll();

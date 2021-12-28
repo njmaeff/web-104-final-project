@@ -17,14 +17,14 @@ import {Button} from "antd";
 import {EditOutlined, SaveOutlined} from "@ant-design/icons";
 import {useRouter} from "../routes";
 import {HorizontalRule} from "../lib/layout/divider";
-import {useFileUpload} from "../lib/storage/file";
+import {useRoleFileUpload} from "../lib/storage/file";
 import {uploadFileList} from "../lib/upload";
 
 export const ReviewForm: React.FC<{ data?: Review }> = ({data}) => {
     const router = useRouter();
     const {currentEmployerID} = useEmployer()
     const {currentRoleID} = useRole()
-    const storageRef = useFileUpload('review')
+    const storageRef = useRoleFileUpload('review')
 
     const [, {
         fieldProps,

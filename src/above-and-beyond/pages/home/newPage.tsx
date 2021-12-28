@@ -18,7 +18,7 @@ export default () => WithEnvironment(() => {
         case "employer":
             Component = () => <EmployerForm onSubmit={(values) => {
                 updateEmployer(values.id)
-                router.home.push({
+                return router.home.push({
                     query: {
                         menu: "employer"
                     }
@@ -28,7 +28,7 @@ export default () => WithEnvironment(() => {
         case "role":
             Component = () => <RoleForm onSubmit={(values) => {
                 updateRole(values.id)
-                router.home.push({
+                return router.home.push({
                     query: {
                         menu: "role"
                     }
