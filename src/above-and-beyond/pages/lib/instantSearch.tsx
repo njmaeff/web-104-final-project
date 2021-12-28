@@ -3,6 +3,7 @@ import {
     connectInfiniteHits,
     connectPoweredBy,
     connectSearchBox,
+    connectSortBy,
     connectStateResults,
     InstantSearch,
     RefinementList,
@@ -13,7 +14,7 @@ import TypesenseInstantSearchAdapter from "typesense-instantsearch-adapter"
 import {auth} from "./firebase/connect-api";
 import {AsyncHook} from "./hooks/useAsync";
 import {Loader} from "./loader";
-import {Input} from "antd";
+import {Input, Select} from "antd";
 import React from "react";
 import {InfiniteHits} from "./search/infiniteHits";
 import {css} from "@emotion/react";
@@ -100,9 +101,33 @@ const SearchBox = connectSearchBox(({
 
 const Hits = connectInfiniteHits(InfiniteHits) as React.ComponentClass<{ HitsComponent }, any>
 
+const CustomSortBy: React.FC<{ items: { value, label, isRefined }[] }> = ({
+                                                                              items,
+                                                                              currentRefinement,
+                                                                              refine,
+                                                                          }) => {
+    return (
+        <Select defaultValue={currentRefinement}
+                onChange={item => {
+                    refine(item);
+                }}>
+            {items.map(item => (
+                <Select.Option key={item.value}
+                               value={item.value}
+                >
+                    {item.label}
+                </Select.Option>
+            ))}
+        </Select>
+    );
+};
+
+const SortBy = connectSortBy(CustomSortBy)
+
+
 const CustomErrorCatcher: React.FC<StateResultsProvided & { onError, error?: { httpStatus?: number } }> = ({
                                                                                                                error,
-                                                                                                               onError
+                                                                                                               onError,
                                                                                                            }) => {
     if (error?.httpStatus === 401) {
         onError();
