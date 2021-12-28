@@ -71,28 +71,32 @@ export const userSchema = makeSchema<User>({
     email: yup.string().email(),
     displayName: yup.string().required(),
 })
-export const employerSchema = makeSchema<Employer>({
+export const employerSchema = makeSchema<Employer & Uploads>({
     name: yup.string().required(),
     location: yup.string().required(),
+    uploads: yup.array().optional(),
 }, {
     name: "",
-    location: ""
+    location: "",
+    uploads: []
 })
 
-export const roleSchema = makeSchema<Role>({
+export const roleSchema = makeSchema<Role & Uploads>({
     name: yup.string().required(),
     responsibilities: yup.string().required(),
     salary: yup.number().required(),
     salaryTarget: yup.number().required(),
     skillTarget: yup.string().required(),
-    startDate: dateValidator
+    startDate: dateValidator,
+    uploads: yup.array().optional(),
 }, {
     name: "",
     salary: 0,
     salaryTarget: 0,
     skillTarget: "",
     responsibilities: "",
-    startDate: new Date()
+    startDate: new Date(),
+    uploads: []
 })
 
 export const reviewSchema = makeSchema<Review & Uploads>({

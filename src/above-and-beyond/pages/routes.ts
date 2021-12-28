@@ -9,7 +9,11 @@ export interface Routes {
             action: 'new'
         }
     }
-    'employer/role'
+    'employer/new': {
+        query: {
+            action: 'role' | 'employer'
+        }
+    }
     profile
     rate
     'rate/new': {

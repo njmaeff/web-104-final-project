@@ -1,12 +1,19 @@
 import {EmployerCollection, getEmployer} from "../lib/orm/docs";
 import {useFormWithStatus} from "../lib/hooks/useFormWithStatus";
-import {Employer, employerSchema, Role, roleSchema} from "../lib/orm/validate";
+import {
+    Employer,
+    employerSchema,
+    Role,
+    roleSchema,
+    Uploads
+} from "../lib/orm/validate";
 import React, {useEffect, useState} from "react";
 import {
     FieldDatePickerRow,
     FieldDropDownInput,
     FieldInputRow,
     FormTable,
+    FormUpload,
     TextInput
 } from "../lib/input";
 import {EmployerDropDown, RoleDropDown} from "../lib/control";
@@ -21,6 +28,7 @@ import {WithEnvironment} from "../lib/withEnvironment";
 import {Loader} from "../lib/loader";
 import {css} from "@emotion/react";
 import {ScrollBar} from "../lib/styles/mixins";
+import {useFileUpload} from "../lib/storage/file";
 
 
 export const EmployerForm: React.FC<{ currentEmployer?: Employer, allEmployers?: Employer[] }> = ({
@@ -29,8 +37,9 @@ export const EmployerForm: React.FC<{ currentEmployer?: Employer, allEmployers?:
                                                                                                   }) => {
 
     const employerAPI = getEmployer();
+    const storageRef = useFileUpload('employer')
 
-    const [formik, form] = useFormWithStatus<Employer>({
+    const [formik, form] = useFormWithStatus<Employer & Uploads>({
         initialValues: currentEmployer,
         validationSchema: employerSchema,
         onSubmit: async (values, helpers) => {
@@ -52,6 +61,10 @@ export const EmployerForm: React.FC<{ currentEmployer?: Employer, allEmployers?:
                 label={"Location"}
                 {...form.fieldProps.location}
             />
+            <FormUpload label={"Uploads"}
+                        storageRef={storageRef.child(form.fieldProps.id?.value ?? "")}
+                        isManualSubmit={!currentEmployer || form.isEdit}
+                        {...form.fieldProps.uploads}  />
         </FormTable>
         <AbsoluteButton Control={({save}) => <Button
             type="primary"
@@ -61,7 +74,7 @@ export const EmployerForm: React.FC<{ currentEmployer?: Employer, allEmployers?:
                     await save(() => {
                         return form.onClickSave()
                     })
-                    form.setView();
+                    form.setSubmitted();
                 } else {
                     form.setEdit()
                 }
@@ -79,8 +92,9 @@ export const RoleForm: React.FC<{ currentRole: Role, allRoles: Role[] }> = ({
     const {
         currentEmployerID,
     } = useEmployer()
+    const storageRef = useFileUpload('role')
 
-    const [formik, form] = useFormWithStatus<Role>({
+    const [formik, form] = useFormWithStatus<Role & Uploads>({
         initialValues: currentRole,
         validationSchema: roleSchema,
         onSubmit: async (values, helpers) => {
@@ -124,24 +138,29 @@ export const RoleForm: React.FC<{ currentRole: Role, allRoles: Role[] }> = ({
                 height={"auto"}
                 label={"Responsibilities"}
             />
-            <AbsoluteButton Control={({save}) => <Button
-                type="primary"
-                icon={form.isEdit ? <SaveOutlined/> : <EditOutlined/>}
-                onClick={async () => {
-                    if (form.isEdit) {
-                        await save(() => {
-                            return form.onClickSave()
-                        })
-                        form.setView();
-                    } else {
-                        form.setEdit()
-                    }
+            <FormUpload label={"Uploads"}
+                        storageRef={storageRef.child(form.fieldProps.id?.value ?? "")}
+                        isManualSubmit={!currentRole || form.isEdit}
+                        {...form.fieldProps.uploads}  />
 
-                }}
-            />}
-            />
+        </FormTable>
+        <AbsoluteButton Control={({save}) => <Button
+            type="primary"
+            icon={form.isEdit ? <SaveOutlined/> : <EditOutlined/>}
+            onClick={async () => {
+                if (form.isEdit) {
+                    await save(() => {
+                        return form.onClickSave()
+                    })
+                    form.setSubmitted();
+                } else {
+                    form.setEdit()
+                }
 
-        </FormTable></>
+            }}
+        />}
+        />
+    </>
 };
 
 export const MainPage = () => {
@@ -176,7 +195,7 @@ export const MainPage = () => {
             } else if (currentEmployerID && currentRoleID) {
                 setMenu({
                     activeKey: "role",
-                    heading: "Above and Beyond"
+                    heading: "Home"
                 });
             }
         }
@@ -186,8 +205,6 @@ export const MainPage = () => {
     return (
         isLoading ? <Loader/> : <MenuLayout
             heading={menu.heading}
-            HeaderDropDown={menu.activeKey === 'role' ? () =>
-                <EmployerDropDown {...employerData.result}/> : null}
             Main={() => {
 
                 return <Tabs css={
@@ -201,10 +218,10 @@ export const MainPage = () => {
                                  ...prev,
                                  activeKey: key,
                              }))}>
-                    <TabPane tab="Employer" key="employer">
+                    <TabPane tab="Employers" key="employer">
                         <EmployerForm {...employerData.result}/>
                     </TabPane>
-                    <TabPane tab="Role" key="role" disabled={menu.disableRole}>
+                    <TabPane tab="Roles" key="role" disabled={menu.disableRole}>
                         <RoleForm {...roleData.result}/>
                     </TabPane>
                 </Tabs>
