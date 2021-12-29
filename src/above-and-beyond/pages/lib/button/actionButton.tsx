@@ -1,60 +1,56 @@
-import React from "react";
-import {Button, ButtonProps} from "antd";
+import React, {useState} from "react";
+import {Button, ButtonProps, Modal} from "antd";
 import {css} from "@emotion/react";
-import {DeleteOutlined, PlusCircleOutlined} from "@ant-design/icons";
+import {DeleteOutlined} from "@ant-design/icons";
 import {BlockModal} from "./blockModal";
 
-export const RemoveButton: React.FC<ButtonProps> = ({onClick, ...props}) => {
-    return <BlockModal Component={({save}) => {
+export const RemoveButton: React.FC<ButtonProps & { onCleanup }> = ({
+                                                                        onClick,
+                                                                        onCleanup: cleanupFunction,
+                                                                        ...props
+                                                                    }) => {
 
-        return <Button
-            css={theme => css`
-                //display: block;
-                background-color: ${theme.colors.light} !important;
-                background-color: transparent !important;
-                color: ${theme.colors.dark} !important;
-                border: none;
-                //border-radius: 5px;
-                //margin: 0.5rem;
-                //font-size: 1rem;
-                //height: auto;
-            `}
-            onClick={(e) => {
-                e.stopPropagation();
-                save(onClick)
-            }}
-            type="primary"
-            {...props}>
-            <DeleteOutlined/>{props.children}
-        </Button>
+    return <BlockModal
 
-    }} message={'Removing...'}/>
+        Component={({save, onCleanup}) => {
+            const [visible, setVisible] = useState(false);
+            onCleanup(cleanupFunction)
+            return <><Button
+                css={theme => css`
+                    background-color: transparent !important;
+                    color: ${theme.colors.dark} !important;
+                    border: none;
+                `}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    setVisible(true)
+                }}
+                type="primary"
+                {...props}>
+                <DeleteOutlined/>{props.children}
+            </Button>
+                <Modal title="Please Confirm"
+                       visible={visible}
+                       onOk={(e) => {
+                           e.stopPropagation()
+                           save(onClick)
+                           setVisible(false)
+                       }}
+                       onCancel={(e) => {
+                           e.stopPropagation()
+                           setVisible(false)
+                       }}
+                       okText="Confirm"
+                       cancelText="Cancel"
+                >
+                    <p>This record will be deleted and cannot be recovered.</p>
+                </Modal>
+            </>
+        }}>
+        Removing...
+    </BlockModal>
 };
 
-
-export const AddButton = React.forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
-
-    return <Button
-        ref={ref}
-        css={theme => css`
-            display: block;
-            background-color: ${theme.colors.primary} !important;
-            color: ${theme.colors.light} !important;
-            border: 2px solid ${theme.colors.primary};
-            border-radius: 5px;
-            margin: 0.5rem;
-            font-size: 1rem;
-            height: auto;
-        `}
-        onClick={(e) => {
-            e.preventDefault();
-            props.onClick?.(e)
-        }}
-        type="primary"
-        {...props}>
-        <PlusCircleOutlined/>{props.children}
-    </Button>
-});
 
 export const ActionButton = ({onNew, onRemove}) => {
 
@@ -66,7 +62,6 @@ export const ActionButton = ({onNew, onRemove}) => {
             margin-top: 1.5rem;
         `}
     >
-        <AddButton>Create</AddButton>
         <RemoveButton>Remove</RemoveButton>
     </div>
 };

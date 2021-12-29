@@ -4,6 +4,8 @@ import {useState} from "react";
 import {FirestoreProvider} from "../firebase/firestore-provider-compat";
 import {useAsync} from "../hooks/useAsync";
 import {DateLike, Doc, Employer, Rate, Review, Role} from "./validate";
+import {useEmployer} from "../../home/useEmployer";
+import {useRole} from "../../home/useRole";
 
 /**
  * Helper function to compose paths to documents stored in collections.
@@ -101,6 +103,26 @@ export class EmployerCollection {
     }
 
     private employer = getEmployer();
+}
+
+export class RoleHook {
+
+    constructor() {
+        const {currentEmployerID} = useEmployer()
+        const {currentRoleID} = useRole();
+
+        this.roleApi = getEmployer().withID(currentEmployerID).fromSubCollection<Role>('roles').withID(currentRoleID);
+    }
+
+    get rate() {
+        return this.roleApi.fromSubCollection<Rate>('rate')
+    }
+
+    get review() {
+        return this.roleApi.fromSubCollection<Review>('review')
+    }
+
+    private roleApi: Firestore<Role>;
 }
 
 export const Timestamp = firebase.firestore.Timestamp;

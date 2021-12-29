@@ -9,7 +9,7 @@ import {
     PlusCircleOutlined
 } from "@ant-design/icons";
 import {useRouter} from "../routes";
-import {Timestamp} from "../lib/orm/docs";
+import {RoleHook, Timestamp} from "../lib/orm/docs";
 import {Highlight} from "react-instantsearch-dom";
 import {css} from "@emotion/react";
 import {RoleDropDown} from "../lib/control";
@@ -21,7 +21,9 @@ import {Loader} from "../lib/loader";
 import {RemoveButton} from "../lib/button/actionButton";
 
 export const RateListHits: React.FC<{ hits }> = ({hits}) => {
+    const role = new RoleHook();
     const routes = useRouter();
+
     return hits.map((item: Rate) => {
         return <List.Item
             key={item.id}
@@ -38,9 +40,13 @@ export const RateListHits: React.FC<{ hits }> = ({hits}) => {
                     query: {
                         id: item.id
                     }
-                })
+                });
             }}
-            actions={[<RemoveButton/>]}
+
+            actions={[<RemoveButton onCleanup={() => routes["rate"].push()}
+                                    onClick={async () => {
+                                        await role.rate.deleteDoc(item.id)
+                                    }}/>]}
         >
             <List.Item.Meta
                 avatar={

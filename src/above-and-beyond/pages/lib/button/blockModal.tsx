@@ -1,14 +1,15 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import pMinDelay from "p-min-delay";
 import {Modal, Spin} from "antd";
 import {css} from "@emotion/react";
 
-export const BlockModal: React.FC<{ Component: React.FC<{ save }>, message?: string }> = ({
-                                                                                              Component,
-                                                                                              message
-                                                                                          }) => {
+export const BlockModal: React.FC<{ Component: React.FC<{ save?, onCleanup? }> }> = ({
+                                                                                       Component,
+                                                                                       children,
+                                                                                   }) => {
 
     const [visible, setVisible] = useState(false);
+    const [saved, setSaved] = useState(false);
     const save = async (fn) => {
 
         try {
@@ -19,7 +20,14 @@ export const BlockModal: React.FC<{ Component: React.FC<{ save }>, message?: str
             setVisible(false)
             throw e;
         }
+        setSaved(true)
     };
+
+    const onCleanup = (fn) => useEffect(() => {
+        if (saved) {
+            fn?.()
+        }
+    }, [saved]);
 
     return <>
         {visible && <Modal css={theme => css`
@@ -29,9 +37,9 @@ export const BlockModal: React.FC<{ Component: React.FC<{ save }>, message?: str
                            closable={false}
                            footer={null}
         >
-            {message}
+            {children}
             <Spin/>
         </Modal>}
-        <Component save={save}/>
+        <Component save={save} onCleanup={onCleanup}/>
     </>
 };
