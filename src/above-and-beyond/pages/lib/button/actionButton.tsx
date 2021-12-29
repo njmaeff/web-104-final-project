@@ -11,6 +11,7 @@ export const RemoveButton: React.FC<ButtonProps> = ({onClick, ...props}) => {
             css={theme => css`
                 //display: block;
                 background-color: ${theme.colors.light} !important;
+                background-color: transparent !important;
                 color: ${theme.colors.dark} !important;
                 border: none;
                 //border-radius: 5px;
@@ -19,7 +20,7 @@ export const RemoveButton: React.FC<ButtonProps> = ({onClick, ...props}) => {
                 //height: auto;
             `}
             onClick={(e) => {
-                e.preventDefault();
+                e.stopPropagation();
                 save(onClick)
             }}
             type="primary"

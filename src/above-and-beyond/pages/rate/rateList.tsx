@@ -18,6 +18,7 @@ import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
 import {formatCurrency} from "../lib/util/currency";
 import {WithEnvironment} from "../lib/withEnvironment";
 import {Loader} from "../lib/loader";
+import {RemoveButton} from "../lib/button/actionButton";
 
 export const RateListHits: React.FC<{ hits }> = ({hits}) => {
     const routes = useRouter();
@@ -32,11 +33,14 @@ export const RateListHits: React.FC<{ hits }> = ({hits}) => {
                     }
                 `
             }
-            onClick={() => routes["rate/view"].push({
-                query: {
-                    id: item.id
-                }
-            })}
+            onClick={() => {
+                routes["rate/view"].push({
+                    query: {
+                        id: item.id
+                    }
+                })
+            }}
+            actions={[<RemoveButton/>]}
         >
             <List.Item.Meta
                 avatar={
