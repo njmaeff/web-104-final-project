@@ -4,15 +4,16 @@ import React, {ReactEventHandler} from "react";
 import {css} from "@emotion/react";
 import {DownOutlined} from "@ant-design/icons";
 import {useEmployer} from "../home/useEmployer";
-import {useRouter} from "../routes";
 import {useRole} from "../home/useRole";
 import {Employer, Role} from "./orm/validate";
+import {useRouter} from "../routes";
+import {RemoveButton} from "./button/actionButton";
+import {alphabetical} from "./util/sort";
 
 export const DropDownMenu: React.FC<{ value }> = ({children, value}) => {
 
     return <Dropdown css={theme => css`
         background-color: ${theme.colors.light};
-
     `} overlay={
         <Menu>{children}</Menu>
     }
@@ -49,7 +50,8 @@ export const DropDownMenu: React.FC<{ value }> = ({children, value}) => {
 export const DropDownElement: React.FC<{
     href?: string;
     onClick?: ReactEventHandler<HTMLAnchorElement>
-}> = ({href, children, onClick}) => {
+    value: string
+}> = ({href, value, children, onClick}) => {
     return (
         <Menu.Item>
             {href ? <Link
@@ -60,7 +62,8 @@ export const DropDownElement: React.FC<{
                 }}>{children}</a>
             </Link> : <a onClick={(e) => {
                 onClick?.(e)
-            }}>{children}</a>}
+            }}>{value}</a>}
+            {children}
         </Menu.Item>
     );
 };
@@ -69,28 +72,42 @@ export const DropDownElement: React.FC<{
 export const EmployerDropDown: React.FC<{
     currentEmployer?: Employer
     allEmployers?: Employer[]
+    onRemove?: (record: Employer) => void
 }> = ({
-          currentEmployer, allEmployers
+          currentEmployer, allEmployers, onRemove
       }) => {
-
+    const router = useRouter()
     const {
         updateEmployer,
     } = useEmployer();
     return <DropDownMenu
-        value={currentEmployer?.name ?? "New Employer"}
+        value={currentEmployer?.name}
     >
+        <DropDownElement
+            key={'new'}
+            onClick={() => {
+                router["home/new"].push({
+                    query: {
+                        menu: 'employer'
+                    }
+                })
+            }}
+            value={'Create New'}
+        >
+        </DropDownElement>
         {allEmployers?.filter(
             (employer) =>
                 employer.id !== currentEmployer?.id
         )
-            .map((employer) => (
+            .sort(alphabetical).map((employer) => (
                 <DropDownElement
                     key={employer.id}
                     onClick={() => {
                         updateEmployer(employer.id)
                     }}
+                    value={employer.name}
                 >
-                    {employer.name}
+                    <RemoveButton onClick={() => onRemove?.(employer)}/>
                 </DropDownElement>
             ))}
     </DropDownMenu>
@@ -102,26 +119,42 @@ export const RoleDropDown: React.FC<{
     disableNew?: boolean
     currentRole?: Role
     allRoles?: Role[]
+    onRemove?: (record: Role) => void
 }> = ({
           currentRole,
           allRoles,
+          onRemove,
       }) => {
+
+    const router = useRouter();
     const {
         updateRole,
     } = useRole()
     return <DropDownMenu
         value={currentRole?.name}
     >
+        <DropDownElement
+            key={'new'}
+            onClick={() => {
+                router["home/new"].push({
+                    query: {
+                        menu: 'role'
+                    }
+                })
+            }}
+            value={'Create New'}
+        />
         {allRoles?.filter(
             (role) =>
                 role.id !== currentRole?.id
         )
-            .map((role) => (
+            .sort(alphabetical).map((role) => (
                 <DropDownElement
                     key={role.id}
                     onClick={() => updateRole(role.id)}
+                    value={role.name}
                 >
-                    {role.name}
+                    <RemoveButton onClick={() => onRemove?.(role)}/>
                 </DropDownElement>
             ))}
     </DropDownMenu>;

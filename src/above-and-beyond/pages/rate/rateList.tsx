@@ -14,7 +14,7 @@ import {Highlight} from "react-instantsearch-dom";
 import {css} from "@emotion/react";
 import {RoleDropDown} from "../lib/control";
 import {useRole} from "../home/useRole";
-import {AbsoluteButton} from "../lib/button/absoluteFeature";
+import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
 import {formatCurrency} from "../lib/util/currency";
 import {WithEnvironment} from "../lib/withEnvironment";
 import {Loader} from "../lib/loader";

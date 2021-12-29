@@ -9,7 +9,7 @@ import {Highlight} from "react-instantsearch-dom";
 import {css} from "@emotion/react";
 import {RoleDropDown} from "../lib/control";
 import {useRole} from "../home/useRole";
-import {AbsoluteButton} from "../lib/button/absoluteFeature";
+import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
 import {Review} from "../lib/orm/validate";
 import {formatCurrency} from "../lib/util/currency";
 import {WithEnvironment} from "../lib/withEnvironment";
@@ -23,7 +23,8 @@ export const ReviewListHits: React.FC<{ hits }> = ({hits}) => {
             css={
                 css`
                     li, p {
-                        margin: 0
+                        margin: 0;
+                        background: transparent;
                     }
                 `
             }

@@ -11,7 +11,7 @@ import {
     TextInput
 } from "../lib/input";
 import {useRole} from "../home/useRole";
-import {AbsoluteButton} from "../lib/button/absoluteFeature";
+import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
 import {Button} from "antd";
 import {EditOutlined, SaveOutlined} from "@ant-design/icons";
 import {useRouter} from "../routes";

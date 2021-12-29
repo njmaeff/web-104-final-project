@@ -19,7 +19,7 @@ import {
 import {EmployerDropDown, RoleDropDown} from "../lib/control";
 import {useEmployer} from "./useEmployer";
 import {useRole} from "./useRole";
-import {AbsoluteButton} from "../lib/button/absoluteFeature";
+import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
 import {MenuLayout} from "../lib/layout/menuLayout";
 import {Button, Tabs} from "antd";
 import {EditOutlined, SaveOutlined} from "@ant-design/icons";
@@ -29,7 +29,7 @@ import {Loader} from "../lib/loader";
 import {css} from "@emotion/react";
 import {ScrollBar} from "../lib/styles/mixins";
 import {useBaseFileUpload} from "../lib/storage/file";
-import {DeleteButton} from "../lib/button/delete";
+import {ActionButton, RemoveButton} from "../lib/button/actionButton";
 import {useRouter} from "../routes";
 import {uploadFileList} from "../lib/upload";
 
@@ -76,7 +76,6 @@ export const EmployerForm: React.FC<{ currentEmployer?: Employer, allEmployers?:
                         storageRef={storageRef.child(form.fieldProps.id?.value ?? "")}
                         isManualSubmit={!currentEmployer || form.isEdit}
                         {...form.fieldProps.uploads}  />
-            {form.isReadonly && <DeleteButton/>}
         </FormTable>
         <AbsoluteButton Control={({save}) => <Button
             type="primary"
@@ -133,37 +132,36 @@ export const RoleForm: React.FC<{ currentRole?: Role, allRoles?: Role[], onSubmi
                 label={"Current Role"}
                 {...form.fieldProps.name}
             />
-            <FieldDatePickerRow
-                label={"Start Date"}
-                {...form.fieldProps.startDate}
-            />
-            <FieldInputRow
-                label={"Current Salary"}
-                monetary
-                {...form.fieldProps.salary}
-            />
             <FieldInputRow
                 label={"Target Salary"}
                 monetary
                 {...form.fieldProps.salaryTarget}
             />
             <TextInput
-                {...form.fieldProps.skillTarget}
-                height={"auto"}
-                label={"Skills"}
-            />
-
-            <TextInput
                 {...form.fieldProps.responsibilities}
                 height={"auto"}
                 label={"Responsibilities"}
             />
+            <TextInput
+                {...form.fieldProps.skillTarget}
+                height={"auto"}
+                label={"Focus"}
+            />
+            <FieldInputRow
+                label={"Current Salary"}
+                monetary
+                {...form.fieldProps.salary}
+            />
+            <FieldDatePickerRow
+                label={"Start Date"}
+                {...form.fieldProps.startDate}
+            />
+
             <FormUpload label={"Uploads"}
                         storageRef={storageRef.child(form.fieldProps.id?.value ?? "")}
                         isManualSubmit={!currentRole || form.isEdit}
                         {...form.fieldProps.uploads}  />
 
-            {form.isReadonly && <DeleteButton/>}
         </FormTable>
         <AbsoluteButton Control={({save}) => <Button
             type="primary"

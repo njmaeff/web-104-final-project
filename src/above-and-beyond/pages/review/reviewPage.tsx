@@ -12,7 +12,7 @@ import {Review, reviewSchema, Uploads} from "../lib/orm/validate";
 import {MenuLayout} from "../lib/layout/menuLayout";
 import {useRole} from "../home/useRole";
 import {useEmployer} from "../home/useEmployer";
-import {AbsoluteButton} from "../lib/button/absoluteFeature";
+import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
 import {Button} from "antd";
 import {EditOutlined, SaveOutlined} from "@ant-design/icons";
 import {useRouter} from "../routes";

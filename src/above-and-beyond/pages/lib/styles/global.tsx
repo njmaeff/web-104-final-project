@@ -285,5 +285,12 @@ export const GlobalStyles = () => {
         div.ant-picker-panel-container {
             background-color: ${theme.colors.light} !important;
         }
+
+        .ant-dropdown-menu-title-content {
+            display: flex !important;
+            justify-content: space-between;
+            align-items: center;
+        }
+
     `}/>
 };

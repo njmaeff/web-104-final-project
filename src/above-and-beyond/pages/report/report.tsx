@@ -1,1 +1,5 @@
-export default  () => <div/>
+import {WithEnvironment} from "../lib/withEnvironment";
+
+export default () => WithEnvironment(() => {
+    return <div/>
+})

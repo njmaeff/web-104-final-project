@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import {FeatureButton} from "./feature";
+import {FeatureButton} from "./featureButton";
 import {Modal, Spin} from "antd";
 import {useState} from "react";
 import {css} from "@emotion/react";
