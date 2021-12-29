@@ -11,7 +11,7 @@ export interface EmployerLocalState {
 }
 
 export const DEFAULT_LOCAL: EmployerLocalState = {
-    currentEmployerID: "",
+    currentEmployerID: null,
 };
 
 export class EmployerApi {
@@ -27,7 +27,12 @@ export class EmployerApi {
     }
 
     useCurrent = () => useAsync(async () => {
-        let currentEmployer = await getEmployer().read(this.currentEmployerID);
+
+        let currentEmployer;
+        if (this.currentEmployerID) {
+            currentEmployer = await getEmployer().read(this.currentEmployerID);
+        }
+
         const allEmployers = await getEmployer().readFromCollection()
         if (!currentEmployer) {
             if (allEmployers.length > 0) {

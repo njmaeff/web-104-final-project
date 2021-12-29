@@ -18,7 +18,7 @@ import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
 import {formatCurrency} from "../lib/util/currency";
 import {WithEnvironment} from "../lib/withEnvironment";
 import {Loader} from "../lib/loader";
-import {RemoveButton} from "../lib/button/actionButton";
+import {ExportButton, RemoveButton} from "../lib/button/actionButton";
 
 export const RateListHits: React.FC<{ hits }> = ({hits}) => {
     const role = new RoleHook();
@@ -33,6 +33,17 @@ export const RateListHits: React.FC<{ hits }> = ({hits}) => {
                         margin: 0;
                         background-color: transparent;
                     }
+
+                    .ant-list-item-action {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-between;
+                        align-self: flex-start;
+
+                        li {
+                            padding: 0;
+                        }
+                    }
                 `
             }
             onClick={() => {
@@ -43,10 +54,14 @@ export const RateListHits: React.FC<{ hits }> = ({hits}) => {
                 });
             }}
 
-            actions={[<RemoveButton onCleanup={() => routes["rate"].push()}
-                                    onClick={async () => {
-                                        await role.rate.deleteDoc(item.id)
-                                    }}/>]}
+            actions={[
+
+                <ExportButton/>,
+                <RemoveButton onCleanup={() => routes["rate"].push()}
+                              onClick={() => {
+                                  return role.rate.deleteDoc(item.id)
+                              }}/>
+            ]}
         >
             <List.Item.Meta
                 avatar={

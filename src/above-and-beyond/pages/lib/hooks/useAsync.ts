@@ -130,10 +130,6 @@ export const useAsync = <Result = any, Error = any>(
     const isSuccess = state.status === AsyncStates.Success
     const isError = state.status === AsyncStates.Error
 
-    const refresh = () => {
-        action()
-    };
-
     const onSuccess = (cb: (result: Result) => void) => {
         useEffect(() => {
             if (isSuccess) {
@@ -151,7 +147,6 @@ export const useAsync = <Result = any, Error = any>(
         isError,
         isInProgress,
         onSuccess,
-        refresh,
     }
 };
 

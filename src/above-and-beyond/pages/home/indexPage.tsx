@@ -29,7 +29,7 @@ import {Loader} from "../lib/loader";
 import {css} from "@emotion/react";
 import {ScrollBar} from "../lib/styles/mixins";
 import {useBaseFileUpload} from "../lib/storage/file";
-import {ActionButton, RemoveButton} from "../lib/button/actionButton";
+import {ExportButton, RemoveButton} from "../lib/button/actionButton";
 import {useRouter} from "../routes";
 import {uploadFileList} from "../lib/upload";
 
@@ -61,13 +61,22 @@ export const EmployerForm: React.FC<{ currentEmployer?: Employer, allEmployers?:
 
     return <>
         <FormTable>
+
             <FieldDropDownInput
                 label={"Current Employer"}
-                DropDown={() => <EmployerDropDown
-                    currentEmployer={formik.values}
-                    allEmployers={allEmployers}/>}
+                DropDown={() =>
+                    <div css={css`
+                        display: flex;
+                    `}>
+                        <EmployerDropDown
+                            currentEmployer={formik.values}
+                            allEmployers={allEmployers}/>
+                        <RemoveButton/>
+                    </div>
+                }
                 {...form.fieldProps.name}
             />
+
             <FieldInputRow
                 label={"Location"}
                 {...form.fieldProps.location}
@@ -77,6 +86,7 @@ export const EmployerForm: React.FC<{ currentEmployer?: Employer, allEmployers?:
                         isManualSubmit={!currentEmployer || form.isEdit}
                         {...form.fieldProps.uploads}  />
         </FormTable>
+        {form.isReadonly && <ExportButton/>}
         <AbsoluteButton Control={({save}) => <Button
             type="primary"
             icon={form.isEdit ? <SaveOutlined/> : <EditOutlined/>}
@@ -127,8 +137,16 @@ export const RoleForm: React.FC<{ currentRole?: Role, allRoles?: Role[], onSubmi
     return <>
         <FormTable>
             <FieldDropDownInput
-                DropDown={() => <RoleDropDown currentRole={formik.values}
-                                              allRoles={allRoles}/>}
+                DropDown={() =>
+                    <div css={css`
+                        display: flex;
+                    `}>
+                        <RoleDropDown currentRole={formik.values}
+                                      allRoles={allRoles}/>
+                        <RemoveButton/>
+                    </div>
+
+                }
                 label={"Current Role"}
                 {...form.fieldProps.name}
             />
@@ -163,6 +181,7 @@ export const RoleForm: React.FC<{ currentRole?: Role, allRoles?: Role[], onSubmi
                         {...form.fieldProps.uploads}  />
 
         </FormTable>
+        {form.isReadonly && <ExportButton/>}
         <AbsoluteButton Control={({save}) => <Button
             type="primary"
             icon={form.isEdit ? <SaveOutlined/> : <EditOutlined/>}

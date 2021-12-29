@@ -12,7 +12,6 @@ import {
     SortByProps,
 } from "react-instantsearch-dom"
 import TypesenseInstantSearchAdapter from "typesense-instantsearch-adapter"
-import {auth} from "./firebase/connect-api";
 import {AsyncHook} from "./hooks/useAsync";
 import {Loader} from "./loader";
 import {Input, Radio, Select} from "antd";
@@ -32,10 +31,10 @@ const {Search} = Input
 export const useSearchClient = () => {
     return new AsyncHook(
         async () => {
-            const token = await auth.currentUser.getIdTokenResult()
+            const token = await fetchCustomToken();
             const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
                 server: {
-                    apiKey: token.claims?.searchKey,
+                    apiKey: token,
                     nodes: [
                         {
                             host: process.env.NEXT_PUBLIC_SEARCH_HOST,

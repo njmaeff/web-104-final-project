@@ -1,10 +1,8 @@
 import React from "react";
-import dynamic from "next/dynamic";
-import {Loader} from "./loader";
+import {WithAppLayout} from "./layout/appLayout";
 
-const SignIn = dynamic(
+const SignIn = WithAppLayout(
     () => import('./SignIn'),
-    {loading: () => <Loader/>, ssr: false}
 )
 
 export const Login = () => {

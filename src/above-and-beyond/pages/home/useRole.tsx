@@ -11,7 +11,7 @@ export interface RoleLocal {
 }
 
 export const DEFAULT_LOCAL: RoleLocal = {
-    currentRoleID: ""
+    currentRoleID: null
 }
 
 export class RoleApi {
@@ -29,7 +29,11 @@ export class RoleApi {
     // select a default role when none is set
     useCurrent = () => useAsync(async () => {
         if (this.currentEmployerID) {
-            let currentRole = await EmployerCollection.fromID(this.currentEmployerID).roles.read(this.currentRoleID);
+
+            let currentRole;
+            if (this.currentRoleID) {
+                currentRole = await EmployerCollection.fromID(this.currentEmployerID).roles.read(this.currentRoleID);
+            }
             const allRoles = await EmployerCollection.fromID(this.currentEmployerID).roles.readFromCollection()
 
             if (!currentRole) {
