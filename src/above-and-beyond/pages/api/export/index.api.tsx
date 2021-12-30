@@ -1,48 +1,39 @@
 import type {NextApiHandler} from 'next'
 import {connectFirebaseAdminAuth} from "../../lib/firebase/connect-admin";
 import {getStorage} from "firebase-admin/storage";
-import {renderToString} from "@react-pdf/renderer";
-import {RateDocumentTemplate} from "./pdfTemplate";
+import {makeRateReport} from "./pdfTemplate";
 import path from "path";
 import JSZip from "jszip";
 import axios from "axios";
 import {v4 as uuidv4} from 'uuid';
+import {verifyTokenFromRequest} from "../../lib/util/auth";
+import {ExportBody} from "./types";
 
 const auth = connectFirebaseAdminAuth();
-
-export function parseAuthorization(authorization: any) {
-    if (typeof authorization === 'string') {
-        const [, token] = authorization.split(' ');
-        return token;
-    } else {
-        throw new Error('expecting authorization header string');
-    }
-}
 
 export type Data = {
     url: string
 }
 export const handler: NextApiHandler<Data> = async (req, res) => {
-    const token = parseAuthorization(req.headers.authorization);
-    const result = await auth.verifyIdToken(token)
+
+    const {token, decoded: result} = await verifyTokenFromRequest(auth, req)
+
     const {
         uploads,
         type,
-        record
-    } = req.body as { path: string, type: string, record: any, uploads: { url: string, name: string }[] }
+        ...reportParams
+    } = req.body as ExportBody
 
     const storage = getStorage();
 
-    let Template;
+    let reportGenerator;
     switch (type as "rate" | 'review') {
         case "rate":
-            Template = RateDocumentTemplate
+            reportGenerator = makeRateReport
             break;
 
     }
-    // noinspection ES6RedundantAwait
-    const reportString = await renderToString(<Template record={record}/>)
-
+    const reportString = await reportGenerator(token, reportParams)
     const bucket = storage
         .bucket(process.env.NEXT_PUBLIC_STORAGE_BUCKET_URL.replace('gs://', ''))
 

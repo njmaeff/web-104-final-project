@@ -7,7 +7,6 @@ import {useEmployer} from "../home/useEmployer";
 import {useRole} from "../home/useRole";
 import {Employer, Role} from "./orm/validate";
 import {useRouter} from "../routes";
-import {RemoveButton} from "./button/actionButton";
 import {alphabetical} from "./util/sort";
 
 export const DropDownMenu: React.FC<{ value }> = ({children, value}) => {
@@ -72,9 +71,8 @@ export const DropDownElement: React.FC<{
 export const EmployerDropDown: React.FC<{
     currentEmployer?: Employer
     allEmployers?: Employer[]
-    onRemove?: (record: Employer) => void
 }> = ({
-          currentEmployer, allEmployers, onRemove
+          currentEmployer, allEmployers,
       }) => {
     const router = useRouter()
     const {
@@ -107,7 +105,6 @@ export const EmployerDropDown: React.FC<{
                     }}
                     value={employer.name}
                 >
-                    <RemoveButton onClick={() => onRemove?.(employer)}/>
                 </DropDownElement>
             ))}
     </DropDownMenu>
@@ -123,7 +120,6 @@ export const RoleDropDown: React.FC<{
 }> = ({
           currentRole,
           allRoles,
-          onRemove,
       }) => {
 
     const router = useRouter();
@@ -154,7 +150,6 @@ export const RoleDropDown: React.FC<{
                     onClick={() => updateRole(role.id)}
                     value={role.name}
                 >
-                    <RemoveButton onClick={() => onRemove?.(role)}/>
                 </DropDownElement>
             ))}
     </DropDownMenu>;

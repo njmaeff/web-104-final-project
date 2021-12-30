@@ -4,7 +4,7 @@ import axios from "axios";
 
 export const httpClient = () => {
     const base = axios.create({
-        baseURL: process.env.STORYBOOK ? 'http://localhost:3000' : '/',
+        baseURL: process.env.STORYBOOK ? process.env.NEXT_PUBLIC_WEB_HOST : '/',
     })
     base.interceptors.request.use(async (config) => {
         const user = await auth.currentUser?.getIdToken()

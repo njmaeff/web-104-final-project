@@ -7,3 +7,8 @@ export const WithoutSSR: React.FC<{ component }> = ({component, children}) => {
 
     return <Component>{children}</Component>
 }
+export const withServerSideProps = (importFn) => async (context) => {
+    const fn = await importFn()
+    return fn.default(context)
+
+};
