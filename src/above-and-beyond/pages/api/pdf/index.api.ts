@@ -1,5 +1,9 @@
 import {NextApiRequest, NextApiResponse} from "next";
 import {chromium} from "playwright"
+import {verifyTokenFromRequest} from "../../lib/util/auth";
+import {connectFirebaseAdminAuth} from "../../lib/firebase/connect-admin";
+
+const auth = connectFirebaseAdminAuth();
 
 export const pdfFromHtmlString = async (html: string) => {
     const browser = await chromium.launch()
@@ -18,6 +22,7 @@ export const pdfFromHtmlString = async (html: string) => {
 };
 
 export default async (request: NextApiRequest, response: NextApiResponse) => {
+    await verifyTokenFromRequest(auth, request)
     const pdf = await pdfFromHtmlString(request.body.html)
     response.status(200).send(pdf);
 };
