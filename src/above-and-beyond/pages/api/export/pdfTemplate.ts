@@ -10,7 +10,7 @@ export const makeRateReport = async (token, params) => {
         baseURL: process.env.NEXT_PUBLIC_WEB_HOST
     })
 
-    const pdf = await axios.post('http://localhost:3001/api/html', {html: html.data}, {
+    const pdf = await axios.post(`${process.env.NEXT_PUBLIC_WEB_HOST}/api/pdf`, {html: html.data}, {
         headers: {
             authorization: 'Bearer ' + token
         },
