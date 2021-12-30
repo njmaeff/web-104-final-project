@@ -3,11 +3,12 @@ import {Button, ButtonProps, Modal} from "antd";
 import {css} from "@emotion/react";
 import {
     CloudDownloadOutlined,
-    DeleteOutlined, DownloadOutlined,
-    ExclamationCircleOutlined,
-    ExportOutlined
+    DeleteOutlined,
+    ExclamationCircleOutlined
 } from "@ant-design/icons";
 import {BlockModal} from "./blockModal";
+import styled from "@emotion/styled";
+import {lighten} from "polished";
 
 export const RemoveButton: React.FC<ButtonProps & { onCleanup? }> = ({
                                                                          className,
@@ -73,12 +74,12 @@ export const RemoveButton: React.FC<ButtonProps & { onCleanup? }> = ({
 };
 
 export const ExportButton: React.FC<ButtonProps & { onCleanup? }> = ({
-                                                                        children,
-                                                                        className,
-                                                                        onCleanup: cleanupFunction,
-                                                                        onClick,
-                                                                        ...props
-                                                                    }) => {
+                                                                         children,
+                                                                         className,
+                                                                         onCleanup: cleanupFunction,
+                                                                         onClick,
+                                                                         ...props
+                                                                     }) => {
 
     return <BlockModal Component={({save, onCleanup}) => {
         onCleanup(cleanupFunction)
@@ -95,7 +96,7 @@ export const ExportButton: React.FC<ButtonProps & { onCleanup? }> = ({
             }}
             type="primary"
             {...props}>
-            <CloudDownloadOutlined />
+            <CloudDownloadOutlined/>
             {children}
         </Button>
     }}>
@@ -103,18 +104,38 @@ export const ExportButton: React.FC<ButtonProps & { onCleanup? }> = ({
     </BlockModal>
 };
 
+export const ExportButtonFull: typeof ExportButton = (props => {
 
-export const ActionButton = ({onNew, onRemove}) => {
+    return <ExportButton css={theme => css`
+        border: 2px solid ${theme.colors.grayLight};
+        color: ${theme.colors.dark};
+        align-self: flex-start;
+    `} {...props}>Export</ExportButton>
+});
+
+export const RemoveButtonFull: typeof RemoveButton = (props => {
+
+    return <RemoveButton css={theme => css`
+        border: 2px solid ${theme.colors.grayLight};
+        color: ${theme.colors.dark};
+        align-self: flex-start;
+    `} {...props}>Remove</RemoveButton>
+});
+
+
+export const ButtonPanelFull = ({onNew, onRemove}) => {
 
     return <div
         css={theme => css`
             display: flex;
-            justify-content: space-between;
             align-items: center;
             margin-top: 1.5rem;
+            button {
+                margin-right: 0.5rem;
+            }
         `}
     >
-        <ExportButton>Export</ExportButton>
-        <RemoveButton>Remove</RemoveButton>
+        <ExportButtonFull/>
+        <RemoveButtonFull/>
     </div>
 };

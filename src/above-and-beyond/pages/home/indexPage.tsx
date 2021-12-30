@@ -29,7 +29,11 @@ import {Loader} from "../lib/loader";
 import {css} from "@emotion/react";
 import {ScrollBar} from "../lib/styles/mixins";
 import {useBaseFileUpload} from "../lib/storage/file";
-import {ExportButton, RemoveButton} from "../lib/button/actionButton";
+import {
+    ExportButton,
+    ExportButtonFull,
+    RemoveButton
+} from "../lib/button/actionButton";
 import {useRouter} from "../routes";
 import {uploadFileList} from "../lib/upload";
 
@@ -86,7 +90,7 @@ export const EmployerForm: React.FC<{ currentEmployer?: Employer, allEmployers?:
                         isManualSubmit={!currentEmployer || form.isEdit}
                         {...form.fieldProps.uploads}  />
         </FormTable>
-        {form.isReadonly && <ExportButton/>}
+        {form.isReadonly && <ExportButtonFull/>}
         <AbsoluteButton Control={({save}) => <Button
             type="primary"
             icon={form.isEdit ? <SaveOutlined/> : <EditOutlined/>}
@@ -163,7 +167,7 @@ export const RoleForm: React.FC<{ currentRole?: Role, allRoles?: Role[], onSubmi
             <TextInput
                 {...form.fieldProps.skillTarget}
                 height={"auto"}
-                label={"Focus"}
+                label={"Goals"}
             />
             <FieldInputRow
                 label={"Current Salary"}
@@ -181,7 +185,7 @@ export const RoleForm: React.FC<{ currentRole?: Role, allRoles?: Role[], onSubmi
                         {...form.fieldProps.uploads}  />
 
         </FormTable>
-        {form.isReadonly && <ExportButton/>}
+        {form.isReadonly && <ExportButtonFull/>}
         <AbsoluteButton Control={({save}) => <Button
             type="primary"
             icon={form.isEdit ? <SaveOutlined/> : <EditOutlined/>}

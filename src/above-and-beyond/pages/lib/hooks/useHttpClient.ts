@@ -2,14 +2,14 @@ import {auth} from "../firebase/connect-api";
 import {makeUseAxios} from "axios-hooks";
 import axios from "axios";
 
-export const httpClient = () => {
+export const httpClient = (token?: string) => {
     const base = axios.create({
-        baseURL: process.env.STORYBOOK ? process.env.NEXT_PUBLIC_WEB_HOST : '/',
+        baseURL: process.env.NEXT_PUBLIC_WEB_HOST ?? '/',
     })
     base.interceptors.request.use(async (config) => {
-        const user = await auth.currentUser?.getIdToken()
-        if (user) {
-            config.headers.Authorization = `Bearer ${user}`;
+        const userToken = token ?? await auth.currentUser?.getIdToken()
+        if (userToken) {
+            config.headers.Authorization = `Bearer ${userToken}`;
         }
         return config
     });

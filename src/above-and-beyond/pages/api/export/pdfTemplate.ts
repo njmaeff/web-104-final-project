@@ -1,24 +1,17 @@
-import axios from 'axios';
+import {httpClient} from "../../lib/hooks/useHttpClient";
+
 
 export const makeRateReport = async (token, params) => {
+    const client = httpClient(token);
 
     // get html for report
-    const html = await axios.get('/rate/export', {
+    const html = await client.get('/rate/export', {
         params,
-        headers: {
-            authorization: 'Bearer ' + token
-        },
-        baseURL: process.env.NEXT_PUBLIC_WEB_HOST
     })
-
-
     // generate pdf from html
-    const pdf = await axios.post('/api/pdf', {html: html.data}, {
-        headers: {
-            authorization: 'Bearer ' + token
-        },
+    const pdf = await client.post('/api/pdf', {html: html.data}, {
         responseType: "arraybuffer",
-        baseURL: process.env.NEXT_PUBLIC_WEB_HOST
     });
     return pdf.data;
 };
+

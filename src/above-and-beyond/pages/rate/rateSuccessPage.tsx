@@ -18,6 +18,7 @@ import {useRole} from "../home/useRole";
 import {HorizontalRule} from "../lib/layout/divider";
 import {uploadFileList} from "../lib/upload";
 import {useRoleFileUpload} from "../lib/storage/file";
+import {ExportButtonFull} from "../lib/button/actionButton";
 
 export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
     const router = useRouter();
@@ -31,6 +32,7 @@ export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
         fieldProps,
         setEdit,
         isEdit,
+        isReadonly,
         onClickSave,
         useSubmitSuccess,
         setSubmitted,
@@ -81,7 +83,7 @@ export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
                             isManualSubmit={!data || isEdit}
                             {...fieldProps.uploads}  />
             </FormTable>
-
+            {isReadonly && <ExportButtonFull/>}
             <AbsoluteButton Control={({save}) => <Button
                 type="primary"
                 icon={isEdit ? <SaveOutlined/> : <EditOutlined/>}
