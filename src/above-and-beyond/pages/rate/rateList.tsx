@@ -9,7 +9,7 @@ import {
     PlusCircleOutlined
 } from "@ant-design/icons";
 import {useRouter} from "../routes";
-import {RoleHook, Timestamp} from "../lib/orm/docs";
+import {ensureDate, RoleHook, Timestamp} from "../lib/orm/docs";
 import {Highlight} from "react-instantsearch-dom";
 import {css} from "@emotion/react";
 import {RoleDropDown} from "../lib/control";
@@ -19,12 +19,18 @@ import {formatCurrency} from "../lib/util/currency";
 import {WithEnvironment} from "../lib/withEnvironment";
 import {Loader} from "../lib/loader";
 import {ExportButton, RemoveButton} from "../lib/button/actionButton";
+import {client} from "../lib/hooks/useHttpClient";
+import {useRoleFileUpload} from "../lib/storage/file";
+import {storage} from "../lib/firebase/connect-api";
 
 export const RateListHits: React.FC<{ hits }> = ({hits}) => {
     const role = new RoleHook();
     const routes = useRouter();
+    const storageRef = useRoleFileUpload('rate')
 
     return hits.map((item: Rate) => {
+
+
         return <List.Item
             key={item.id}
             css={
@@ -56,7 +62,39 @@ export const RateListHits: React.FC<{ hits }> = ({hits}) => {
 
             actions={[
 
-                <ExportButton/>,
+                <ExportButton
+                    onCleanup={() => {
+                    }}
+                    onClick={async () => {
+                        const ref = role.rate.withID(item.id)
+                        const record = await ref.read();
+                        const uploadFiles = await storageRef.child(item.id).listAll()
+                        const uploads = await Promise.all(uploadFiles.items.map(async (file) => ({
+                            name: file.name,
+                            url: await file.getDownloadURL()
+                        })))
+
+                        const result = await client.post("/api/export", {
+                            record: {
+                                ...record,
+                                date: ensureDate(record.date).toLocaleDateString()
+                            },
+                            uploads,
+                            type: 'rate',
+                        })
+
+                        const url = await storage.ref(result.data.url).getDownloadURL()
+
+                        const downloadElement = document.createElement('a')
+                        Object.assign(downloadElement, {
+                            download: 'report.zip',
+                            href: url,
+                            target: '_blank',
+                        } as HTMLAnchorElement)
+                        downloadElement.click()
+                        downloadElement.remove()
+
+                    }}/>,
                 <RemoveButton onCleanup={() => routes["rate"].push()}
                               onClick={() => {
                                   return role.rate.deleteDoc(item.id)
@@ -86,7 +124,7 @@ export const RateListHits: React.FC<{ hits }> = ({hits}) => {
                     </ul>
                 }
             />
-        </List.Item>
+        </List.Item>;
     })
 };
 

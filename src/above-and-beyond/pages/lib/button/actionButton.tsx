@@ -2,7 +2,8 @@ import React, {useState} from "react";
 import {Button, ButtonProps, Modal} from "antd";
 import {css} from "@emotion/react";
 import {
-    DeleteOutlined,
+    CloudDownloadOutlined,
+    DeleteOutlined, DownloadOutlined,
     ExclamationCircleOutlined,
     ExportOutlined
 } from "@ant-design/icons";
@@ -71,7 +72,7 @@ export const RemoveButton: React.FC<ButtonProps & { onCleanup? }> = ({
     </BlockModal>
 };
 
-export const ExportButton: React.FC<ButtonProps & { onCleanup }> = ({
+export const ExportButton: React.FC<ButtonProps & { onCleanup? }> = ({
                                                                         children,
                                                                         className,
                                                                         onCleanup: cleanupFunction,
@@ -94,11 +95,11 @@ export const ExportButton: React.FC<ButtonProps & { onCleanup }> = ({
             }}
             type="primary"
             {...props}>
-            <ExportOutlined/>
+            <CloudDownloadOutlined />
             {children}
         </Button>
     }}>
-        Exporting...
+        Downloading...
     </BlockModal>
 };
 

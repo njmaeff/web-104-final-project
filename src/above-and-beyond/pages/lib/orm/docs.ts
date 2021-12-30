@@ -58,6 +58,10 @@ export class Firestore<Doc extends firebase.firestore.DocumentData> extends Fire
             () => id
         );
     }
+
+    toPath() {
+        return this.id ? [this.collection.path, this.id()].join('/') : this.collection.path
+    }
 }
 
 export interface DataMeta extends Doc {
