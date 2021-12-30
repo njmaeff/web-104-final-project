@@ -7,7 +7,7 @@ import {formatCurrency} from "./util/currency";
 import {getBase64, uploadFile, UploadState} from "./upload";
 import {InboxOutlined} from "@ant-design/icons";
 import {Reference} from "@firebase/storage-types";
-import { DatePicker } from "./datePicker";
+import {DatePicker, TimePicker} from "./datePicker";
 
 interface FieldProps<Value = any> {
     label: string;
@@ -364,21 +364,28 @@ export const FieldDateTimePickerRow: React.FC<FieldProps<Date>> = ({
                                                                        error,
                                                                        touched,
                                                                    }) => {
+
+    const [date, setDate] = useState();
+    const [time, setTime] = useState();
+
     return (
         <FieldRowWrapper label={label} error={error} readonly={readonly}
                          touched={touched}>
             {readonly ? (
                 <p>{value.toLocaleString()}</p>
             ) : (
-                <DatePicker
-                    name={name}
-                    readOnly={readonly}
-                    selected={value}
+                <>
+                    <DatePicker
+                    disabled={readonly}
+                    value={value}
                     onChange={onChange}
                     onBlur={onBlur}
-                    showTimeSelect
-                    dateFormat="MMMM d, yyyy h:mm aa"
+
                 />
+                    <TimePicker
+
+                    />
+                </>
             )}
         </FieldRowWrapper>
     );
