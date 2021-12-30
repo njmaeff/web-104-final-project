@@ -33,7 +33,7 @@ export const handler: NextApiHandler<Data> = async (req, res) => {
             break;
 
     }
-    const reportString = await reportGenerator(token, reportParams)
+    const reportBuffer = await reportGenerator(token, reportParams)
     const bucket = storage
         .bucket(process.env.NEXT_PUBLIC_STORAGE_BUCKET_URL.replace('gs://', ''))
 
@@ -42,7 +42,7 @@ export const handler: NextApiHandler<Data> = async (req, res) => {
     )
 
     const jszip = new JSZip();
-    jszip.file('report.pdf', reportString);
+    jszip.file('report.pdf', reportBuffer);
 
     const filesResponses = await Promise.all(
         uploads.map(file => axios.get(file.url, {

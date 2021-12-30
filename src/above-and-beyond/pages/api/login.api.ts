@@ -1,17 +1,9 @@
 import type {NextApiHandler} from 'next'
 import {connectFirebaseAdminAuth} from "../lib/firebase/connect-admin";
 import {createClient} from "../../seed/search";
+import {verifyTokenFromRequest} from "../lib/util/auth";
 
 const auth = connectFirebaseAdminAuth();
-
-export function parseAuthorization(authorization: any) {
-    if (typeof authorization === 'string') {
-        const [, token] = authorization.split(' ');
-        return token;
-    } else {
-        throw new Error('expecting authorization header string');
-    }
-}
 
 export type Data = {
     token: string
@@ -20,8 +12,7 @@ export type Data = {
 const client = createClient();
 
 export const handler: NextApiHandler<Data> = async (req, res) => {
-    const token = parseAuthorization(req.headers.authorization);
-    const decoded = await auth.verifyIdToken(token)
+    const {decoded} = await verifyTokenFromRequest(auth, req)
     const keys = client.keys();
     const scopedKey = keys.generateScopedSearchKey(process.env.SEARCH_ONLY_API_KEY, {
         'filter_by': `userID:${decoded.uid}`,

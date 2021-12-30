@@ -130,12 +130,12 @@ export class RoleHook {
 }
 
 export const Timestamp = firebase.firestore.Timestamp;
-export const isTimestampLike = (obj): obj is { _seconds: number } => '_seconds' in obj
+export const isTimestampLike = (obj): obj is { _seconds: number, _nanoseconds: number } => '_seconds' in obj && '_nanoseconds' in obj
 export const ensureDate = (date: DateLike): Date => {
     if (date instanceof Timestamp) {
         return date.toDate();
     } else if (isTimestampLike(date)) {
-        return Timestamp.fromMillis(date._seconds).toDate()
+        return new Timestamp(date._seconds, date._nanoseconds).toDate()
     } else {
         return date;
     }
