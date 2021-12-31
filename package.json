@@ -32,9 +32,6 @@
       "yarn validate"
     ]
   },
-  "resolutions": {
-    "@emotion/core": "^11"
-  },
   "wallaby": {
     "autoDetect": true,
     "testFramework": {

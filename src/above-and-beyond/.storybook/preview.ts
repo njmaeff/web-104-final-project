@@ -1,6 +1,6 @@
 import {INITIAL_VIEWPORTS} from "@storybook/addon-viewport";
 import {RouterContext} from "next/dist/shared/lib/router-context"
-
+import {WithTheme} from "../pages/lib/sb/withTheme";
 
 export default {
     parameters: {
@@ -23,3 +23,5 @@ export const parameters = {
         defaultViewport: "iphonex",
     },
 }
+
+export const decorators = [WithTheme];

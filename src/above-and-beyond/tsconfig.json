@@ -5,7 +5,7 @@
     "compilerOptions": {
       "module": "commonjs"
     },
-    "scope": true
+    "scope": false
   },
   "extends": "../node-tsconfig.json",
   "compilerOptions": {

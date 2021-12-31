@@ -1,9 +1,12 @@
 import {Configuration, DefinePlugin} from "webpack";
+import path from "path";
 
 export interface MainOpts {
     stories: string;
     jsxToJS?: RegExp;
 }
+
+const toPath = (_path) => path.join(process.cwd(), _path);
 
 export default {
     features: {
@@ -11,6 +14,7 @@ export default {
     },
     babel: (options) => {
         // https://github.com/storybookjs/storybook/issues/13834#issuecomment-880646396
+        options.presets.push("@emotion/babel-preset-css-prop")
         return {
             ...options,
             plugins: options.plugins.filter(
@@ -23,6 +27,16 @@ export default {
         };
     },
     webpackFinal: async (base: Configuration) => {
+
+        // Emotion 11
+        base.resolve.alias = {
+            ...base.resolve.alias,
+            '@emotion/core': toPath('node_modules/@emotion/react'),
+            '@emotion/styled/base': toPath('node_modules/@emotion/styled'),
+            '@emotion/styled': toPath('node_modules/@emotion/styled'),
+            'emotion-theming': toPath('node_modules/@emotion/react'),
+        };
+
         base.module.rules.push({
             test: /\.mdx?$/,
             use: [
