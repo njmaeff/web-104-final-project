@@ -3,7 +3,6 @@ import Head from 'next/head';
 import {CacheProvider} from '@emotion/react';
 import {createEmotionCache} from "./lib/util/create-emotion-cache";
 import "firebaseui/dist/firebaseui.css"
-import "react-datepicker/dist/react-datepicker.min.css"
 import "antd/dist/antd.min.css"
 import {ThemeEnvironment} from "./lib/styles/theme";
 

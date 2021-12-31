@@ -8,6 +8,7 @@ import {getBase64, uploadFile, UploadState} from "./upload";
 import {InboxOutlined} from "@ant-design/icons";
 import {Reference} from "@firebase/storage-types";
 import {DatePicker, TimePicker} from "./datePicker";
+import {getTimezone} from "./util/date";
 
 interface FieldProps<Value = any> {
     label: string;
@@ -372,7 +373,7 @@ export const FieldDateTimePickerRow: React.FC<FieldProps<Date>> = ({
         <FieldRowWrapper label={label} error={error} readonly={readonly}
                          touched={touched}>
             {readonly ? (
-                <p>{value.toDateString()}, {value.toLocaleTimeString()}</p>
+                <p>{value.toLocaleString()}</p>
             ) : (
                 <>
                     <DatePicker

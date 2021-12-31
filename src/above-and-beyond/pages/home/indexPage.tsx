@@ -29,11 +29,7 @@ import {Loader} from "../lib/loader";
 import {css} from "@emotion/react";
 import {ScrollBar} from "../lib/styles/mixins";
 import {useBaseFileUpload} from "../lib/storage/file";
-import {
-    ExportButton,
-    ExportButtonFull,
-    RemoveButton
-} from "../lib/button/actionButton";
+import {ExportButtonFull, RemoveButton} from "../lib/button/actionButton";
 import {useRouter} from "../routes";
 import {uploadFileList} from "../lib/upload";
 
@@ -154,11 +150,6 @@ export const RoleForm: React.FC<{ currentRole?: Role, allRoles?: Role[], onSubmi
                 label={"Current Role"}
                 {...form.fieldProps.name}
             />
-            <FieldInputRow
-                label={"Target Salary"}
-                monetary
-                {...form.fieldProps.salaryTarget}
-            />
             <TextInput
                 {...form.fieldProps.responsibilities}
                 height={"auto"}
@@ -173,6 +164,11 @@ export const RoleForm: React.FC<{ currentRole?: Role, allRoles?: Role[], onSubmi
                 label={"Current Salary"}
                 monetary
                 {...form.fieldProps.salary}
+            />
+            <FieldInputRow
+                label={"Target Salary"}
+                monetary
+                {...form.fieldProps.salaryTarget}
             />
             <FieldDatePickerRow
                 label={"Start Date"}
