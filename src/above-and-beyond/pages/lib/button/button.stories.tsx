@@ -7,6 +7,5 @@ export const RemoveButton = () => <RemoveButtonFull/>
 export const ExportButton = () => <ExportButtonFull/>
 
 export default {
-    title: 'buttons',
     decorators: [WithCenter]
 } as Meta
