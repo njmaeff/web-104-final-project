@@ -365,25 +365,35 @@ export const FieldDateTimePickerRow: React.FC<FieldProps<Date>> = ({
                                                                        touched,
                                                                    }) => {
 
-    const [date, setDate] = useState();
-    const [time, setTime] = useState();
+    const [date, setDate] = useState(value);
+    const [time, setTime] = useState(value);
 
     return (
         <FieldRowWrapper label={label} error={error} readonly={readonly}
                          touched={touched}>
             {readonly ? (
-                <p>{value.toLocaleString()}</p>
+                <p>{value.toDateString()}, {value.toLocaleTimeString()}</p>
             ) : (
                 <>
                     <DatePicker
-                    disabled={readonly}
-                    value={value}
-                    onChange={onChange}
-                    onBlur={onBlur}
-
-                />
+                        disabled={readonly}
+                        value={date}
+                        onChange={(value: Date) => {
+                            if (value) {
+                                setDate(value);
+                                onChange(new Date(value.getFullYear(), value.getMonth(), value.getDate(), time.getHours(), time.getMinutes()))
+                            }
+                        }}
+                    />
                     <TimePicker
-
+                        disabled={readonly}
+                        value={time}
+                        onChange={(value) => {
+                            if (value) {
+                                setTime(value);
+                                onChange(new Date(date.getFullYear(), date.getMonth(), date.getDate(), value.getHours(), value.getMinutes()))
+                            }
+                        }}
                     />
                 </>
             )}
