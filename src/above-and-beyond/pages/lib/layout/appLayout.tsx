@@ -1,9 +1,11 @@
-import React, {useEffect} from "react";
+import React from "react";
 import {MDXProvider} from "@mdx-js/react";
 import {useRouter} from "next/router";
 import {checkAuthUI} from "../hooks/checkAuthUI";
 import {NextPageWithLayout} from "../types";
 import {WithoutSSR} from "../util/next";
+import {AsyncHook} from "../hooks/useAsync";
+import {Loader} from "../loader";
 
 export const Anchor: React.FC<JSX.IntrinsicElements["a"]> = ({
                                                                  children,
@@ -34,23 +36,29 @@ export const Environment = ({children}) => {
     );
 };
 
+export const MDXLayout: React.FC = ({children}) => {
+    return <AppLayout>
+        <Environment>
+            {children}
+        </Environment>
+    </AppLayout>
+}
+
 export const AppLayout: React.FC = ({children}) => {
     const router = useRouter();
 
     const {isLoggedIn} = checkAuthUI()
 
-    useEffect(() => {
+    const loginStatus = new AsyncHook(async () => {
         if (isLoggedIn === false) {
-            router.push('/login')
+            return router.push('/login')
         }
-
     }, [isLoggedIn]);
 
-    return <Environment>
-        {children}
-    </Environment>
-}
-export const WithAppLayout = (component, children?) => {
+    return loginStatus.isInProgress ? <Loader/> : <>{children}</>
+};
+
+export const WithoutSSRLayout = (Layout?) => (component, children?) => {
 
     const Component: NextPageWithLayout = () => (
         <WithoutSSR
@@ -58,8 +66,17 @@ export const WithAppLayout = (component, children?) => {
             {children}
         </WithoutSSR>
     )
-    Component.getLayout = AppLayout
+    Component.getLayout = Layout
 
     return Component
 
+}
+
+export const WithSSRLayout = (Layout?) => (Component: NextPageWithLayout) => {
+    Component.getLayout = Layout
+    return Component
 };
+
+export const WithoutSSRMDXLayout = WithoutSSRLayout(MDXLayout)
+
+export const WithoutSSRAppLayout = WithoutSSRLayout(AppLayout)

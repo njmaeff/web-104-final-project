@@ -1,7 +1,7 @@
 import React from "react";
-import {WithAppLayout} from "./layout/appLayout";
+import {WithoutSSRAppLayout} from "./layout/appLayout";
 
-const SignIn = WithAppLayout(
+const SignIn = WithoutSSRAppLayout(
     () => import('./SignIn'),
 )
 

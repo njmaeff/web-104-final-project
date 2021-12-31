@@ -1,3 +1,3 @@
-import {WithAppLayout} from "../lib/layout/appLayout";
+import {WithoutSSRAppLayout} from "../lib/layout/appLayout";
 
-export default WithAppLayout(() => import('./indexPage'))
+export default WithoutSSRAppLayout(() => import('./indexPage'))

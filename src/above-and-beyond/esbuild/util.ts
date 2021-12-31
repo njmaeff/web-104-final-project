@@ -1,18 +1,7 @@
-import {Plugin} from "esbuild"
 import dotenv from "dotenv"
 
-export const plugin: () => Plugin = () => {
-    return {
-        name: "importMap",
-        setup(build) {
-
-        }
-    };
-}
-
-
 export const makeDefine = () => {
-    let env = {} as any;
+    let env;
     if (process.env.NODE_ENV === "production") {
         env = dotenv.config({
             path: ".env.production",
