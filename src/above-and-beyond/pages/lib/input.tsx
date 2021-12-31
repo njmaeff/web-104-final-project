@@ -8,7 +8,6 @@ import {getBase64, uploadFile, UploadState} from "./upload";
 import {InboxOutlined} from "@ant-design/icons";
 import {Reference} from "@firebase/storage-types";
 import {DatePicker, TimePicker} from "./datePicker";
-import {getTimezone} from "./util/date";
 
 interface FieldProps<Value = any> {
     label: string;
