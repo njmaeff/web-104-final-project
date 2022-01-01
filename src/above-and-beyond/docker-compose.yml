@@ -42,11 +42,7 @@ services:
       dockerfile: .docker/firebase.Dockerfile
       context: .
     command: firebase emulators:start --import /home/node/.cache/firebase/data --export-on-exit
-    working_dir: /workspace/.docker/firebase
-    user: node
     volumes:
-      - ./:/workspace
-      #        Persist data and emulators. Normally the emulators and data will be re-downloaded / created on every run.
       - firebase:/home/node/.cache/firebase
 
     ports:
