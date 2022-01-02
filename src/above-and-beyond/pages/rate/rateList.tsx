@@ -17,7 +17,7 @@ import {useRole} from "../home/useRole";
 import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
 import {formatCurrency} from "../lib/util/currency";
 import {WithEnvironment} from "../lib/withEnvironment";
-import {Loader} from "../lib/loader";
+import {LoaderCircle} from "../lib/loaderCircle";
 import {ExportButton, RemoveButton} from "../lib/button/actionButton";
 import {client} from "../lib/hooks/useHttpClient";
 import {useRoleFileUpload} from "../lib/storage/file";
@@ -170,7 +170,7 @@ export default () => WithEnvironment(() => {
         heading={'Role - Rate'}
         HeaderDropDown={() => {
             const data = useRole().useCurrent()
-            return data.isInProgress ? <Loader/> :
+            return data.isInProgress ? <LoaderCircle/> :
                 <RoleDropDown {...data.result}/>
         }}
         Main={RateList}

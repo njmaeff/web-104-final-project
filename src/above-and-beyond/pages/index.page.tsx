@@ -1,6 +1,6 @@
 import React, {useEffect} from "react"
 import type {NextPage} from "next";
-import {Loader} from "./lib/loader";
+import {LoaderCircle} from "./lib/loaderCircle";
 import {checkAuthUI} from "./lib/hooks/checkAuthUI";
 import {useRouter} from "./routes";
 
@@ -20,7 +20,7 @@ export const HomePage: NextPage = () => {
         checkAuth();
     }, [isLoggedIn]);
 
-    return <Loader/>
+    return <LoaderCircle/>
 }
 
 export default HomePage

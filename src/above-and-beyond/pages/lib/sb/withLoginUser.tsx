@@ -1,7 +1,7 @@
 import { usePromise } from "./usePromise";
 import React from "react";
 import { auth } from "../firebase/connect-api";
-import {Loader} from "../loader";
+import {LoaderCircle} from "../loaderCircle";
 
 export const WithLoginUser = (Story) => {
     const loaded = usePromise(async () => {
@@ -13,5 +13,5 @@ export const WithLoginUser = (Story) => {
         }
     });
 
-    return loaded ? <Story /> : <Loader />;
+    return loaded ? <Story /> : <LoaderCircle />;
 };

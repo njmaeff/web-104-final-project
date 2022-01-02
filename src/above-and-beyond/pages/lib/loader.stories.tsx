@@ -1,8 +1,9 @@
 import {Meta} from "@storybook/react"
-import {Loader} from "./loader";
+import {LoaderCircle, LoaderCircleSmallRelative} from "./loaderCircle";
 import {WithCenter} from "./sb/withCenter";
 
-export const CircleLoader = () => <Loader/>
+export const Circle = () => <LoaderCircle/>
+export const CircleRelativeSmall = () => <LoaderCircleSmallRelative/>
 
 export default {
     decorators: [WithCenter]

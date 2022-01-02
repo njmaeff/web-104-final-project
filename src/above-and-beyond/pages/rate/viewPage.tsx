@@ -5,7 +5,7 @@ import {useRouter} from "../routes";
 import {useEmployer} from "../home/useEmployer";
 import {useRole} from "../home/useRole";
 import {EmployerCollection} from "../lib/orm/docs";
-import {Loader} from "../lib/loader";
+import {LoaderCircle} from "../lib/loaderCircle";
 import {Rate} from "../lib/orm/validate";
 import {useAsync} from "../lib/hooks/useAsync";
 import {FileType} from "../lib/upload";
@@ -56,7 +56,7 @@ export const ViewPage = () => {
     return <MenuLayout
         heading={`Rating ${(result?.type === 'issue' ? ' - Issue' : result?.type === 'success' ? ' - Success' : '')}`}
         Main={() => {
-            return (!result ? <Loader/> :
+            return (!result ? <LoaderCircle/> :
                     <>
                         {
                             result.type === 'issue' ?

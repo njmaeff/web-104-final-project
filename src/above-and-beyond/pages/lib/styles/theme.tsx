@@ -10,6 +10,7 @@ declare module "@emotion/react" {
             secondary: string
             light: string
             dark: string
+            darkLight: string
             error: string
             success: string
             warning: string
@@ -24,18 +25,20 @@ declare module "@emotion/react" {
 }
 
 const gray = "#9A9A9A";
+const dark = "#3F4747"
 
 export const defaultTheme: Theme = {
     colors: {
         light: "#F0F0F0",
-        dark: "#3F4747",
+        dark,
+        darkLight: lighten(.15, dark),
         gray,
         primary: "#0661C1",
         secondary: "#218CFF",
         error: "red",
         success: "green",
         warning: "yellow",
-        grayLight: lighten('.15', gray)
+        grayLight: lighten(.15, gray)
     },
     media: {
         tablet: "48rem",

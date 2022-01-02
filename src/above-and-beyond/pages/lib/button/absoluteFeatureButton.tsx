@@ -1,18 +1,8 @@
 import styled from "@emotion/styled";
-import {FeatureButton} from "./featureButton";
 import {Modal, Spin} from "antd";
 import {useState} from "react";
 import {css} from "@emotion/react";
 import pMinDelay from 'p-min-delay';
-
-export const AbsoluteFeatureButton = styled(FeatureButton)`
-    position: fixed;
-    bottom: 2rem;
-    left: 50%;
-    transform: translate(-50%, 0);
-    border-radius: 50%;
-    z-index: 100;
-`
 
 const AbsoluteContainer = styled.div`
     position: fixed;

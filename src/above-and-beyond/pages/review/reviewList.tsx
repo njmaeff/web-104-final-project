@@ -13,7 +13,7 @@ import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
 import {Review} from "../lib/orm/validate";
 import {formatCurrency} from "../lib/util/currency";
 import {WithEnvironment} from "../lib/withEnvironment";
-import {Loader} from "../lib/loader";
+import {LoaderCircle} from "../lib/loaderCircle";
 
 export const ReviewListHits: React.FC<{ hits }> = ({hits}) => {
     const routes = useRouter();
@@ -102,7 +102,7 @@ export default () => WithEnvironment(() => {
         heading={'Role - Review'}
         HeaderDropDown={() => {
             const data = useRole().useCurrent()
-            return data.isInProgress ? <Loader/> :
+            return data.isInProgress ? <LoaderCircle/> :
                 <RoleDropDown {...data.result}/>
         }}
         Main={ReviewList}

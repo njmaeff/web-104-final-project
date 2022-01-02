@@ -1,6 +1,6 @@
 import {css, Global,} from "@emotion/react";
 import {ThemeFunction} from "./types";
-import {ScrollBar, withTablet} from "./mixins";
+import {ButtonFullMixin, ScrollBar, withTablet} from "./mixins";
 
 
 export const fonts = css`
@@ -290,6 +290,25 @@ export const GlobalStyles = () => {
             display: flex !important;
             justify-content: space-between;
             align-items: center;
+        }
+
+        .ant-btn {
+            ${ButtonFullMixin(theme)}
+            &:hover, &:focus, &:active {
+                border: 2px solid ${theme.colors.darkLight};
+                color: ${theme.colors.dark};
+            }
+        }
+
+        .ant-btn-primary {
+            border: 2px solid ${theme.colors.primary};
+            color: ${theme.colors.primary};
+
+            &:hover, &:focus, &:active {
+                border: 2px solid ${theme.colors.primary};
+                background: ${theme.colors.primary};
+                color: ${theme.colors.light};
+            }
         }
 
     `}/>

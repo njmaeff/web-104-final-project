@@ -25,7 +25,7 @@ import {Button, Tabs} from "antd";
 import {EditOutlined, SaveOutlined} from "@ant-design/icons";
 import {TabPane} from "rc-tabs";
 import {WithEnvironment} from "../lib/withEnvironment";
-import {Loader} from "../lib/loader";
+import {LoaderCircle} from "../lib/loaderCircle";
 import {css} from "@emotion/react";
 import {ScrollBar} from "../lib/styles/mixins";
 import {useBaseFileUpload} from "../lib/storage/file";
@@ -208,7 +208,7 @@ export const MainPage = () => {
     const roleData = useRole().useCurrent();
 
     return (
-        employerData.isInProgress || roleData.isInProgress ? <Loader/> :
+        employerData.isInProgress || roleData.isInProgress ? <LoaderCircle/> :
             <MenuLayout
                 heading={'Above and Beyond'}
                 Main={() => {

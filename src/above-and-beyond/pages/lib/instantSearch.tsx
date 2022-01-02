@@ -13,7 +13,7 @@ import {
 } from "react-instantsearch-dom"
 import TypesenseInstantSearchAdapter from "typesense-instantsearch-adapter"
 import {AsyncHook} from "./hooks/useAsync";
-import {Loader} from "./loader";
+import {LoaderCircle} from "./loaderCircle";
 import {Input, Radio, Select} from "antd";
 import React from "react";
 import {InfiniteHits} from "./search/infiniteHits";
@@ -246,5 +246,5 @@ export const SearchInterface: React.FC<{
                 client.refresh()
             }}/>
         </InstantSearch>
-    ) : <Loader/>
+    ) : <LoaderCircle/>
 }

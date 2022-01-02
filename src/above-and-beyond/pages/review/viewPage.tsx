@@ -5,7 +5,7 @@ import {useRole} from "../home/useRole";
 import {useRouter} from "../routes";
 import {EmployerCollection} from "../lib/orm/docs";
 import {Review} from "../lib/orm/validate";
-import {Loader} from "../lib/loader";
+import {LoaderCircle} from "../lib/loaderCircle";
 import {useRoleFileUpload} from "../lib/storage/file";
 import {useAsync} from "../lib/hooks/useAsync";
 import {FileType} from "../lib/upload";
@@ -56,7 +56,7 @@ export default () => WithEnvironment(() => {
             );
 
 
-            return (!result ? <Loader/> :
+            return (!result ? <LoaderCircle/> :
                     <ReviewForm data={result}/>
             )
         }}

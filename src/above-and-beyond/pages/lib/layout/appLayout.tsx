@@ -5,7 +5,7 @@ import {checkAuthUI} from "../hooks/checkAuthUI";
 import {NextPageWithLayout} from "../types";
 import {WithoutSSR} from "../util/next";
 import {AsyncHook} from "../hooks/useAsync";
-import {Loader} from "../loader";
+import {LoaderCircle} from "../loaderCircle";
 
 export const Anchor: React.FC<JSX.IntrinsicElements["a"]> = ({
                                                                  children,
@@ -55,7 +55,7 @@ export const AppLayout: React.FC = ({children}) => {
         }
     }, [isLoggedIn]);
 
-    return loginStatus.isInProgress ? <Loader/> : <>{children}</>
+    return loginStatus.isInProgress ? <LoaderCircle/> : <>{children}</>
 };
 
 export const WithoutSSRLayout = (Layout?) => (component, children?) => {

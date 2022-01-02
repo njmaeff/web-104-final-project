@@ -28,17 +28,19 @@ const Spinner = styled.div<{ size: number }>`
     animation: ${spin} 1.5s linear infinite;
 `
 
-export const Loader: React.FC<JSX.IntrinsicElements['div'] &
+export const LoaderCircle: React.FC<JSX.IntrinsicElements['div'] &
     { size?: number, position?: CSSProperties['position'] }> = ({
                                                                     size = 16,
                                                                     position = 'absolute',
                                                                     ...props
                                                                 }) => (
     <div css={css`
-        position: absolute;
-        top: 40%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+        position: ${position};
+        ${position === 'absolute' && css`
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        `}
     `} {...props}>
         <div css={theme => css`
             border: ${size}px solid ${theme.colors.light};
@@ -50,3 +52,6 @@ export const Loader: React.FC<JSX.IntrinsicElements['div'] &
         `}/>
     </div>
 );
+
+export const LoaderCircleSmallRelative: typeof LoaderCircle = (props) => <LoaderCircle size={6}
+                                                                                       position={'relative'} {...props} />
