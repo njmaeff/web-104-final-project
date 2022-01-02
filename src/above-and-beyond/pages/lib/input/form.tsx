@@ -2,12 +2,13 @@ import React, {useState} from "react";
 import {Form, Input, Modal, Upload} from "antd";
 import {css} from "@emotion/react";
 import {ScrollBar} from "../styles/mixins";
-import {ParagraphSize, SectionSize, SubTitleSize} from "../styles/size";
 import {formatCurrency} from "../util/currency";
 import {getBase64, uploadFile, UploadState} from "./upload";
 import {InboxOutlined} from "@ant-design/icons";
-import {Reference} from "@firebase/storage-types";
+import type {Reference} from "@firebase/storage-types";
 import {DatePicker, TimePicker} from "./datePicker";
+import {TextSection} from "../text";
+import {ParagraphSize, SubTitleSize} from "../styles/size";
 
 interface FieldProps<Value = any> {
     label: string;
@@ -456,16 +457,10 @@ export const FormTable: React.FC<{
             padding-bottom: 1rem;
             margin-bottom: 1rem;
 
-            h3 {
-                margin: 1rem 0 0.5rem;
-                ${SectionSize}
-            }
-
-
         `}
               {...formItemLayout}
         >
-            {heading && <h3>{heading}</h3>}
+            {heading && <TextSection>{heading}</TextSection>}
             {children}
         </Form>
     );
