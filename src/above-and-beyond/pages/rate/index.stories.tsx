@@ -14,5 +14,10 @@ export const ExportIssue = () => <ExportPage record={{
 }}/>
 
 export default {
+    parameters: {
+        viewport: {
+            defaultViewport: "ipad",
+        },
+    },
     decorators: [WithFaker]
 } as Meta
