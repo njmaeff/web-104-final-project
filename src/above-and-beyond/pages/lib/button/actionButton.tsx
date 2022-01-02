@@ -9,6 +9,15 @@ import {
 import {BlockModal} from "./blockModal";
 import {ThemeFunction} from "../styles/types";
 
+export const ButtonSmallMixing: ThemeFunction = theme => css`
+
+    background-color: transparent !important;
+    color: ${theme.colors.dark} !important;
+    border: none;
+    box-shadow: none;
+
+`
+
 export const RemoveButton: React.FC<ButtonProps & { onCleanup? }> = ({
                                                                          className,
                                                                          onClick,
@@ -24,9 +33,7 @@ export const RemoveButton: React.FC<ButtonProps & { onCleanup? }> = ({
             return <><Button
                 className={className}
                 css={theme => css`
-                    background-color: transparent !important;
-                    color: ${theme.colors.dark} !important;
-                    border: none;
+                    ${ButtonSmallMixing(theme)}
                 `}
                 onClick={(e) => {
                     e.stopPropagation();
@@ -85,9 +92,7 @@ export const ExportButton: React.FC<ButtonProps & { onCleanup? }> = ({
         return <Button
             className={className}
             css={theme => css`
-                background-color: transparent !important;
-                color: ${theme.colors.dark} !important;
-                border: none;
+                ${ButtonSmallMixing(theme)}
             `}
             onClick={(e) => {
                 e.stopPropagation();
@@ -106,11 +111,7 @@ export const ExportButton: React.FC<ButtonProps & { onCleanup? }> = ({
 export const ButtonFullMixin: ThemeFunction = (theme) => css`border: 2px solid ${theme.colors.grayLight};
     color: ${theme.colors.dark};
     align-self: flex-start;
-    padding: 0.3rem 0.5rem;
-
-    span:last-child {
-        margin-left: 0.3rem;
-    }`
+`
 
 export const ExportButtonFull: typeof ExportButton = (props => {
 

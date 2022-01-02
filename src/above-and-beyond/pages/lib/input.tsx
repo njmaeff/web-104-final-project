@@ -349,7 +349,7 @@ export const FieldDatePickerRow: React.FC<FieldProps<Date>> = ({
                     onChange={onChange}
                     onBlur={onBlur}
                 />
-            )}b
+            )}
         </FieldRowWrapper>
     );
 };
