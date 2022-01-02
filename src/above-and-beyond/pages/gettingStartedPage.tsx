@@ -2,7 +2,7 @@ import FullScreen from "./lib/FullScreen";
 import {Page} from "./lib/page";
 import Link from "next/link";
 import {routes} from "./routes";
-import {PrimaryLink} from "./lib/link/primaryLink";
+import {ButtonLink} from "./lib/link/buttonLink";
 import {css} from "@emotion/react";
 import About from "./lib/mdx/about.mdx";
 import React from "react";
@@ -14,11 +14,11 @@ export const GettingStartedPage = () => {
                 <header>
                     <div>
                         <Link href={routes.home()}>
-                            <PrimaryLink css={
+                            <ButtonLink css={
                                 css`
                                     display: block;
                                 `
-                            }>Continue</PrimaryLink>
+                            }>Continue</ButtonLink>
                         </Link>
                     </div>
                 </header>

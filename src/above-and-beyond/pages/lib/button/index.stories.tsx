@@ -4,22 +4,22 @@ import {actions} from '@storybook/addon-actions'
 import React from "react";
 import {
     ButtonPanelContainer,
-    ExportButton,
     ExportButtonFull,
-    RemoveButton,
-    RemoveButtonFull
+    ExportButtonSmall,
+    RemoveButtonFull,
+    RemoveButtonSmall
 } from "./actionButton";
 
 const buttonActions = actions('onClick')
 
 export const RemoveSmall = () =>
-    <RemoveButton {...buttonActions} />
+    <RemoveButtonSmall {...buttonActions} />
 export const RemoveFull = () =>
     <RemoveButtonFull {...buttonActions}/>
 
 
 export const ExportSmall = () =>
-    <ExportButton {...buttonActions} />
+    <ExportButtonSmall {...buttonActions} />
 export const ExportFull = () =>
     <ExportButtonFull {...buttonActions}/>
 

@@ -52,12 +52,22 @@ export const controlStyles: ThemeFunction = (theme,) => css`
         background-color: ${darken(0.15, theme.colors.primary)};
     }
 `
-export const ButtonSmallMixing: ThemeFunction = theme => css`
+export const ButtonSmallMixin: ThemeFunction = theme => css`
 
     background-color: transparent !important;
     color: ${theme.colors.dark} !important;
     border: none;
     box-shadow: none;
+
+    &:focus, &:active {
+        border: 2px solid ${theme.colors.darkLight};
+        color: ${theme.colors.dark};
+        transition: none;
+    }
+
+    &:hover {
+        border: none;
+    }
 
 `
 export const ButtonFullMixin: ThemeFunction = (theme) => css`

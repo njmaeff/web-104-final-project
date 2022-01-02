@@ -4,7 +4,7 @@ import {css} from "@emotion/react";
 import {CloudDownloadOutlined, DeleteOutlined} from "@ant-design/icons";
 import {BlockModal} from "../modal/blockModal";
 import {ConfirmModal} from "../modal/confirmModal";
-import {ButtonFullMixin, ButtonSmallMixing} from "../styles/mixins";
+import {ButtonFullMixin, ButtonSmallMixin} from "../styles/mixins";
 
 export const RemoveButton: React.FC<ButtonProps & { onCleanup? }> = ({
                                                                          className,
@@ -20,9 +20,6 @@ export const RemoveButton: React.FC<ButtonProps & { onCleanup? }> = ({
             onCleanup(cleanupFunction)
             return <><Button
                 className={className}
-                css={theme => css`
-                    ${ButtonSmallMixing(theme)}
-                `}
                 onClick={(e) => {
                     e.stopPropagation();
                     setVisible(true)
@@ -51,6 +48,7 @@ export const RemoveButton: React.FC<ButtonProps & { onCleanup? }> = ({
     </BlockModal>
 };
 
+
 export const ExportButton: React.FC<ButtonProps & { onCleanup? }> = ({
                                                                          children,
                                                                          className,
@@ -63,9 +61,6 @@ export const ExportButton: React.FC<ButtonProps & { onCleanup? }> = ({
         onCleanup(cleanupFunction)
         return <Button
             className={className}
-            css={theme => css`
-                ${ButtonSmallMixing(theme)}
-            `}
             onClick={(e) => {
                 e.stopPropagation();
                 save(onClick)
@@ -79,6 +74,18 @@ export const ExportButton: React.FC<ButtonProps & { onCleanup? }> = ({
         Downloading...
     </BlockModal>
 };
+
+export const ExportButtonSmall: typeof ExportButton = (props) => <ExportButton
+    css={theme => css`
+        ${ButtonSmallMixin(theme)}
+    `}
+    {...props}/>
+
+export const RemoveButtonSmall: typeof ExportButton = (props) => <RemoveButton
+    css={theme => css`
+        ${ButtonSmallMixin(theme)}
+    `}
+    {...props}/>
 
 export const ExportButtonFull: typeof ExportButton = (props => {
 

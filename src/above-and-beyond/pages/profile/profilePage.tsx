@@ -7,7 +7,7 @@ import {auth} from "../lib/firebase/connect-api";
 import Link from "next/link";
 import {routes, useRouter} from "../routes";
 import {NextPageWithLayout} from "../lib/types";
-import {PrimaryLink} from "../lib/link/primaryLink";
+import {ButtonLink} from "../lib/link/buttonLink";
 import {PrimaryButton} from "../lib/button/primaryButton";
 import {MenuLayout} from "../lib/layout/menuLayout";
 import {Button} from "antd";
@@ -60,9 +60,9 @@ export const ProfileForm = () => {
             Logout
         </PrimaryButton>
         <Link href={routes.gettingStarted()}>
-            <PrimaryLink>
+            <ButtonLink>
                 About
-            </PrimaryLink>
+            </ButtonLink>
         </Link>
         <AbsoluteButton Control={({save}) => <Button
             type="primary"
