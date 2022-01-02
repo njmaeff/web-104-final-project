@@ -18,7 +18,7 @@ import {useRouter} from "../routes";
 import {HorizontalRule} from "../lib/layout/divider";
 import {useRoleFileUpload} from "../lib/storage/file";
 import {uploadFileList} from "../lib/upload";
-import {ButtonPanelFull, ExportButtonFull} from "../lib/button/actionButton";
+import {ButtonPanelContainer, ExportButtonFull} from "../lib/button/actionButton";
 
 export const RateIssuePage: React.FC<{ data?: RateIssue }> = ({data}) => {
 
@@ -88,7 +88,7 @@ export const RateIssuePage: React.FC<{ data?: RateIssue }> = ({data}) => {
                             isManualSubmit={!data || isEdit}
                             {...fieldProps.uploads}  />
             </FormTable>
-            {isReadonly && <ButtonPanelFull/>}
+            {isReadonly && <ButtonPanelContainer/>}
             <AbsoluteButton Control={({save}) => <Button
                 type="primary"
                 icon={isEdit ? <SaveOutlined/> : <EditOutlined/>}

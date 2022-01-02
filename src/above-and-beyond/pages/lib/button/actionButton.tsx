@@ -7,8 +7,7 @@ import {
     ExclamationCircleOutlined
 } from "@ant-design/icons";
 import {BlockModal} from "./blockModal";
-import styled from "@emotion/styled";
-import {lighten} from "polished";
+import {ThemeFunction} from "../styles/types";
 
 export const RemoveButton: React.FC<ButtonProps & { onCleanup? }> = ({
                                                                          className,
@@ -104,38 +103,44 @@ export const ExportButton: React.FC<ButtonProps & { onCleanup? }> = ({
     </BlockModal>
 };
 
+export const ButtonFullMixin: ThemeFunction = (theme) => css`border: 2px solid ${theme.colors.grayLight};
+    color: ${theme.colors.dark};
+    align-self: flex-start;
+    padding: 0.3rem 0.5rem;
+
+    span:last-child {
+        margin-left: 0.3rem;
+    }`
+
 export const ExportButtonFull: typeof ExportButton = (props => {
 
     return <ExportButton css={theme => css`
-        border: 2px solid ${theme.colors.grayLight};
-        color: ${theme.colors.dark};
-        align-self: flex-start;
+        ${ButtonFullMixin(theme)}
     `} {...props}>Export</ExportButton>
 });
 
 export const RemoveButtonFull: typeof RemoveButton = (props => {
 
     return <RemoveButton css={theme => css`
-        border: 2px solid ${theme.colors.grayLight};
-        color: ${theme.colors.dark};
-        align-self: flex-start;
+        ${ButtonFullMixin(theme)}
+
     `} {...props}>Remove</RemoveButton>
 });
 
 
-export const ButtonPanelFull = ({onNew, onRemove}) => {
+export const ButtonPanelContainer: React.FC = ({children}) => {
 
     return <div
         css={theme => css`
             display: flex;
             align-items: center;
             margin-top: 1.5rem;
+
             button {
                 margin-right: 0.5rem;
             }
         `}
     >
-        <ExportButtonFull/>
-        <RemoveButtonFull/>
+        {children}
     </div>
 };

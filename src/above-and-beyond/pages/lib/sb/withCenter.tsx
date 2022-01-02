@@ -4,6 +4,7 @@ import {css} from "@emotion/react";
 export const WithCenter = (Story) => {
     return (
         <div css={css`
+            position: relative;
             height: 100vh;
             width: 100vw;
         `}>

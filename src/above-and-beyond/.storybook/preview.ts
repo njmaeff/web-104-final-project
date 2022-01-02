@@ -1,6 +1,7 @@
 import {INITIAL_VIEWPORTS} from "@storybook/addon-viewport";
 import {RouterContext} from "next/dist/shared/lib/router-context"
 import {WithTheme} from "../pages/lib/sb/withTheme";
+import 'antd/dist/antd.css';
 
 export default {
     parameters: {
@@ -15,6 +16,7 @@ export default {
 }
 
 export const parameters = {
+    // actions: {argTypesRegex: '^on.*'},
     nextRouter: {
         Provider: RouterContext.Provider,
     },
