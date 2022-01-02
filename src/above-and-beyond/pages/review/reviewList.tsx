@@ -4,7 +4,6 @@ import React from "react";
 import {Button, List} from "antd";
 import {PlusCircleOutlined, StarOutlined} from "@ant-design/icons";
 import {useRouter} from "../routes";
-import {Timestamp} from "../lib/orm/docs";
 import {Highlight} from "react-instantsearch-dom";
 import {css} from "@emotion/react";
 import {RoleDropDown} from "../lib/control";
@@ -14,6 +13,7 @@ import {Review} from "../lib/orm/validate";
 import {formatCurrency} from "../lib/util/currency";
 import {WithEnvironment} from "../lib/withEnvironment";
 import {LoaderCircle} from "../lib/loaderCircle";
+import {Timestamp} from "../lib/util/date";
 
 export const ReviewListHits: React.FC<{ hits }> = ({hits}) => {
     const routes = useRouter();

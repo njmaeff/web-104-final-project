@@ -9,7 +9,7 @@ import {
     PlusCircleOutlined
 } from "@ant-design/icons";
 import {useRouter} from "../routes";
-import {RoleHook, Timestamp} from "../lib/orm/docs";
+import {RoleHook} from "../lib/orm/docs";
 import {Highlight} from "react-instantsearch-dom";
 import {css} from "@emotion/react";
 import {RoleDropDown} from "../lib/control";
@@ -23,7 +23,7 @@ import {client} from "../lib/hooks/useHttpClient";
 import {useRoleFileUpload} from "../lib/storage/file";
 import {auth, storage} from "../lib/firebase/connect-api";
 import {ExportBody} from "../api/export/types";
-import {getTimezone} from "../lib/util/date";
+import {getTimezone, Timestamp} from "../lib/util/date";
 
 export const RateListHits: React.FC<{ hits }> = ({hits}) => {
     const role = new RoleHook();

@@ -3,7 +3,7 @@ import firebase from "firebase/compat/app";
 import {useState} from "react";
 import {FirestoreProvider} from "../firebase/firestore-provider-compat";
 import {useAsync} from "../hooks/useAsync";
-import {DateLike, Doc, Employer, Rate, Review, Role} from "./validate";
+import {Doc, Employer, Rate, Review, Role} from "./validate";
 import {useEmployer} from "../../home/useEmployer";
 import {useRole} from "../../home/useRole";
 
@@ -69,8 +69,6 @@ export interface DataMeta extends Doc {
     currentRoleID: string;
 }
 
-export type FirebaseDoc = Employer | Role | Rate | Review;
-
 export class UserProvider extends Firestore<DataMeta> {
     constructor() {
         super(
@@ -129,18 +127,3 @@ export class RoleHook {
     private roleApi: Firestore<Role>;
 }
 
-export const Timestamp = firebase.firestore.Timestamp;
-export const isTimestampLike = (obj): obj is { _seconds: number, _nanoseconds: number } => '_seconds' in obj && '_nanoseconds' in obj
-export const ensureDate = (date: DateLike): Date => {
-    if (date instanceof Timestamp) {
-        return date.toDate();
-    } else if (isTimestampLike(date)) {
-        return new Timestamp(date._seconds, date._nanoseconds).toDate()
-    } else {
-        return date;
-    }
-};
-
-export const isDateLike = (date: DateLike) => {
-    return date instanceof Timestamp || date instanceof Date;
-};

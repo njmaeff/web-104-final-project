@@ -3,7 +3,7 @@ import {AnySchema} from "yup/lib/schema";
 import Reference from "yup/lib/Reference";
 import Lazy from "yup/lib/Lazy";
 import type firebase from "firebase/compat";
-import {ensureDate} from "./docs";
+import {ensureDate} from "../util/date";
 
 export type ConvertToObjectShape<T> = {
     [P in keyof T]: AnySchema | Reference | Lazy<any, any>
@@ -11,8 +11,11 @@ export type ConvertToObjectShape<T> = {
 export const makeSchema = <T = {}>(shape: ConvertToObjectShape<T>, defaults?: T) => {
     return yup.object().shape<ConvertToObjectShape<T>>(shape).default(defaults ?? {})
 };
-
-export type DateLike = firebase.firestore.Timestamp | Date;
+export type SerializedTimestamp = { _seconds: number, _nanoseconds: number };
+export type DateLike =
+    firebase.firestore.Timestamp
+    | Date
+    | SerializedTimestamp;
 
 export interface Doc {
     id?: string;

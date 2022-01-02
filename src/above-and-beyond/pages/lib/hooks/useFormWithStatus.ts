@@ -1,7 +1,7 @@
 import "react";
 import * as formik from "formik";
-import {isDateLike} from "../orm/docs";
 import {useEffect} from "react";
+import {isDateLike} from "../util/date";
 
 export enum PageStatus {
     EDIT,
