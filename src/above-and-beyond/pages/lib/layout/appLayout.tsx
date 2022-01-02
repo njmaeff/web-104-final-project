@@ -5,7 +5,7 @@ import {checkAuthUI} from "../hooks/checkAuthUI";
 import {NextPageWithLayout} from "../types";
 import {WithoutSSR} from "../util/next";
 import {AsyncHook} from "../hooks/useAsync";
-import {LoaderCircle} from "../loaderCircle";
+import {LoaderCircle} from "../feedback/loaderCircle";
 
 export const Anchor: React.FC<JSX.IntrinsicElements["a"]> = ({
                                                                  children,

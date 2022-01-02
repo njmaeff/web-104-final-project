@@ -1,5 +1,5 @@
-import FullScreen from "./lib/FullScreen";
-import {Page} from "./lib/page";
+import FullScreen from "./lib/layout/FullScreen";
+import {Page} from "./lib/layout/page";
 import Link from "next/link";
 import {routes} from "./routes";
 import {ButtonLink} from "./lib/link/buttonLink";

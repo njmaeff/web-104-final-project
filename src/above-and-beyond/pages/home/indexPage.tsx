@@ -15,8 +15,8 @@ import {
     FormTable,
     FormUpload,
     TextInput
-} from "../lib/input";
-import {EmployerDropDown, RoleDropDown} from "../lib/control";
+} from "../lib/input/form";
+import {EmployerDropDown, RoleDropDown} from "../lib/input/control";
 import {useEmployer} from "./useEmployer";
 import {useRole} from "./useRole";
 import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
@@ -24,14 +24,14 @@ import {MenuLayout} from "../lib/layout/menuLayout";
 import {Button, Tabs} from "antd";
 import {EditOutlined, SaveOutlined} from "@ant-design/icons";
 import {TabPane} from "rc-tabs";
-import {WithEnvironment} from "../lib/withEnvironment";
-import {LoaderCircle} from "../lib/loaderCircle";
+import {WithEnvironment} from "../lib/hooks/withEnvironment";
+import {LoaderCircle} from "../lib/feedback/loaderCircle";
 import {css} from "@emotion/react";
 import {ScrollBar} from "../lib/styles/mixins";
 import {useBaseFileUpload} from "../lib/storage/file";
 import {ExportButtonFull, RemoveButton} from "../lib/button/actionButton";
 import {useRouter} from "../routes";
-import {uploadFileList} from "../lib/upload";
+import {uploadFileList} from "../lib/input/upload";
 
 
 export const EmployerForm: React.FC<{ currentEmployer?: Employer, allEmployers?: Employer[], onSubmit? }> = ({

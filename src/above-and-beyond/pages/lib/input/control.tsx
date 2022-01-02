@@ -3,11 +3,11 @@ import Link from "next/link";
 import React, {ReactEventHandler} from "react";
 import {css} from "@emotion/react";
 import {DownOutlined} from "@ant-design/icons";
-import {useEmployer} from "../home/useEmployer";
-import {useRole} from "../home/useRole";
-import {Employer, Role} from "./orm/validate";
-import {useRouter} from "../routes";
-import {alphabetical} from "./util/sort";
+import {useEmployer} from "../../home/useEmployer";
+import {useRole} from "../../home/useRole";
+import {Employer, Role} from "../orm/validate";
+import {useRouter} from "../../routes";
+import {alphabetical} from "../util/sort";
 
 export const DropDownMenu: React.FC<{ value }> = ({children, value}) => {
 

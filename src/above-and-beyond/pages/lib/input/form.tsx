@@ -1,9 +1,9 @@
 import React, {useState} from "react";
 import {Form, Input, Modal, Upload} from "antd";
 import {css} from "@emotion/react";
-import {ScrollBar} from "./styles/mixins";
-import {ParagraphSize, SectionSize, SubTitleSize} from "./styles/size";
-import {formatCurrency} from "./util/currency";
+import {ScrollBar} from "../styles/mixins";
+import {ParagraphSize, SectionSize, SubTitleSize} from "../styles/size";
+import {formatCurrency} from "../util/currency";
 import {getBase64, uploadFile, UploadState} from "./upload";
 import {InboxOutlined} from "@ant-design/icons";
 import {Reference} from "@firebase/storage-types";

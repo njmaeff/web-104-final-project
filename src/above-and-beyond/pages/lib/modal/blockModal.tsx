@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import pMinDelay from "p-min-delay";
 import {Modal, ModalProps} from "antd";
 import {css} from "@emotion/react";
-import {LoaderCircleSmallRelative} from "../loaderCircle";
+import {LoaderCircleSmallRelative} from "../feedback/loaderCircle";
 
 export const BlockModalContainer: React.FC<ModalProps> = ({
                                                               children,

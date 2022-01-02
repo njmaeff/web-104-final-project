@@ -1,7 +1,7 @@
 import {MenuLayout} from "../lib/layout/menuLayout";
 import React from 'react';
 import {Rate} from "../lib/orm/validate";
-import {SearchInterface} from "../lib/instantSearch";
+import {SearchInterface} from "../lib/input/instantSearch";
 import {Button, List} from "antd";
 import {
     ExclamationCircleOutlined,
@@ -12,12 +12,12 @@ import {useRouter} from "../routes";
 import {RoleHook} from "../lib/orm/docs";
 import {Highlight} from "react-instantsearch-dom";
 import {css} from "@emotion/react";
-import {RoleDropDown} from "../lib/control";
+import {RoleDropDown} from "../lib/input/control";
 import {useRole} from "../home/useRole";
 import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
 import {formatCurrency} from "../lib/util/currency";
-import {WithEnvironment} from "../lib/withEnvironment";
-import {LoaderCircle} from "../lib/loaderCircle";
+import {WithEnvironment} from "../lib/hooks/withEnvironment";
+import {LoaderCircle} from "../lib/feedback/loaderCircle";
 import {ExportButton, RemoveButton} from "../lib/button/actionButton";
 import {client} from "../lib/hooks/useHttpClient";
 import {useRoleFileUpload} from "../lib/storage/file";

@@ -1,6 +1,6 @@
 import React, {useEffect} from "react"
 import type {NextPage} from "next";
-import {LoaderCircle} from "./lib/loaderCircle";
+import {LoaderCircle} from "./lib/feedback/loaderCircle";
 import {checkAuthUI} from "./lib/hooks/checkAuthUI";
 import {useRouter} from "./routes";
 

@@ -5,12 +5,12 @@ import {useRouter} from "../routes";
 import {useEmployer} from "../home/useEmployer";
 import {useRole} from "../home/useRole";
 import {EmployerCollection} from "../lib/orm/docs";
-import {LoaderCircle} from "../lib/loaderCircle";
+import {LoaderCircle} from "../lib/feedback/loaderCircle";
 import {Rate} from "../lib/orm/validate";
 import {useAsync} from "../lib/hooks/useAsync";
-import {FileType} from "../lib/upload";
+import {FileType} from "../lib/input/upload";
 import {useRoleFileUpload} from "../lib/storage/file";
-import {WithEnvironment} from "../lib/withEnvironment";
+import {WithEnvironment} from "../lib/hooks/withEnvironment";
 
 export const ViewPage = () => {
     const {currentEmployerID} = useEmployer()

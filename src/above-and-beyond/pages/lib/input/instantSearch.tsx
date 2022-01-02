@@ -12,15 +12,15 @@ import {
     SortByProps,
 } from "react-instantsearch-dom"
 import TypesenseInstantSearchAdapter from "typesense-instantsearch-adapter"
-import {AsyncHook} from "./hooks/useAsync";
-import {LoaderCircle} from "./loaderCircle";
+import {AsyncHook} from "../hooks/useAsync";
+import {LoaderCircle} from "../feedback/loaderCircle";
 import {Input, Radio, Select} from "antd";
 import React from "react";
 import {InfiniteHits} from "./search/infiniteHits";
 import {css} from "@emotion/react";
 import capitalize from "lodash/capitalize";
-import {ScrollBar} from "./styles/mixins";
-import {fetchCustomToken} from "./util/fetchCustomToken";
+import {ScrollBar} from "../styles/mixins";
+import {fetchCustomToken} from "../util/fetchCustomToken";
 import {
     RefinementListProvided,
     StateResultsProvided

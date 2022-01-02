@@ -4,7 +4,7 @@ import {RateIssuePage} from "./rateIssuePage";
 import {Radio, RadioGroupProps} from "antd"
 import React, {useState} from "react";
 import {css} from "@emotion/react";
-import {WithEnvironment} from "../lib/withEnvironment";
+import {WithEnvironment} from "../lib/hooks/withEnvironment";
 
 export const RadioGroup: React.FC<RadioGroupProps & { heading: string }> = ({
                                                                                 heading,

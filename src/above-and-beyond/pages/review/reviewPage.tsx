@@ -5,7 +5,7 @@ import {
     FormTable,
     FormUpload,
     TextInput,
-} from "../lib/input";
+} from "../lib/input/form";
 import {PageStatus, useFormWithStatus} from "../lib/hooks/useFormWithStatus";
 import {EmployerCollection} from "../lib/orm/docs";
 import {Review, reviewSchema, Uploads} from "../lib/orm/validate";
@@ -18,7 +18,7 @@ import {EditOutlined, SaveOutlined} from "@ant-design/icons";
 import {useRouter} from "../routes";
 import {HorizontalRule} from "../lib/layout/divider";
 import {useRoleFileUpload} from "../lib/storage/file";
-import {uploadFileList} from "../lib/upload";
+import {uploadFileList} from "../lib/input/upload";
 
 export const ReviewForm: React.FC<{ data?: Review }> = ({data}) => {
     const router = useRouter();

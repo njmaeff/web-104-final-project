@@ -1,6 +1,6 @@
 import {User, userSchema} from "../lib/orm/validate";
 import {PageStatus, useFormWithStatus} from "../lib/hooks/useFormWithStatus";
-import {FieldInputRow, FormTable} from "../lib/input";
+import {FieldInputRow, FormTable} from "../lib/input/form";
 import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
 import React from "react";
 import {auth} from "../lib/firebase/connect-api";

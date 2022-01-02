@@ -9,7 +9,7 @@ import {
     FormTable,
     FormUpload,
     TextInput
-} from "../lib/input";
+} from "../lib/input/form";
 import {useRole} from "../home/useRole";
 import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
 import {Button} from "antd";
@@ -17,7 +17,7 @@ import {EditOutlined, SaveOutlined} from "@ant-design/icons";
 import {useRouter} from "../routes";
 import {HorizontalRule} from "../lib/layout/divider";
 import {useRoleFileUpload} from "../lib/storage/file";
-import {uploadFileList} from "../lib/upload";
+import {uploadFileList} from "../lib/input/upload";
 import {ButtonPanelContainer, ExportButtonFull} from "../lib/button/actionButton";
 
 export const RateIssuePage: React.FC<{ data?: RateIssue }> = ({data}) => {

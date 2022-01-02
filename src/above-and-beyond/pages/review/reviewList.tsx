@@ -1,4 +1,4 @@
-import {SearchInterface} from "../lib/instantSearch";
+import {SearchInterface} from "../lib/input/instantSearch";
 import {MenuLayout} from "../lib/layout/menuLayout";
 import React from "react";
 import {Button, List} from "antd";
@@ -6,13 +6,13 @@ import {PlusCircleOutlined, StarOutlined} from "@ant-design/icons";
 import {useRouter} from "../routes";
 import {Highlight} from "react-instantsearch-dom";
 import {css} from "@emotion/react";
-import {RoleDropDown} from "../lib/control";
+import {RoleDropDown} from "../lib/input/control";
 import {useRole} from "../home/useRole";
 import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
 import {Review} from "../lib/orm/validate";
 import {formatCurrency} from "../lib/util/currency";
-import {WithEnvironment} from "../lib/withEnvironment";
-import {LoaderCircle} from "../lib/loaderCircle";
+import {WithEnvironment} from "../lib/hooks/withEnvironment";
+import {LoaderCircle} from "../lib/feedback/loaderCircle";
 import {Timestamp} from "../lib/util/date";
 
 export const ReviewListHits: React.FC<{ hits }> = ({hits}) => {

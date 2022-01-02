@@ -1,4 +1,4 @@
-import {WithEnvironment} from "../lib/withEnvironment";
+import {WithEnvironment} from "../lib/hooks/withEnvironment";
 import {useRouter} from "../routes";
 import React from "react";
 import {MenuLayout} from "../lib/layout/menuLayout";

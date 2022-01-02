@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
-import {ScrollBar, withTablet} from "./styles/mixins";
+import {ScrollBar, withTablet} from "../styles/mixins";
 import {css} from "@emotion/react";
 
 export const Page = styled.div`

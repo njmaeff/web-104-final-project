@@ -1,5 +1,5 @@
 import React from "react";
-import FullScreen from "../FullScreen";
+import FullScreen from "./FullScreen";
 import Link from "next/link";
 import {routes} from "../../routes";
 import {
@@ -9,7 +9,7 @@ import {
     SettingOutlined,
     StarOutlined
 } from "@ant-design/icons";
-import {FooterControl, HeaderControl, Page} from "../page";
+import {FooterControl, HeaderControl, Page} from "./page";
 
 export const MenuLayout: React.FC<{
     heading?: string;

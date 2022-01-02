@@ -5,11 +5,11 @@ import {useRole} from "../home/useRole";
 import {useRouter} from "../routes";
 import {EmployerCollection} from "../lib/orm/docs";
 import {Review} from "../lib/orm/validate";
-import {LoaderCircle} from "../lib/loaderCircle";
+import {LoaderCircle} from "../lib/feedback/loaderCircle";
 import {useRoleFileUpload} from "../lib/storage/file";
 import {useAsync} from "../lib/hooks/useAsync";
-import {FileType} from "../lib/upload";
-import {WithEnvironment} from "../lib/withEnvironment";
+import {FileType} from "../lib/input/upload";
+import {WithEnvironment} from "../lib/hooks/withEnvironment";
 
 export default () => WithEnvironment(() => {
     return <MenuLayout
