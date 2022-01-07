@@ -10,10 +10,23 @@ export const DatePicker = React.forwardRef<any, PickerDateProps<Date> | PickerTi
         theme => css`
             background-color: ${theme.colors.light} !important;
             padding-left: 0;
+            margin: 0.2rem 0;
             border: 2px solid ${theme.colors.grayLight};
+            transition: none;
 
             input {
                 border: 1px solid ${theme.colors.grayLight};
+                transition: none;
+
+                &:hover, &:focus, &:active {
+                    border: 1px solid ${theme.colors.darkLight};
+                    transition: none;
+                }
+            }
+
+            &:hover, &:focus, &:active {
+                border: 2px solid ${theme.colors.darkLight};
+                transition: none;
             }
         `
     }  {...props}/>

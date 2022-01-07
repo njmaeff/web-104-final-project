@@ -1,6 +1,6 @@
 import {withServerSideProps} from "../lib/util/next";
 
-export {ExportRatePage as default} from "./exportRatePage"
+export {ExportReviewPage as default} from "./exportReviewPage"
 export const getServerSideProps = withServerSideProps(() => import("../lib/util/getRecordFromPath"));
 
 

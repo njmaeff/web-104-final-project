@@ -1,8 +1,8 @@
 import {GetServerSideProps} from "next";
-import {connectFirebaseAdminAuth} from "../lib/firebase/connect-admin";
-import {verifyTokenFromRequest} from "../lib/util/auth";
+import {connectFirebaseAdminAuth} from "../firebase/connect-admin";
+import {verifyTokenFromRequest} from "./auth";
 import {getFirestore} from "firebase-admin/firestore";
-import {RecordParams} from "../api/export/types";
+import {RecordParams} from "../../api/export/types";
 
 const auth = connectFirebaseAdminAuth();
 export const getRecordFromPath: GetServerSideProps = async (context) => {

@@ -2,26 +2,17 @@ import {Rate} from "../lib/orm/validate";
 import {NextPage} from "next";
 import {utcToZonedTime} from "date-fns-tz";
 import {formatCurrency} from "../lib/util/currency";
-import {css, Global} from "@emotion/react";
+import {css} from "@emotion/react";
 import {ensureDate, getTimezone} from "../lib/util/date";
 import React from "react"
 import capitalize from "lodash/capitalize";
 import {Descriptions} from "antd";
 import {TextHeading, TextSection} from "../lib/text";
 import {HorizontalRule} from "../lib/layout/divider";
+import {Report} from "../lib/layout/report";
 
 export type ServerProps = { record: Rate, tz?: string };
-export const Report: React.FC = ({children}) => <>
-    <Global styles={css`
-        body {
-            display: block !important;
-            height: auto;
-            background-color: white;
-        }
-    `}/>
-    {children}
-</>
-export const ExportPage: NextPage<ServerProps> = ({
+export const ExportEmployerPage: NextPage<ServerProps> = ({
                                                       record,
                                                       tz = getTimezone()
                                                   }) => {
