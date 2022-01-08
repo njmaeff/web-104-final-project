@@ -19,7 +19,7 @@ export const ExportRolePage: NextPage<ServerProps> = ({
     return <Report>
         <Descriptions title={
             <>
-                <TextHeading>{`Role`}</TextHeading>
+                <TextHeading>{`Role - ${record.name}`}</TextHeading>
                 <HorizontalRule/>
             </>
         }
@@ -37,16 +37,11 @@ export const ExportRolePage: NextPage<ServerProps> = ({
                 }>{formatCurrency(record.salaryTarget)}</Descriptions.Item>
             <Descriptions.Item
                 label={
-                    <TextSection>{"Situation"}</TextSection>}>{record.situation}</Descriptions.Item>
+                    <TextSection>{"Responsibilities"}</TextSection>}>{record.responsibilities}</Descriptions.Item>
             <Descriptions.Item
                 label={
-                    <TextSection>{"Result"}</TextSection>
-                }>{record.result}</Descriptions.Item>
-            {record.type === 'issue' ?
-                <Descriptions.Item
-                    label={
-                        <TextSection>{'Correction'}</TextSection>
-                    }>{record.correction}</Descriptions.Item> : null}
+                    <TextSection>{"Goals"}</TextSection>
+                }>{record.skillTarget}</Descriptions.Item>
         </Descriptions>
     </Report>
 };

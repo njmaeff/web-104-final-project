@@ -44,7 +44,7 @@ const seed = async () => {
             () =>
                 ({
                     name: faker.company.companyName(),
-                    location: faker.name.jobArea(),
+                    location: faker.address.streetAddress(true),
                 } as Employer)
         );
 
