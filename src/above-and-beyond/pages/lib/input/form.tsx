@@ -37,7 +37,7 @@ export const FormTextArea: React.FC<{ error, name, onChange, onBlur, value }> = 
     />
 };
 
-export const TextInput: React.FC<{
+export const FieldTextInput: React.FC<{
     width?: string;
     height?: string;
 } & FieldProps> = ({
@@ -451,7 +451,6 @@ export const FormTable: React.FC<{
             width: 100%;
             padding-bottom: 1rem;
             margin-bottom: 1rem;
-
         `}
               {...formItemLayout}
         >

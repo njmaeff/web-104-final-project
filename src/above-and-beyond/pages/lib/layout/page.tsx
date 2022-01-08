@@ -4,11 +4,9 @@ import {ScrollBar, withTablet} from "../styles/mixins";
 import {css} from "@emotion/react";
 
 export const Page = styled.div`
-    position: absolute;
     height: 100%;
     display: flex;
     flex-direction: column;
-    width: 100%;
 
     &::before {
         /* to add opacity on background only https://stackoverflow.com/a/10423121/15809514 */

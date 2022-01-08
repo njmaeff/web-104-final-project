@@ -8,7 +8,7 @@ import {
     FieldInputRow,
     FormTable,
     FormUpload,
-    TextInput
+    FieldTextInput
 } from "../lib/input/form";
 import {useRole} from "../home/useRole";
 import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
@@ -79,9 +79,9 @@ export const RateIssuePage: React.FC<{ data?: RateIssue }> = ({data}) => {
                     {...fieldProps.value}
                 />
                 <HorizontalRule/>
-                <TextInput label={"Situation"} {...fieldProps.situation} />
-                <TextInput label={"Result"} {...fieldProps.result} />
-                <TextInput
+                <FieldTextInput label={"Situation"} {...fieldProps.situation} />
+                <FieldTextInput label={"Result"} {...fieldProps.result} />
+                <FieldTextInput
                     label={"Correction"} {...fieldProps.correction} />
                 <FormUpload label={"Uploads"}
                             storageRef={storageRef.child(fieldProps.id?.value ?? "")}

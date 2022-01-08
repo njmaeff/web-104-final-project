@@ -4,7 +4,7 @@ import {
     FieldInputRow,
     FormTable,
     FormUpload,
-    TextInput,
+    FieldTextInput,
 } from "../lib/input/form";
 import {PageStatus, useFormWithStatus} from "../lib/hooks/useFormWithStatus";
 import {EmployerCollection} from "../lib/orm/docs";
@@ -71,7 +71,7 @@ export const ReviewForm: React.FC<{ data?: Review }> = ({data}) => {
                 {...fieldProps.adjustedSalary}
             />
             <HorizontalRule/>
-            <TextInput label={"Outcome"} {...fieldProps.outcome} />
+            <FieldTextInput label={"Outcome"} {...fieldProps.outcome} />
             <FormUpload label={"Uploads"}
                         storageRef={storageRef.child(fieldProps.id?.value ?? "")}
                         isManualSubmit={!data || isEdit}

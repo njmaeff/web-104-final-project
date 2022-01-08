@@ -14,7 +14,7 @@ import {
     FieldInputRow,
     FormTable,
     FormUpload,
-    TextInput
+    FieldTextInput
 } from "../lib/input/form";
 import {EmployerDropDown, RoleDropDown} from "../lib/input/control";
 import {useEmployer} from "./useEmployer";
@@ -150,12 +150,12 @@ export const RoleForm: React.FC<{ currentRole?: Role, allRoles?: Role[], onSubmi
                 label={"Current Role"}
                 {...form.fieldProps.name}
             />
-            <TextInput
+            <FieldTextInput
                 {...form.fieldProps.responsibilities}
                 height={"auto"}
                 label={"Responsibilities"}
             />
-            <TextInput
+            <FieldTextInput
                 {...form.fieldProps.skillTarget}
                 height={"auto"}
                 label={"Goals"}

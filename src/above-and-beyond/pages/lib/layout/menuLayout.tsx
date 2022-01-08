@@ -66,6 +66,7 @@ export const MenuLayout: React.FC<{
                         </FooterControl>
                     </nav>
                 </footer>
-            </Page></FullScreen>
+            </Page>
+        </FullScreen>
     );
 };
