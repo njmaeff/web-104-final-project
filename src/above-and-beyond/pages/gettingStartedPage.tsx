@@ -11,20 +11,9 @@ export const GettingStartedPage = () => {
     return (
         <FullScreen>
             <Page>
-                <header>
-                    <div>
-                        <Link href={routes.home()}>
-                            <ButtonLink css={
-                                css`
-                                    display: block;
-                                `
-                            }>Continue</ButtonLink>
-                        </Link>
-                    </div>
-                </header>
                 <main>
                     <section css={css`
-                        padding-top: 2rem;
+                        margin-top: 1rem;
 
                         h1 {
                             text-align: left !important;
@@ -53,7 +42,20 @@ export const GettingStartedPage = () => {
                         <About/>
                     </section>
                 </main>
-                <footer/>
+                <footer>
+                    <Link href={routes.home()}>
+                        <ButtonLink css={
+                            theme => css`
+                                display: block;
+                                max-width: 12rem;
+                                margin: 1rem auto;
+                                font-size: 1.5rem;
+                                color: ${theme.colors.dark};
+                                text-decoration: none;
+                            `
+                        }>Continue</ButtonLink>
+                    </Link>
+                </footer>
             </Page>
         </FullScreen>
     );
