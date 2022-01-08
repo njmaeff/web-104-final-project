@@ -1,3 +1,4 @@
+import {WithFirebase} from "../sb/withFirebase";
 import {Meta} from "@storybook/react";
 import {WithCenter} from "../sb/withCenter";
 import {FieldDatePickerRow, FieldDateTimePickerRow, FormTable} from "./form";
@@ -12,5 +13,5 @@ export const DateTimePickerRow = () => <FieldDateTimePickerRow
 
 const WithFormTable = (Story) => <FormTable><Story/></FormTable>
 export default {
-    decorators: [WithCenter, WithFormTable]
+    decorators: [WithCenter, WithFormTable, WithFirebase]
 } as Meta

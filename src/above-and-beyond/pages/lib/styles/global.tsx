@@ -1,6 +1,6 @@
 import {css, Global,} from "@emotion/react";
 import {ThemeFunction} from "./types";
-import {ButtonFullMixin, ScrollBar, withTablet} from "./mixins";
+import {ScrollBar, withTablet} from "./mixins";
 
 
 export const fonts = css`
@@ -212,8 +212,6 @@ export const GlobalStyles = () => {
 
         body {
             max-width: 960px;
-            background-color: ${theme.colors.light};
-            color: ${theme.colors.dark};
             margin: 0 auto;
 
             /* https://stackoverflow.com/questions/46167604/ios-html-disable-double-tap-to-zoom */
@@ -255,8 +253,6 @@ export const GlobalStyles = () => {
             font-size: 0.8rem;
             margin: 0.2rem 0.5rem;
             line-height: 1.3rem;
-            background-color: ${theme.colors.light};
-            color: ${theme.colors.dark};
         }
 
         img {
@@ -277,39 +273,5 @@ export const GlobalStyles = () => {
             overflow: hidden;
             display: none !important;
         }
-
-        div.ant-dropdown ul {
-            background-color: ${theme.colors.light};
-        }
-
-        div.ant-picker-panel-container {
-            background-color: ${theme.colors.light} !important;
-        }
-
-        .ant-dropdown-menu-title-content {
-            display: flex !important;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .ant-btn {
-            ${ButtonFullMixin(theme)}
-            &:hover, &:focus, &:active {
-                border: 2px solid ${theme.colors.darkLight};
-                color: ${theme.colors.dark};
-            }
-        }
-
-        .ant-btn-primary {
-            border: 2px solid ${theme.colors.primary};
-            color: ${theme.colors.primary};
-
-            &:hover, &:focus, &:active {
-                border: 2px solid ${theme.colors.primary};
-                background: ${theme.colors.primary};
-                color: ${theme.colors.light};
-            }
-        }
-
     `}/>
 };

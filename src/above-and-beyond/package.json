@@ -9,6 +9,7 @@
     "dev": "NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
     "build-functions": "node -r ts-node/register/transpile-only esbuildrc.ts",
+    "build-styles": "yarn lessc --js pages/lib/styles/antd.less pages/lib/styles/antd.css",
     "start": "next start",
     "build-storybook": "build-storybook"
   },
@@ -71,6 +72,7 @@
     "file-loader": "^6.2.0",
     "firebase-admin": "^10.0.0",
     "firebase-functions": "^3.16.0",
+    "less": "^4.1.2",
     "lodash": "^4.17.21",
     "msw": "^0.35.0",
     "sass": "^1.43.5",

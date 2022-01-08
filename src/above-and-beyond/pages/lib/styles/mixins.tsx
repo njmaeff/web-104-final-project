@@ -28,11 +28,6 @@ export const ScrollBar: ThemeFunction = (theme) => css`
     }
 `
 
-export const Highlight = (color) => css`
-    border: 2px solid ${color} !important;
-    box-shadow: 0 0 3px ${color} !important;
-`;
-
 export const withTablet: MediaFunction = (theme, defs) => css`
     @media (min-width: ${theme.media.tablet}) {
         ${defs}

@@ -10,7 +10,7 @@ export const Report: React.FC = ({children}) => <>
         }
     `}/>
     <div css={
-        theme => css`
+        css`
             padding: 1rem 0;
 
             h1 {
@@ -23,10 +23,6 @@ export const Report: React.FC = ({children}) => <>
 
             .ant-descriptions-item {
                 margin: 0 1rem;
-            }
-
-            .ant-descriptions-item-label {
-                background-color: ${theme.colors.light};
             }
         `
     }>

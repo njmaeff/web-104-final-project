@@ -1,5 +1,5 @@
 import {Meta} from "@storybook/react";
-import {WithFaker} from "./lib/sb/WithFaker";
+import {WithFaker} from "./lib/sb/withFaker";
 import {ExportRatePage} from "./rate/exportRatePage";
 import * as faker from "faker";
 import {ExportReviewPage} from "./review/exportReviewPage";

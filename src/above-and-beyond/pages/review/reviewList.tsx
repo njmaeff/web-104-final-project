@@ -44,7 +44,6 @@ export const ReviewListHits: React.FC<{ hits }> = ({hits}) => {
 
                         li {
                             padding: 0;
-                        }
                     }
                 `
             }

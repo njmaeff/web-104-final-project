@@ -7,27 +7,9 @@ import {css} from "@emotion/react";
 export const DatePickerBase = generatePicker<Date>(dateFnsGenerateConfig) as any;
 export const DatePicker = React.forwardRef<any, PickerDateProps<Date> | PickerTimeProps<Date>>((props, ref) => {
     return <DatePickerBase ref={ref} css={
-        theme => css`
-            background-color: ${theme.colors.light} !important;
+        css`
             padding-left: 0;
             margin: 0.2rem 0;
-            border: 2px solid ${theme.colors.grayLight};
-            transition: none;
-
-            input {
-                border: 1px solid ${theme.colors.grayLight};
-                transition: none;
-
-                &:hover, &:focus, &:active {
-                    border: 1px solid ${theme.colors.darkLight};
-                    transition: none;
-                }
-            }
-
-            &:hover, &:focus, &:active {
-                border: 2px solid ${theme.colors.darkLight};
-                transition: none;
-            }
         `
     }  {...props}/>
 });

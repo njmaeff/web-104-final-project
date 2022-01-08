@@ -83,6 +83,10 @@ const SearchBox = connectSearchBox(({
 
         color: ${theme.colors.dark};
 
+        .ant-btn {
+            border: 1px solid ${theme.colors.grayLight};
+        }
+
         .ant-input-wrapper {
             span, input, button {
                 background-color: ${theme.colors.light};

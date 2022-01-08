@@ -39,8 +39,6 @@ module.exports = (phase, {defaultConfig}) => withMDX({
             test: /\.(woff|woff2|eot|ttf|otf)$/i,
             use: ['file-loader']
         },)
-
         return config
     },
-    webpack5: true
 })
