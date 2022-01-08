@@ -200,13 +200,8 @@ export const FormUpload: React.FC<FieldProps & { storageRef: Reference, isManual
                                                                                                  label,
                                                                                                  storageRef,
                                                                                                  isManualSubmit,
-                                                                                                 readonly,
                                                                                                  onChange,
-                                                                                                 onBlur,
                                                                                                  value,
-                                                                                                 touched,
-                                                                                                 name,
-                                                                                                 error,
                                                                                              }) => {
     const [{
         PreviewComponent,

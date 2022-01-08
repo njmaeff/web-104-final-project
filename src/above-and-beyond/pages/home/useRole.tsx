@@ -16,7 +16,7 @@ export const DEFAULT_LOCAL: RoleLocal = {
 
 export class RoleApi {
     static use() {
-        const [{currentRoleID}, updateRoleState] = useLocalStorage(ROLE_KEY, DEFAULT_LOCAL);
+        const [{currentRoleID}, updateRoleState] = useLocalStorage(getRoleKey(), DEFAULT_LOCAL);
         const {currentEmployerID} = useEmployer()
         const router = useRouter()
         return new RoleApi(router, currentRoleID, currentEmployerID, updateRoleState)
@@ -64,7 +64,7 @@ export class RoleApi {
 const RoleContext = React.createContext<RoleApi>(null);
 export const useRole = () => useContext(RoleContext)
 
-export const ROLE_KEY = [auth.currentUser.uid, 'ROLE'].join('/')
+export const getRoleKey = () => [auth.currentUser.uid, 'ROLE'].join('/')
 
 export const RoleProvider: React.FC = ({children}) => {
 

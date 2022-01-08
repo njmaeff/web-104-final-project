@@ -1,7 +1,7 @@
 import React from "react";
 import {UploadRequestOption} from "rc-upload/lib/interface";
 import type {Reference} from "@firebase/storage-types";
-import type {TaskEvent} from "firebase/storage";
+import firebase from "firebase/compat/app";
 
 export const getBase64 = (file: Blob) => {
     return new Promise((resolve, reject) => {
@@ -24,7 +24,7 @@ export const uploadFile = ({
     const task = storageRef.put(file);
     return new Promise((resolve, reject) => {
         task.on(
-            'state_changed' as TaskEvent,
+            firebase.storage.TaskEvent.STATE_CHANGED,
             {
                 next(snapshot) {
                     onProgress({

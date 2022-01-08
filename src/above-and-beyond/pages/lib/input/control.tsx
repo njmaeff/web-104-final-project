@@ -11,9 +11,7 @@ import {alphabetical} from "../util/sort";
 
 export const DropDownMenu: React.FC<{ value }> = ({children, value}) => {
 
-    return <Dropdown css={theme => css`
-        background-color: ${theme.colors.light};
-    `} overlay={
+    return <Dropdown overlay={
         <Menu>{children}</Menu>
     }
                      trigger={['click']}>
@@ -22,7 +20,6 @@ export const DropDownMenu: React.FC<{ value }> = ({children, value}) => {
                 display: block;
                 border: 2px solid ${theme.colors.grayLight};
                 padding-left: 0.5rem;
-                color: ${theme.colors.dark};
 
                 div {
                     width: 100%;

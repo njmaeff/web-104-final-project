@@ -17,7 +17,7 @@ export const DEFAULT_LOCAL: EmployerLocalState = {
 export class EmployerApi {
     static use() {
         const router = useRouter();
-        const [{currentEmployerID}, updateProviderState] = useLocalStorage(EMPLOYER_KEY, DEFAULT_LOCAL);
+        const [{currentEmployerID}, updateProviderState] = useLocalStorage(getEmployerKey(), DEFAULT_LOCAL);
 
         return new EmployerApi(router, currentEmployerID, updateProviderState)
     }
@@ -63,7 +63,7 @@ const EmployerContext = React.createContext<EmployerApi>(null)
 export const useEmployer = () => useContext(EmployerContext)
 
 
-const EMPLOYER_KEY = [auth.currentUser.uid, 'employer'].join('/')
+const getEmployerKey = () => [auth.currentUser.uid, 'employer'].join('/')
 
 
 export const EmployerProvider: React.FC = ({children}) => {
