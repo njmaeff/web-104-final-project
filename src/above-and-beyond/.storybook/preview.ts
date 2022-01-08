@@ -2,6 +2,7 @@ import {INITIAL_VIEWPORTS} from "@storybook/addon-viewport";
 import {RouterContext} from "next/dist/shared/lib/router-context"
 import {WithTheme} from "../pages/lib/sb/withTheme";
 import 'antd/dist/antd.css';
+import "firebaseui/dist/firebaseui.css"
 
 export default {
     parameters: {

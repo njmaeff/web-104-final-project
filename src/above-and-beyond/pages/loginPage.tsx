@@ -45,7 +45,7 @@ export const useFirebaseUI = () => {
 }
 
 export const FirebaseAuthContainer = styled.div`
-    margin-top: 3rem;
+    margin-top: 10rem;
     font-family: 'Rubik', sans-serif;
 
     button {
@@ -75,6 +75,10 @@ export const FirebaseAuthContainer = styled.div`
         }
 
         background-color: transparent;
+
+        .firebaseui-card-header {
+            border-bottom: none !important;
+        }
     }
 
 `
@@ -88,14 +92,9 @@ export function SignInScreen() {
 
 export const LoginPage = () => {
 
-    return <div className={"page page-login"}>
-        <header>
-            <h1>Login</h1>
-        </header>
-        <main>
-            <SignInScreen/>
-        </main>
-    </div>
+    return <FirebaseAuthContainer>
+        <main><SignInScreen/></main>
+    </FirebaseAuthContainer>
 };
 
 

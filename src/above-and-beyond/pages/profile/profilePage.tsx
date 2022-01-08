@@ -64,7 +64,7 @@ export const ProfileForm = () => {
                 About
             </ButtonLink>
         </Link>
-        <AbsoluteButton Control={({save}) => <Button
+        <AbsoluteButton Component={({save}) => <Button
             type="primary"
             icon={mainProps.isEdit ? <SaveOutlined/> : <EditOutlined/>}
             onClick={async () => {

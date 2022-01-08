@@ -17,8 +17,8 @@ import {useRole} from "../home/useRole";
 import {AbsoluteButton} from "../lib/button/absoluteFeatureButton";
 import {formatCurrency} from "../lib/util/currency";
 import {WithEnvironment} from "../lib/hooks/withEnvironment";
-import {LoaderCircle} from "../lib/feedback/loaderCircle";
-import {ExportButton, RemoveButton} from "../lib/button/actionButton";
+import {LoaderCircleSmallRelative} from "../lib/feedback/loaderCircle";
+import {ExportButtonSmall, RemoveButtonSmall} from "../lib/button/actionButton";
 import {client} from "../lib/hooks/useHttpClient";
 import {useRoleFileUpload} from "../lib/storage/file";
 import {auth, storage} from "../lib/firebase/connect-api";
@@ -26,8 +26,8 @@ import {ExportBody} from "../api/export/types";
 import {getTimezone, Timestamp} from "../lib/util/date";
 
 export const RateListHits: React.FC<{ hits }> = ({hits}) => {
-    const role = new RoleHook();
     const routes = useRouter();
+    const role = new RoleHook();
     const storageRef = useRoleFileUpload('rate')
 
     return hits.map((item: Rate) => {
@@ -64,7 +64,7 @@ export const RateListHits: React.FC<{ hits }> = ({hits}) => {
 
             actions={[
 
-                <ExportButton
+                <ExportButtonSmall
                     onCleanup={() => {
                     }}
                     onClick={async () => {
@@ -96,10 +96,10 @@ export const RateListHits: React.FC<{ hits }> = ({hits}) => {
 
                     }}/>,
 
-                <RemoveButton onCleanup={() => routes["rate"].push()}
-                              onClick={() => {
-                                  return role.rate.deleteDoc(item.id)
-                              }}/>
+                <RemoveButtonSmall onCleanup={() => routes["rate"].push()}
+                                   onClick={() => {
+                                       return role.rate.deleteDoc(item.id)
+                                   }}/>
             ]}
         >
             <List.Item.Meta
@@ -155,7 +155,7 @@ export const RateList = () => {
                                  attribute: "type",
                              }}
             />
-            <AbsoluteButton Control={() => <Button
+            <AbsoluteButton Component={() => <Button
                 type="primary"
                 icon={<PlusCircleOutlined/>}
                 onClick={() => router["rate/new"].push()}
@@ -170,7 +170,7 @@ export default () => WithEnvironment(() => {
         heading={'Role - Rate'}
         HeaderDropDown={() => {
             const data = useRole().useCurrent()
-            return data.isInProgress ? <LoaderCircle/> :
+            return data.isInProgress ? <LoaderCircleSmallRelative/> :
                 <RoleDropDown {...data.result}/>
         }}
         Main={RateList}

@@ -72,7 +72,7 @@ export const ButtonSmallMixin: ThemeFunction = theme => css`
 `
 export const ButtonFullMixin: ThemeFunction = (theme) => css`
     border: 2px solid ${theme.colors.grayLight};
-    background-color: transparent;
+    background-color: ${theme.colors.light};
     color: ${theme.colors.darkLight};
     align-self: flex-start;
 `

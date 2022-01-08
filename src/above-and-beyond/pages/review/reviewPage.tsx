@@ -77,7 +77,7 @@ export const ReviewForm: React.FC<{ data?: Review }> = ({data}) => {
                         isManualSubmit={!data || isEdit}
                         {...fieldProps.uploads}  />
         </FormTable>
-        <AbsoluteButton Control={({save}) => <Button
+        <AbsoluteButton Component={({save}) => <Button
             type="primary"
             icon={isEdit ? <SaveOutlined/> : <EditOutlined/>}
             onClick={async () => {

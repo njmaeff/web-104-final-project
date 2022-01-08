@@ -29,7 +29,7 @@ import {LoaderCircle} from "../lib/feedback/loaderCircle";
 import {css} from "@emotion/react";
 import {ScrollBar} from "../lib/styles/mixins";
 import {useBaseFileUpload} from "../lib/storage/file";
-import {ExportButtonFull, RemoveButton} from "../lib/button/actionButton";
+import {ExportButtonFull, RemoveButtonSmall} from "../lib/button/actionButton";
 import {useRouter} from "../routes";
 import {uploadFileList} from "../lib/input/upload";
 
@@ -71,7 +71,7 @@ export const EmployerForm: React.FC<{ currentEmployer?: Employer, allEmployers?:
                         <EmployerDropDown
                             currentEmployer={formik.values}
                             allEmployers={allEmployers}/>
-                        <RemoveButton/>
+                        <RemoveButtonSmall/>
                     </div>
                 }
                 {...form.fieldProps.name}
@@ -87,7 +87,7 @@ export const EmployerForm: React.FC<{ currentEmployer?: Employer, allEmployers?:
                         {...form.fieldProps.uploads}  />
         </FormTable>
         {form.isReadonly && <ExportButtonFull/>}
-        <AbsoluteButton Control={({save}) => <Button
+        <AbsoluteButton Component={({save}) => <Button
             type="primary"
             icon={form.isEdit ? <SaveOutlined/> : <EditOutlined/>}
             onClick={async () => {
@@ -143,7 +143,7 @@ export const RoleForm: React.FC<{ currentRole?: Role, allRoles?: Role[], onSubmi
                     `}>
                         <RoleDropDown currentRole={formik.values}
                                       allRoles={allRoles}/>
-                        <RemoveButton/>
+                        <RemoveButtonSmall/>
                     </div>
 
                 }
@@ -182,7 +182,7 @@ export const RoleForm: React.FC<{ currentRole?: Role, allRoles?: Role[], onSubmi
 
         </FormTable>
         {form.isReadonly && <ExportButtonFull/>}
-        <AbsoluteButton Control={({save}) => <Button
+        <AbsoluteButton Component={({save}) => <Button
             type="primary"
             icon={form.isEdit ? <SaveOutlined/> : <EditOutlined/>}
             onClick={async () => {

@@ -89,7 +89,7 @@ export const RateIssuePage: React.FC<{ data?: RateIssue }> = ({data}) => {
                             {...fieldProps.uploads}  />
             </FormTable>
             {isReadonly && <ButtonPanelContainer/>}
-            <AbsoluteButton Control={({save}) => <Button
+            <AbsoluteButton Component={({save}) => <Button
                 type="primary"
                 icon={isEdit ? <SaveOutlined/> : <EditOutlined/>}
                 onClick={async () => {

@@ -84,7 +84,7 @@ export const RateSuccessPage: React.FC<{ data?: RateSuccess }> = ({data}) => {
                             {...fieldProps.uploads}  />
             </FormTable>
             {isReadonly && <ExportButtonFull/>}
-            <AbsoluteButton Control={({save}) => <Button
+            <AbsoluteButton Component={({save}) => <Button
                 type="primary"
                 icon={isEdit ? <SaveOutlined/> : <EditOutlined/>}
                 onClick={async () => {

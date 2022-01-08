@@ -1,8 +1,6 @@
 import styled from "@emotion/styled";
-import {Modal, Spin} from "antd";
-import {useState} from "react";
-import {css} from "@emotion/react";
-import pMinDelay from 'p-min-delay';
+import React from "react";
+import {BlockModal} from "../modal/blockModal";
 
 const AbsoluteContainer = styled.div`
     position: fixed;
@@ -16,6 +14,7 @@ const AbsoluteContainer = styled.div`
         border-radius: 20%;
         width: 3rem;
         height: 3rem;
+        color: ${({theme}) => theme.colors.light};
     }
 
     span {
@@ -23,35 +22,11 @@ const AbsoluteContainer = styled.div`
     }
 `
 
-export const AbsoluteButton: React.FC<{ Control?: React.ElementType<{ save }> }> = ({
-                                                                                        children,
-                                                                                        Control
-                                                                                    }) => {
-    const [visible, setVisible] = useState(false);
-    const save = async (fn) => {
-
-        try {
-            setVisible(true)
-            await pMinDelay(fn(), 1000);
-            setVisible(false)
-        } catch (e) {
-            setVisible(false)
-            throw e;
-        }
-    };
+export const AbsoluteButton: typeof BlockModal = (props) => {
 
     return <AbsoluteContainer>
-        {visible && <Modal css={theme => css`
-            background-color: ${theme.colors.light};
-        `}
-                           visible={true}
-                           closable={false}
-                           footer={null}
-        >
+        <BlockModal {...props}>
             Saving...
-            <Spin/>
-        </Modal>}
-        <Control save={save}/>
-        {children}
+        </BlockModal>
     </AbsoluteContainer>
 };

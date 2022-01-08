@@ -30,6 +30,7 @@ export const RemoveButton: React.FC<ButtonProps & { onCleanup? }> = ({
             </Button>
                 <ConfirmModal
                     visible={visible}
+                    focusTriggerAfterClose={false}
                     onOk={(e) => {
                         e.stopPropagation()
                         save(onClick)
