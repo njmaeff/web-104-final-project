@@ -34,13 +34,14 @@ const seed = async () => {
     connectFirebaseAdminAuth();
     try {
         const user = await addUserByEmail(testEmail, testPassword, {
-            displayName: "Nik Jmaeff",
+            displayName: "Default",
+            uid: 'default'
         });
         const db = getFirestore();
         const userCollection = db.collection(`users`);
 
         // create employers
-        const employers = range(3).map(
+        const [defaultEmployer, ...employers] = range(3).map(
             () =>
                 ({
                     name: faker.company.companyName(),
@@ -51,10 +52,11 @@ const seed = async () => {
         const userPath = userCollection.doc(user.uid);
         const employerPath = userPath.collection("employers");
 
+        const employer = await createDocFromData(employerPath, defaultEmployer, 'default')
         const employerDocs = await createDocsFromData(employerPath, employers);
 
-        const roles = await mapEachDoc(employerDocs, (doc) => {
-            const roles = range(2).map(() => {
+        const roles = await mapEachDoc([employer, ...employerDocs], async (doc, index) => {
+            const [defaultRole, ...roles] = range(2).map(() => {
                 const salary = parseInt(faker.finance.amount(50000, 80000));
                 return {
                     name: faker.name.jobTitle(),
@@ -69,7 +71,17 @@ const seed = async () => {
                 } as Role;
             });
 
-            return createDocsFromData(doc.collection("roles"), roles);
+            const roleCollection = doc.collection("roles");
+
+            // default employer
+            if (index === 0) {
+                const defaultRoleDoc = await createDocFromData(roleCollection, defaultRole, 'default')
+                const otherRoles = await createDocsFromData(roleCollection, roles);
+                return [defaultRoleDoc, ...otherRoles];
+            } else {
+                return await createDocsFromData(roleCollection, [defaultRole, ...roles]);
+            }
+
         });
 
         await mapEachDoc(roles, async (doc) => {
@@ -119,6 +131,12 @@ if (require.main) {
     seed().catch((e) => console.error(e));
 }
 
+export const createDocFromData = async <T extends any>(collection: CollectionReference, doc: T, id?) => {
+    const docRef = collection.doc(id);
+    await docRef.create(doc);
+    return docRef;
+};
+
 export const createDocsFromData = <T extends any[]>(
     collection: CollectionReference,
     docs: T
@@ -134,11 +152,11 @@ export const createDocsFromData = <T extends any[]>(
 
 export const mapEachDoc = async (
     docs: DocumentReference[],
-    fn: (docRef: DocumentReference) => Promise<DocumentReference[]> | Promise<void>
+    fn: (docRef: DocumentReference, index: number) => Promise<DocumentReference[]> | Promise<void>
 ): Promise<DocumentReference[]> => {
     return flatten(
         await Promise.all(
-            docs.map((doc) => fn(doc))
+            docs.map((doc, index) => fn(doc, index))
         ) as any
     );
 };

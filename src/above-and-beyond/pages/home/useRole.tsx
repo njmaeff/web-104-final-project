@@ -64,7 +64,7 @@ export class RoleApi {
 const RoleContext = React.createContext<RoleApi>(null);
 export const useRole = () => useContext(RoleContext)
 
-export const getRoleKey = () => [auth.currentUser.uid, 'ROLE'].join('/')
+export const getRoleKey = () => [auth.currentUser.uid, 'role'].join('/')
 
 export const RoleProvider: React.FC = ({children}) => {
 

@@ -5,12 +5,12 @@
       "origin": "http://localhost:3000",
       "localStorage": [
         {
-          "name": "mOcnjei6NKxaZUN85E5YmLIaiBxp/ROLE",
-          "value": "{\"currentRoleID\":\"h5Ttj3JHHTvXFN8Nzuhr\"}"
+          "name": "default/role",
+          "value": "{\"currentRoleID\":\"default\"}"
         },
         {
-          "name": "mOcnjei6NKxaZUN85E5YmLIaiBxp/employer",
-          "value": "{\"currentEmployerID\":\"Px5vAhpAOUw5OAPSNgLx\"}"
+          "name": "default/employer",
+          "value": "{\"currentEmployerID\":\"default\"}"
         }
       ]
     }
