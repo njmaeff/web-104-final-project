@@ -1,11 +1,10 @@
 // playwright.config.ts
-import { PlaywrightTestConfig } from "@playwright/test";
+import {PlaywrightTestConfig} from "@playwright/test";
 
 const config: PlaywrightTestConfig = {
     // Look for test files in the "tests" directory, relative to this
     // configuration file
     testDir: "e2e",
-    globalSetup: require.resolve("./playwright-setup"),
     // Each test is given 30 seconds
     timeout: 30000,
 
@@ -19,10 +18,17 @@ const config: PlaywrightTestConfig = {
     workers: process.env.CI ? 2 : undefined,
 
     use: {
+        baseURL: 'http://localhost:3000/',
+        storageState: './e2e/storage.json',
         // trace: "on",
         // video: "on",
         // screenshot: "on"
         // Configure browser and context here
+    },
+    webServer: {
+        command: `yarn start`,
+        port: 3000,
+        reuseExistingServer: !process.env.CI,
     },
     projects: [
         {
@@ -33,29 +39,6 @@ const config: PlaywrightTestConfig = {
                 channel: "chrome",
             },
         },
-        // {
-        //   name: 'Desktop Safari',
-        //   use: {
-        //     browserName: 'webkit',
-        //     viewport: { width: 1200, height: 750 },
-        //   }
-        // },
-        // // Test against mobile viewports.
-        // {
-        //   name: 'Mobile Chrome',
-        //   use: devices['Pixel 5'],
-        // },
-        // {
-        //   name: 'Mobile Safari',
-        //   use: devices['iPhone 12'],
-        // },
-        // {
-        //   name: 'Desktop Firefox',
-        //   use: {
-        //     browserName: 'firefox',
-        //     viewport: { width: 800, height: 600 },
-        //   }
-        // },
     ],
 };
 export default config;

@@ -1,0 +1,18 @@
+{
+  "cookies": [],
+  "origins": [
+    {
+      "origin": "http://localhost:3000",
+      "localStorage": [
+        {
+          "name": "mOcnjei6NKxaZUN85E5YmLIaiBxp/ROLE",
+          "value": "{\"currentRoleID\":\"h5Ttj3JHHTvXFN8Nzuhr\"}"
+        },
+        {
+          "name": "mOcnjei6NKxaZUN85E5YmLIaiBxp/employer",
+          "value": "{\"currentEmployerID\":\"Px5vAhpAOUw5OAPSNgLx\"}"
+        }
+      ]
+    }
+  ]
+}

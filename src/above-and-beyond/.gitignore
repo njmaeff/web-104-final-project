@@ -1,2 +1,3 @@
 !.env.template
 .loki
+e2e/firebase-login.js

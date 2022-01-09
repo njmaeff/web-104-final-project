@@ -8,7 +8,8 @@
     "seed-search": "node -r ts-node/register/transpile-only seed/seed-search.ts",
     "dev": "NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
-    "build-functions": "node -r ts-node/register/transpile-only esbuildrc.ts",
+    "build-functions": "node -r ts-node/register/transpile-only scripts/build-functions.ts",
+    "build-test-script": "node -r ts-node/register/transpile-only scripts/build-test-script.ts",
     "build-styles": "yarn lessc --js pages/lib/styles/antd.less pages/lib/styles/antd.css",
     "start": "next start",
     "build-storybook": "build-storybook"
