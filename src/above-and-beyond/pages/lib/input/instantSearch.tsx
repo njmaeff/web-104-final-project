@@ -1,17 +1,12 @@
 import {
     Configure,
     connectInfiniteHits,
-    connectPoweredBy,
-    connectRefinementList,
-    connectSearchBox,
-    connectSortBy,
+    connectPoweredBy, connectRefinementList,
+    connectSearchBox, connectSortBy,
     connectStateResults,
     InstantSearch,
-    RefinementList,
-    SortBy,
     SortByProps,
 } from "react-instantsearch-dom"
-import TypesenseInstantSearchAdapter from "typesense-instantsearch-adapter"
 import {AsyncHook} from "../hooks/useAsync";
 import {LoaderCircle} from "../feedback/loaderCircle";
 import {Input, Radio, Select} from "antd";
@@ -23,16 +18,20 @@ import {ScrollBar} from "../styles/mixins";
 import {fetchCustomToken} from "../util/fetchCustomToken";
 import {
     RefinementListProvided,
-    StateResultsProvided
+    StateResultsProvided,
 } from "react-instantsearch-core";
+import {
+    TypesenseInstantsearchAdapter
+} from "../search/TypesenseInstantsearchAdapter"
 
 const {Search} = Input
 
-export const useSearchClient = () => {
+export const useSearchClient = ({facetFilters = []} = {}) => {
     return new AsyncHook(
         async () => {
             const token = await fetchCustomToken();
-            const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
+            return new TypesenseInstantsearchAdapter({
+                facetFilters,
                 server: {
                     apiKey: token,
                     nodes: [
@@ -55,7 +54,6 @@ export const useSearchClient = () => {
                     numTypos: 3,
                 },
             })
-            return typesenseInstantsearchAdapter.searchClient
 
         }, []
     )
@@ -191,12 +189,11 @@ export const SearchInterface: React.FC<{
           refinementProps,
           HitsComponent
       }) => {
-    const client = useSearchClient();
+    const client = useSearchClient({facetFilters: filters});
     return client.isSuccess ? (
         <InstantSearch searchClient={client.result} indexName={indexName}>
             <Configure
                 hitsPerPage={10}
-                facetFilters={filters}
             />
             <div css={css`
                 display: flex;
@@ -250,5 +247,5 @@ export const SearchInterface: React.FC<{
                 client.refresh()
             }}/>
         </InstantSearch>
-    ) : <LoaderCircle/>
+    ) : <LoaderCircle/>;
 }

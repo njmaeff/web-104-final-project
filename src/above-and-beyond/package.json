@@ -11,6 +11,7 @@
     "build-functions": "node -r ts-node/register/transpile-only scripts/build-functions.ts",
     "build-test-script": "node -r ts-node/register/transpile-only scripts/build-test-script.ts",
     "build-styles": "yarn lessc --js pages/lib/styles/antd.less pages/lib/styles/antd.css",
+    "test-codegen": "yarn playwright codegen http://localhost:3000",
     "start": "next start",
     "build-storybook": "build-storybook"
   },
@@ -43,8 +44,7 @@
     "react-error-boundary": "^3.1.4",
     "react-firebaseui": "^6.0.0",
     "react-instantsearch-dom": "^6.18.0",
-    "typesense": "^1.0.2",
-    "typesense-instantsearch-adapter": "^2.2.0",
+    "typesense": "^1.1.2",
     "uuid": "^8.3.2",
     "yup": "^0.32.11"
   },

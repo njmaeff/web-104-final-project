@@ -4098,8 +4098,7 @@ __metadata:
     ts-node: ^10.2.1
     type-fest: ^2.5.4
     typescript: ^4.5.3
-    typesense: ^1.0.2
-    typesense-instantsearch-adapter: ^2.2.0
+    typesense: ^1.1.2
     uuid: ^8.3.2
     yargs-parser: ^21.0.0
     yup: ^0.32.11
@@ -21208,38 +21207,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typesense-instantsearch-adapter@npm:^2.2.0":
-  version: 2.2.0
-  resolution: "typesense-instantsearch-adapter@npm:2.2.0"
-  dependencies:
-    typesense: ^0.14.0
-  peerDependencies:
-    "@babel/runtime": ^7.13.17
-  checksum: a7e7034188b8c1878db8519e7de10d5ba90138f2691af56a8e4adcf9f1c129523ff0ce836c98290f17078d46b5d25d4f0780d0d2846119e88c6178c882b8c62c
-  languageName: node
-  linkType: hard
-
-"typesense@npm:^0.14.0":
-  version: 0.14.0
-  resolution: "typesense@npm:0.14.0"
+"typesense@npm:^1.1.2":
+  version: 1.1.2
+  resolution: "typesense@npm:1.1.2"
   dependencies:
     axios: ^0.21.1
     loglevel: ^1.7.1
   peerDependencies:
     "@babel/runtime": ^7.14.6
-  checksum: a27b96f21a7e5c3b6a4cab150f6cd6c25e008e6e2538f9f244cb0abedafab1671334f1c6150b4d7466c7e0589b370dd708d16652ff6fcef2df9feda65cee4690
-  languageName: node
-  linkType: hard
-
-"typesense@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "typesense@npm:1.0.2"
-  dependencies:
-    axios: ^0.21.1
-    loglevel: ^1.7.1
-  peerDependencies:
-    "@babel/runtime": ^7.14.6
-  checksum: 0e6f6dd1065a227fdd82843689d42c4c4b37597a0c4024f9a518e9b870b56c4d625bd6c1a7e5b69ba59d64a854b2e8005af60d5af461ffe8b18d31db7df8b2a2
+  checksum: 113071fc2b6e54aee5a6bc6e5e4da3e299f352ba8f5a31b08febab86613c0d24a1c827ef922d0059cfd8da708eb81e67844f702c4e6e84785840b0e4d6213952
   languageName: node
   linkType: hard
 

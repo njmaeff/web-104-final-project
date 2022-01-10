@@ -12,3 +12,19 @@ test.beforeEach(async ({page}) => {
 test('rate', async ({page}) => {
     await expect(page.locator(`text=Powered by Typesense`)).toBeVisible()
 });
+
+test('filtering issues', async ({page}) =>
+{
+
+    // Fill input[type="radio"]
+    await page.fill('input[type="radio"]', '');
+
+});
+
+test('filtering success', async ({page}) =>
+{
+
+    // Fill input[type="radio"]
+    await page.fill('input[type="radio"]', '');
+
+});
